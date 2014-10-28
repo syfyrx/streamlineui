@@ -179,28 +179,9 @@
 	};
 
 	var locales = {
-		'af':'easyui-lang-af.js',
-		'ar':'easyui-lang-ar.js',
-		'bg':'easyui-lang-bg.js',
-		'ca':'easyui-lang-ca.js',
-		'cs':'easyui-lang-cs.js',
-		'cz':'easyui-lang-cz.js',
-		'da':'easyui-lang-da.js',
-		'de':'easyui-lang-de.js',
-		'el':'easyui-lang-el.js',
-		'en':'easyui-lang-en.js',
-		'es':'easyui-lang-es.js',
-		'fr':'easyui-lang-fr.js',
-		'it':'easyui-lang-it.js',
-		'jp':'easyui-lang-jp.js',
-		'nl':'easyui-lang-nl.js',
-		'pl':'easyui-lang-pl.js',
-		'pt_BR':'easyui-lang-pt_BR.js',
-		'ru':'easyui-lang-ru.js',
-		'sv_SE':'easyui-lang-sv_SE.js',
-		'tr':'easyui-lang-tr.js',
-		'zh_CN':'easyui-lang-zh_CN.js',
-		'zh_TW':'easyui-lang-zh_TW.js'
+		'en':'slui-lang-en.js',
+		'zh_CN':'slui-lang-zh_CN.js',
+		'zh_TW':'slui-lang-zh_TW.js'
 	};
 
 	var queues = {};
