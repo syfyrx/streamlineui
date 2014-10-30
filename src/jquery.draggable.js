@@ -124,7 +124,9 @@
 		var source = e.data.target;
 		state.droppables.each(function () {
 			var dropObj = $(this);
-			if (dropObj.droppable('options').disabled) { return; }
+			if (dropObj.droppable('options').disabled) {
+				return;
+			}
 
 			var p2 = dropObj.offset();
 			if (e.pageX > p2.left && e.pageX < p2.left + dropObj.outerWidth()
@@ -146,12 +148,10 @@
 	}
 
 	function doUp(e) {
-		//		isDragging = false;
 		$.fn.draggable.isDragging = false;
-		//		drag(e);
 		doMove(e);
 
-		var state = $.data(e.data.target, 'draggable');
+		var state = $(e.data.target).data('draggable');
 		var proxy = state.proxy;
 		var opts = state.options;
 		if (opts.revert) {
