@@ -1,7 +1,7 @@
 /*jQuery StreamLineUI v1.0*/
 (function ($) {
 	function drag(e) {
-		var state = $.data(e.data.target, 'draggable');
+		var state = $(e.data.target).data('draggable');
 		var opts = state.options;
 		var proxy = state.proxy;
 
@@ -30,14 +30,6 @@
 				}
 			}
 		}
-
-		//		if (opts.deltaX != null && opts.deltaX != undefined){
-		//			left = e.pageX + opts.deltaX;
-		//		}
-		//		if (opts.deltaY != null && opts.deltaY != undefined){
-		//			top = e.pageY + opts.deltaY;
-		//		}
-
 		if (e.data.parent != document.body) {
 			left += $(e.data.parent).scrollLeft();
 			top += $(e.data.parent).scrollTop();
@@ -54,18 +46,12 @@
 	}
 
 	function applyDrag(e) {
-		var state = $.data(e.data.target, 'draggable');
+		var state = $(e.data.target).data('draggable');
 		var opts = state.options;
 		var proxy = state.proxy;
 		if (!proxy) {
 			proxy = $(e.data.target);
 		}
-		//		if (proxy){
-		//			proxy.css('cursor', opts.cursor);
-		//		} else {
-		//			proxy = $(e.data.target);
-		//			$.data(e.data.target, 'draggable').handle.css('cursor', opts.cursor);
-		//		}
 		proxy.css({
 			left: e.data.left,
 			top: e.data.top
@@ -213,7 +199,9 @@
 			var dropped = false;
 			state.droppables.each(function () {
 				var dropObj = $(this);
-				if (dropObj.droppable('options').disabled) { return; }
+				if (dropObj.droppable('options').disabled) {
+					return;
+				}
 
 				var p2 = dropObj.offset();
 				if (e.pageX > p2.left && e.pageX < p2.left + dropObj.outerWidth()
@@ -268,7 +256,9 @@
 			}
 
 			handle.unbind('.draggable').bind('mousemove.draggable', { target: this }, function (e) {
-				if ($.fn.draggable.isDragging) { return; }
+				if ($.fn.draggable.isDragging) {
+					return;
+				}
 				var opts = $(e.data.target).data('draggable').options;
 				if (checkArea(e)) {
 					$(this).css('cursor', opts.cursor);
