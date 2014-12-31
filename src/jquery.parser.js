@@ -108,11 +108,7 @@
         }
     };
     $(function () {
-        var d = $('<div style="position:absolute;top:-1000px;width:100px;height:100px;padding:5px"></div>').appendTo('body');
-        $._boxModel = d.outerWidth() != 100;
-        d.remove();
-
-        if (!window.easyloader && $.parser.auto) {
+    	if (!window.easyloader && $.parser.auto) {
             $.parser.parse();
         }
     });
