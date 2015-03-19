@@ -8,6 +8,8 @@
 				 'tree', 'textbox', 'filebox', 'combo', 'combobox', 'combotree', 'combogrid', 'numberbox', 'validatebox', 'searchbox',
 				 'spinner', 'numberspinner', 'timespinner', 'datetimespinner', 'calendar', 'datebox', 'datetimebox', 'slider',
 				 'layout', 'panel', 'datagrid', 'propertygrid', 'treegrid', 'tabs', 'accordion', 'window', 'dialog', 'form'
+
+
         ],
         parse: function (context) {
             var aa = [];

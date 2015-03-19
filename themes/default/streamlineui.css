@@ -1,7 +1,7 @@
 ﻿body { font-size: 12px; font-family: Verdana,'Microsoft YaHei'; }
 
 * { margin: 0; padding: 0; }
-
+/*linkbutton*/
 .l-btn { text-decoration: none; display: inline-block; cursor: pointer; text-align: center; vertical-align: middle; color: #444; background: #fafafa; border: 1px solid #bbb; }
 .l-btn:hover { background: #eaf2ff; color: #000000; border: 1px solid #b7d2ff; filter: none; }
 .l-btn-focus { outline: thin dotted #0000FF; }
@@ -30,6 +30,16 @@
 .l-btn-plain-selected,
 .l-btn-plain-selected:hover { background: #ddd; }
 .l-btn-disabled,
-.l-btn-disabled:hover { opacity: 0.8; cursor: default; background: #fafafa; color: #444;border: 1px solid #bbb; }
+.l-btn-disabled:hover { opacity: 0.5; filter: alpha(opacity=50); cursor: default; background: #fafafa; color: #444; border: 1px solid #bbb; }
 .l-btn-plain-disabled,
-.l-btn-plain-disabled:hover { opacity: 0.8; cursor: default; background: #fafafa; color: #444;border:none; }
+.l-btn-plain-disabled:hover { opacity: 0.5; filter: alpha(opacity=50); cursor: default; background: #fafafa; color: #444; border: none; }
+/*menu*/
+.menu { position: absolute; margin: 0; padding: 2px; border: 1px solid #bbb; overflow: hidden; background-color:#fff;}
+.menu-item { position: relative; margin: 0; padding-left: 20px; overflow: hidden; white-space: nowrap; cursor: pointer; vertical-align: middle; line-height: 20px; }
+.menu-item.menu-active { background-color: red; }
+.menu-item.menu-icon { background-position-x: left; }
+.menu-item.menu-item-disabled {  opacity: 0.5; filter: alpha(opacity=50); cursor: default; }
+.menu-item.menu-active-disabled { background-color:transparent; color: #444; }
+.menu-sep { margin: 3px 0px 3px 20px; height: 1px; background-color: #bbb; }
+.menu-rightarrow { position: absolute; top: 50%; right: 0px; margin-top: -5px; height: 0; width: 0; overflow: hidden; font-size: 0; line-height: 0; border-color: transparent transparent transparent #FF9600; border-style: solid; border-width: 5px; }
+

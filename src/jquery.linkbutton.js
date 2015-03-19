@@ -1,4 +1,6 @@
-/*jQuery StreamLineUI v1.0*/
+/*jQuery StreamLineUI v1.0
+ *“¿¿µ£∫parser
+ */
 (function ($) {
 	function setSize(target, param) {
 		var opts = $(target).data('linkbutton').options;
@@ -11,7 +13,7 @@
 		if (opts.height) {
 			$(target).css({
 				"height": opts.height,
-				"line-height":opts.height
+				"line-height": opts.height
 			});
 		}
 	}
@@ -58,7 +60,7 @@
 				opts.onClick.call(this);
 			}
 		});
-
+		
 		setSelected(target, opts.selected);
 		setDisabled(target, opts.disabled);
 	}
