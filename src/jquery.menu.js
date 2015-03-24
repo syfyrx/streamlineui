@@ -1,4 +1,4 @@
-/*jQuery StreamLineUI v1.0
+/*jQuery StreamlineUI v1.0
  *“¿¿µ£∫parser
  */
 (function ($) {
