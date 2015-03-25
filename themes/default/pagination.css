@@ -1,5 +1,14 @@
+* { margin: 0; padding: 0; }
 .pagination {
   zoom: 1;
+  font-size:12px;
+}
+.pagination a{
+  text-decoration: none;
+  color: #000000;
+}
+.pagination a:hover{
+  background-color: #DCEFFC;
 }
 .pagination table {
   float: left;
@@ -31,39 +40,57 @@
   border-width: 1px;
   border-style: solid;
 }
+.pagination-text{
+  padding:0 5px;
+}
 .pagination-info {
   float: right;
   margin: 0 6px 0 0;
   padding: 0;
   height: 30px;
   line-height: 30px;
-  font-size: 12px;
 }
 .pagination span {
-  font-size: 12px;
 }
-.pagination-link .l-btn-text {
+.pagination-link{
   width: 24px;
   text-align: center;
   margin: 0;
+  padding:5px 8px;
+}
+.pagination-link.select{
+  background-color: #DDDDDD;
 }
 .pagination-first {
   background: url('images/pagination_icons.png') no-repeat 0 center;
+  padding:5px 10px;
 }
 .pagination-prev {
   background: url('images/pagination_icons.png') no-repeat -16px center;
+  padding:5px 10px;
 }
 .pagination-next {
-  background: url('images/pagination_icons.png') no-repeat -32px center;
+  background: url('images/pagination_icons.png') no-repeat -30px center;
+  padding:5px 10px;
 }
 .pagination-last {
-  background: url('images/pagination_icons.png') no-repeat -48px center;
+  background: url('images/pagination_icons.png') no-repeat -46px center;
+  padding:5px 10px;
 }
 .pagination-load {
   background: url('images/pagination_icons.png') no-repeat -64px center;
+  padding:5px 10px;
 }
 .pagination-loading {
   background: url('images/loading.gif') no-repeat center center;
+  padding:5px 10px;
+}
+.pagination-disabled{
+  opacity: 0.5; 
+  filter: alpha(opacity=50); 
+  cursor: default;  
+  color: #444; 
+  border: none; 
 }
 .pagination-page-list,
 .pagination .pagination-num {

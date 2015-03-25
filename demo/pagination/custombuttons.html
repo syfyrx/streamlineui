@@ -2,33 +2,36 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Custom Pagination Buttons - jQuery EasyUI Demo</title>
-	<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="../../themes/default/pagination.css">
 	<link rel="stylesheet" type="text/css" href="../../themes/icon.css">
-	<link rel="stylesheet" type="text/css" href="../demo.css">
 	<script type="text/javascript" src="../../jquery.min.js"></script>
-	<script type="text/javascript" src="../../jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../../src/jquery.parser.js"></script>
+	<script type="text/javascript" src="../../src/jquery.pagination.js"></script>
+	<style type="text/css">
+		.btn{
+			padding: 5px 8px;
+		}
+	</style>
 </head>
 <body>
-	<h2>Custom Pagination Buttons</h2>
-	<p>The customized buttons can be appended to page bar.</p>
-	<div style="margin:20px 0;"></div>
-	<div class="easyui-panel">
-		<div class="easyui-pagination" data-options="total:114,buttons:buttons"></div>
-	</div>
+	<div class="slui-pagination" data-options="total:114,controls:buttons"></div>
 	<script>
 		var buttons = [{
-			iconCls:'icon-add',
+			text:'a',
+			css:'btn',
 			handler:function(){
 				alert('add');
 			}
 		},{
-			iconCls:'icon-cut',
+			text:'b',
+			css:'btn',
 			handler:function(){
 				alert('cut');
 			}
 		},{
-			iconCls:'icon-save',
+			text:'c',
+			css:'btn',
 			handler:function(){
 				alert('save');
 			}
