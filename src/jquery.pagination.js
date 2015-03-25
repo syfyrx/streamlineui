@@ -1,5 +1,6 @@
 /**
  * jQuery StreamlineUI v1.0
+ * 依赖：parser
  */
  (function ($) {
 	/**
