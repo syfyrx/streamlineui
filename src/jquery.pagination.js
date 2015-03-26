@@ -237,9 +237,10 @@
 			if (state) {
 				$.extend(state.options, options);
 			} else {
-				state = $(this).data('pagination', {
+				$(this).data('pagination', {
 					options: $.extend({}, $.fn.pagination.defaults, $.fn.pagination.parseOptions(this), options)
 				});
+				state =$(this).data('pagination');
 			}
 	 		init(this);
 	 		update(this);
