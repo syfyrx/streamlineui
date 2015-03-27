@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="../../themes/default/panel.css">
+	<link rel="stylesheet" type="text/css" href="../../themes/default/window.css">
+	<link rel="stylesheet" type="text/css" href="../../themes/default/icon.css">
+	<script type="text/javascript" src="../../jquery.min.js"></script>
+	<script type="text/javascript" src="../../src/jquery.parser.js"></script>
+	<script type="text/javascript" src="../../src/jquery.draggable.js"></script>
+	<script type="text/javascript" src="../../src/jquery.resizable.js"></script>
+	<script type="text/javascript" src="../../src/jquery.panel.js"></script>
+	<script type="text/javascript" src="../../src/jquery.window.js"></script>
+</head>
+<body>
+	<div style="margin:20px 0;">
+		<a href="javascript:void(0)" onclick="$('#w').window('open')">Open</a>
+		<a href="javascript:void(0)" onclick="$('#w').window('close')">Close</a>
+	</div>
+	<div id="w" class="slui-window" title="Custom Window Tools" data-options="iconCls:'icon-save',minimizable:false,tools:'#tt'" style="width:500px;height:200px;">
+		The window content.
+	</div>
+	<div id="tt">
+		<a href="javascript:void(0)" onclick="javascript:alert('add')">a</a>
+		<a href="javascript:void(0)" onclick="javascript:alert('edit')">b</a>
+		<a href="javascript:void(0)" onclick="javascript:alert('cut')">c</a>
+		<a href="javascript:void(0)" onclick="javascript:alert('help')">d</a>
+	</div>
+
+</body>
+</html>

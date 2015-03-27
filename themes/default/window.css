@@ -1,0 +1,23 @@
+.window {
+  overflow: hidden;
+  border: none;
+  position: absolute;
+}
+.window .window-header {
+}
+.window .window-body {
+  background-color: #ffffff;
+}
+.window .window-body-noheader {
+}
+.window-mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  filter: alpha(opacity=40);
+  opacity: 0.40;
+  overflow: hidden;
+  background: #ccc;
+}

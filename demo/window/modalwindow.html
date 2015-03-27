@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="../../themes/default/panel.css">
+	<link rel="stylesheet" type="text/css" href="../../themes/default/window.css">
+	<link rel="stylesheet" type="text/css" href="../../themes/default/icon.css">
+	<script type="text/javascript" src="../../jquery.min.js"></script>
+	<script type="text/javascript" src="../../src/jquery.parser.js"></script>
+	<script type="text/javascript" src="../../src/jquery.draggable.js"></script>
+	<script type="text/javascript" src="../../src/jquery.resizable.js"></script>
+	<script type="text/javascript" src="../../src/jquery.panel.js"></script>
+	<script type="text/javascript" src="../../src/jquery.window.js"></script>
+</head>
+<body>
+	<div style="margin:20px 0;">
+		<a href="javascript:void(0)" onclick="$('#w').window('open')">Open</a>
+		<a href="javascript:void(0)" onclick="$('#w').window('close')">Close</a>
+	</div>
+	<div id="w" class="slui-window" title="Modal Window" data-options="modal:true,closed:true,iconCls:'icon-save'" style="width:500px;height:200px;">
+		The window content.
+	</div>
+
+</body>
+</html>

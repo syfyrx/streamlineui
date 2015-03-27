@@ -12,12 +12,6 @@
  		var header=$(target).children('.panel-header');
  		var body=$(target).children('.panel-body');
  		var footer=$(target).children('.panel-footer');
- 		if(opts.fit){
- 			params={
- 				width:$(target).parent().innerWidth(),
- 				height:$(target).parent().innerHeight()
- 			};
- 		}
  		if(params){
  			if(params.width){
  				opts.width=params.width;
@@ -311,7 +305,13 @@
  		opts.left=0;
  		opts.top=0;
  		opts.fit=true;
- 		resize(target);
+ 		if(opts.fit){
+ 			params={
+ 				width:$(target).parent().innerWidth(),
+ 				height:$(target).parent().innerHeight()
+ 			};
+ 		}
+ 		resize(target,params);
  		opts.maximized=true;
  		opts.onMaximize.call(target);
  	};
