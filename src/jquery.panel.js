@@ -75,6 +75,7 @@
  				body.addClass('panel-body-noheader');
  			}else{
  				var header=$(target).children('.panel-header');
+ 				header.addClass(opts.headerCls);
 				if(header.length==0){
 					header=$('<div class="panel-header"></div>').prependTo(target);
 				}
@@ -133,7 +134,7 @@
  		function setBody(){
  			var str=$(target).html();
  			$(target).empty();
- 			$('<div class="panel-body"></div>').appendTo(target).html(str);
+ 			$('<div class="panel-body"></div>').appendTo(target).html(str).addClass(opts.bodyCls);
  		}
  		/**
  		 * 添加工具栏按钮
@@ -148,10 +149,10 @@
  		function setFooter(){
  			if(opts.footer){
  				$(opts.footer).addClass('panel-footer').appendTo(target);
- 				body.addClass('panel-body-nobottom');
+ 				body.removeClass('panel-body-nofooter');
  			}else{
  				$(target).children('.panel-footer').remove();
- 				body.removeClass('panel-body-nobottom');
+ 				body.addClass('panel-body-nofooter');
  			}
  		};
  	};
@@ -364,9 +365,7 @@
  			}
  			init(this);
  			if(state.options.closed==true){
- 				//state.panel.hide();
- 			}else{
- 				//open(this);
+ 				$(this).hide();
  			}
  		});
  	};
@@ -451,7 +450,7 @@
  	$.fn.panel.parseOptions=function(target){
  		var t=$(target);
  		var ff=t.children('.panel-footer,footer');
- 		return $.extend({},$.parser.parseOptions(target,['id','title','iconCls','width','height','left','top','tools','href','method','content','footer',{cache:'boolean',fit:'boolean',border:'boolean',noheader:'boolean'},{collapsible:'boolean',maximizable:'boolean'},{closable:'boolean',collapsed:'boolean',maximized:'boolean',closed:'boolean'},'openAnimation','closeAnimation',{openDuration:'number',closeDuration:'number'},]),{loadingMessage:(t.attr('loadingMessage')!=undefined?t.attr('loadingMessage'):undefined),footer:(ff.length?ff.removeClass('panel-footer'):undefined)});
+ 		return $.extend({},$.parser.parseOptions(target,['id','title','iconCls','width','height','left','top','headerCls','bodyCls','tools','href','method','content','footer',{cache:'boolean',fit:'boolean',border:'boolean',noheader:'boolean'},{collapsible:'boolean',maximizable:'boolean'},{closable:'boolean',collapsed:'boolean',maximized:'boolean',closed:'boolean'},'openAnimation','closeAnimation',{openDuration:'number',closeDuration:'number'},]),{loadingMessage:(t.attr('loadingMessage')!=undefined?t.attr('loadingMessage'):undefined),footer:(ff.length?ff.removeClass('panel-footer'):undefined)});
  	};
  	$.fn.panel.defaults={
  		id:null,
@@ -461,6 +460,8 @@
  		height:'auto',
  		left:null,
  		top:null,
+ 		headerCls:'',
+ 		bodyCls:'',
  		fit:false,
  		border:true,
  		noheader:false,
