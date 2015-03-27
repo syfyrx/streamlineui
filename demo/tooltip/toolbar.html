@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="../../themes/default/tooltip.css">
+	<link rel="stylesheet" type="text/css" href="../../themes/default/icon.css">
+	<script type="text/javascript" src="../../jquery.min.js"></script>
+	<script type="text/javascript" src="../../src/jquery.parser.js"></script>
+	<script type="text/javascript" src="../../src/jquery.tooltip.js"></script>
+</head>
+<body>
+	<h2>Tooltip as Toolbar</h2>
+	<p>This sample shows how to create a tooltip style toolbar.</p>
+	<div style="margin:20px 0;"></div>
+	<div style="padding:10px 200px">
+		<p><a id="dd" href="javascript:void(0)" class="slui-tooltip" data-options="
+					hideEvent: 'none',
+					content: function(){
+						return $('#toolbar');
+					},
+					onShow: function(){
+						var t = $(this);
+						t.tooltip('tip').focus().unbind().bind('blur',function(){
+							t.tooltip('hide');
+						});
+					}
+				">Hover me</a> to display toolbar.</p>
+	</div>
+	<div style="display:none">
+		<div id="toolbar">
+			<a href="#" class="slui-tooltip" title="Add">a</a>
+			<a href="#" class="slui-tooltip" title="Cut">b</a>
+			<a href="#" class="slui-tooltip" title="Remove">c</a>
+			<a href="#" class="slui-tooltip" title="Undo">d</a>
+			<a href="#" class="slui-tooltip" title="Redo">e</a>
+		</div>
+	</div>
+</body>
+</html>

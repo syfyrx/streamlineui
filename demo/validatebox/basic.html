@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Basic ValidateBox - jQuery EasyUI Demo</title>
+	<link rel="stylesheet" type="text/css" href="../../themes/default/tooltip.css">
+	<link rel="stylesheet" type="text/css" href="../../themes/default/validatebox.css">
+	<link rel="stylesheet" type="text/css" href="../../themes/default/icon.css">
+	<script type="text/javascript" src="../../jquery.min.js"></script>
+	<script type="text/javascript" src="../../src/jquery.parser.js"></script>
+	<script type="text/javascript" src="../../src/jquery.tooltip.js"></script>
+	<script type="text/javascript" src="../../src/jquery.validatebox.js"></script>
+</head>
+<body>
+	<table cellpadding="5">
+		<tr>
+			<td>User Name:</td>
+			<td><input class="slui-validatebox textbox" data-options="required:true,validType:'length',validParams:[3,10]"></td>
+		</tr>
+		<tr>
+			<td>Email:</td>
+			<td><input class="slui-validatebox textbox" data-options="required:true,validType:'email'"></td>
+		</tr>
+		<tr>
+			<td>Birthday:</td>
+			<td><input class="slui-datebox textbox"></td>
+		</tr>
+		<tr>
+			<td>URL:</td>
+			<td><input class="slui-validatebox textbox" data-options="required:true,validType:'url'"></td>
+		</tr>
+		<tr>
+			<td>Phone:</td>
+			<td><input class="slui-validatebox textbox" data-options="required:true"></td>
+		</tr>
+	</table>
+	<style scoped="scoped">
+		.textbox{
+			height:20px;
+			margin:0;
+			padding:0 2px;
+			box-sizing:content-box;
+		}
+	</style>
+
+</body>
+</html>
