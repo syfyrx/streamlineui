@@ -4,22 +4,22 @@
 	<meta charset="UTF-8">
 	<title></title>
 	<link rel="stylesheet" type="text/css" href="../../themes/default/tooltip.css">
-	<link rel="stylesheet" type="text/css" href="../../themes/default/validatebox.css">
+	<link rel="stylesheet" type="text/css" href="../../themes/default/validate.css">
 	<link rel="stylesheet" type="text/css" href="../../themes/default/icon.css">
 	<script type="text/javascript" src="../../jquery.min.js"></script>
 	<script type="text/javascript" src="../../src/jquery.parser.js"></script>
 	<script type="text/javascript" src="../../src/jquery.tooltip.js"></script>
-	<script type="text/javascript" src="../../src/jquery.validatebox.js"></script>
+	<script type="text/javascript" src="../../src/jquery.validate.js"></script>
 </head>
 <body>
 	<table cellpadding="5">
 		<tr>
 			<td>User Name:</td>
-			<td><input class="slui-validatebox textbox" data-options="prompt:'Enter User Name.',required:true,validType:'length[3,10]'"></td>
+			<td><input class="slui-validate textbox" data-options="prompt:'Enter User Name.',required:true,validType:'length[3,10]'"></td>
 		</tr>
 		<tr>
 			<td>Email:</td>
-			<td><input class="slui-validatebox textbox" data-options="prompt:'Enter a valid email.',required:true,validType:'email'"></td>
+			<td><input class="slui-validate textbox" data-options="prompt:'Enter a valid email.',required:true,validType:'email'"></td>
 		</tr>
 		<tr>
 			<td>Birthday:</td>
@@ -27,11 +27,11 @@
 		</tr>
 		<tr>
 			<td>URL:</td>
-			<td><input class="slui-validatebox textbox" data-options="prompt:'Enter your URL.',required:true,validType:'url'"></td>
+			<td><input class="slui-validate textbox" data-options="prompt:'Enter your URL.',required:true,validType:'url'"></td>
 		</tr>
 		<tr>
 			<td>Phone:</td>
-			<td><input class="slui-validatebox textbox" data-options="prompt:'Enter your phone number.',required:true"></td>
+			<td><input class="slui-validate textbox" data-options="prompt:'Enter your phone number.',required:true"></td>
 		</tr>
 	</table>
 	<style scoped="scoped">
@@ -44,7 +44,7 @@
 	</style>
 	<script>
 		$(function(){
-			$('input.slui-validatebox').validatebox({
+			$('input.slui-validate').validate({
 				tipOptions: {	// the options to create tooltip
 					showEvent: 'mouseenter',
 					hideEvent: 'mouseleave',
@@ -52,7 +52,7 @@
 					hideDelay: 0,
 					zIndex: '',
 					onShow: function(){
-						if (!$(this).hasClass('validatebox-invalid')){
+						if (!$(this).hasClass('validate-invalid')){
 							if ($(this).tooltip('options').prompt){
 								$(this).tooltip('update', $(this).tooltip('options').prompt);
 							} else {
@@ -75,7 +75,7 @@
 			}).tooltip({
 				position: 'right',
 				content: function(){
-					var opts = $(this).validatebox('options');
+					var opts = $(this).validate('options');
 					return opts.prompt;
 				},
 				onShow: function(){

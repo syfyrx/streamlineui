@@ -7,7 +7,7 @@
  	 * 销毁验证
  	 */
  	 function destroy(target){
- 	 	var state=$(target).data('validatebox');
+ 	 	var state=$(target).data('validate');
  	 	state.validating=false;
  	 	if(state.timer){
  	 		clearTimeout(state.timer);
@@ -20,20 +20,20 @@
  	 * 绑定验证事件
  	 */
  	 function bindEvent(target){
- 	 	var opts=$(target).data('validatebox').options;
- 	 	$(target).unbind('.validatebox');
+ 	 	var opts=$(target).data('validate').options;
+ 	 	$(target).unbind('.validate');
  	 	if(opts.novalidate||$(target).is(':disabled')){
  	 		return;
  	 	}
  	 	for(var e in opts.events){
- 	 		$(target).bind(e+'.validatebox',{target:target},opts.events[e]);
+ 	 		$(target).bind(e+'.validate',{target:target},opts.events[e]);
  	 	}
  	 };
  	/**
  	 * 显示提示
  	 */
  	 function showTip(target){
- 	 	var state=$(target).data('validatebox');
+ 	 	var state=$(target).data('validate');
  	 	var opts=state.options;
  	 	$(target).tooltip($.extend({},opts.tipOptions,{content:state.message,position:opts.tipPosition,deltaX:opts.deltaX})).tooltip('show');
  	 	state.tip=true;
@@ -42,7 +42,7 @@
  	 * 重置提示位置
  	 */
  	 function repositionTip(target){
- 	 	var state=$(target).data('validatebox');
+ 	 	var state=$(target).data('validate');
  	 	if(state&&state.tip){
  	 		$(target).tooltip('reposition');
  	 	}
@@ -51,7 +51,7 @@
  	 * 隐藏提示
  	 */
  	 function hideTip(target){
- 	 	var state=$(target).data('validatebox');
+ 	 	var state=$(target).data('validate');
  	 	state.tip=false;
  	 	$(target).tooltip('hide');
  	 };
@@ -59,7 +59,7 @@
  	 * 验证
  	 */
  	 function validate(target){
- 	 	var state=$(target).data('validatebox');
+ 	 	var state=$(target).data('validate');
  	 	var opts=state.options;
  	 	var box=$(target);
  	 	opts.onBeforeValidate.call(target);
@@ -74,7 +74,7 @@
  	 		var rule=opts.rules[validType];
  	 		if(rule&&value){
  	 			if(!rule['validator'].call(target,value,opts.validParams)){
- 	 				box.addClass('validatebox-invalid');
+ 	 				box.addClass('validate-invalid');
  	 				var msg=rule['message'];
  	 				if(opts.validParams){
  	 					for(var i=0;i<opts.validParams.length;i++){
@@ -91,7 +91,7 @@
  	 		return true;
  	 	};
  	 	function getValidateResult(){
- 	 		box.removeClass('validatebox-invalid');
+ 	 		box.removeClass('validate-invalid');
  	 		hideTip(target);
  	 		if(opts.novalidate||box.is(':disabled')){
  	 			return true;
@@ -99,7 +99,7 @@
 
  	 		if(opts.required){
  	 			if(box.val()==''){
- 	 				box.addClass('validatebox-invalid');
+ 	 				box.addClass('validate-invalid');
  	 				setMessage(opts.missingMessage);
  	 				if(state.validating){
  	 					showTip(target);
@@ -127,37 +127,37 @@
  	 * 开启或禁用验证
  	 */
  	 function setValidation(target,param){
- 	 	var opts=$(target).data('validatebox').options;
+ 	 	var opts=$(target).data('validate').options;
  	 	if(param!=undefined){
  	 		opts.novalidate=param;
  	 	}
  	 	if(opts.novalidate){
- 	 		$(target).removeClass('validatebox-invalid');
+ 	 		$(target).removeClass('validate-invalid');
  	 		hideTip(target);
  	 	}
  	 	validate(target);
  	 	bindEvent(target);
  	 };
- 	 $.fn.validatebox=function(options,param){
+ 	 $.fn.validate=function(options,param){
  	 	if(typeof options=='string'){
- 	 		return $.fn.validatebox.methods[options](this,param);
+ 	 		return $.fn.validate.methods[options](this,param);
  	 	}
  	 	options=options||{};
  	 	return this.each(function(){
- 	 		var state=$(this).data('validatebox');
+ 	 		var state=$(this).data('validate');
  	 		if(state){
  	 			$.extend(state.options,options);
  	 		}else{
- 	 			$(this).addClass('validatebox-text');
- 	 			$(this).data('validatebox',{options:$.extend({},$.fn.validatebox.defaults,$.fn.validatebox.parseOptions(this),options)});
+ 	 			$(this).addClass('validate-text');
+ 	 			$(this).data('validate',{options:$.extend({},$.fn.validate.defaults,$.fn.validate.parseOptions(this),options)});
  	 		}
  	 		setValidation(this);
  	 		validate(this);
  	 	});
  	 };
- 	 $.fn.validatebox.methods={
+ 	 $.fn.validate.methods={
  	 	options:function(jq){
- 	 		return $(jq[0]).data('validatebox').options;
+ 	 		return $(jq[0]).data('validate').options;
  	 	},
  	 	destroy:function(jq){
  	 		return jq.each(function(){
@@ -183,11 +183,11 @@
  	 		});
  	 	}
  	 };
- 	 $.fn.validatebox.parseOptions=function(target){
+ 	 $.fn.validate.parseOptions=function(target){
  	 	var t=$(target);
  	 	return $.extend({},$.parser.parseOptions(target,['validType','missingMessage','invalidMessage','tipPosition',{delay:'number',deltaX:'number'}]),{required:(t.attr('required')?true:undefined),novalidate:(t.attr('novalidate')!=undefined?true:undefined)});
  	 };
- 	 $.fn.validatebox.defaults={
+ 	 $.fn.validate.defaults={
  	 	required:false,
  	 	validType:null,
  	 	validParams:[],
@@ -200,7 +200,7 @@
  	 	events:{
  	 		focus:function focus(e){
  	 			var target=e.data.target;
- 	 			var state=$(target).data('validatebox');
+ 	 			var state=$(target).data('validate');
  	 			if($(target).attr('readonly')){
  	 				return;
  	 			}
@@ -214,7 +214,7 @@
  	 							clearTimeout(state.timer);
  	 						}
  	 						state.timer=setTimeout(function(){
- 	 							$(target).validatebox('validate');
+ 	 							$(target).validate('validate');
  	 						},state.options.delay);
  	 					}else{
  	 						repositionTip(target);
@@ -225,7 +225,7 @@
  	 		},
  	 		blur:function blur(e){
  	 			var target=e.data.target;
- 	 			var state=$(target).data('validatebox');
+ 	 			var state=$(target).data('validate');
  	 			if(state.timer){
  	 				clearTimeout(state.timer);
  	 				state.timer=undefined;
@@ -235,13 +235,13 @@
  	 		},
  	 		mouseenter:function(e){
  	 			var t=$(e.data.target);
- 	 			if(t.hasClass('validatebox-invalid')){
+ 	 			if(t.hasClass('validate-invalid')){
  	 				showTip(e.data.target);
  	 			}
  	 		},
  	 		mouseleave:function mouseleave(e){
  	 			var target=e.data.target;
- 	 			var state=$(target).data('validatebox');
+ 	 			var state=$(target).data('validate');
  	 			if(!state.validating){
  	 				hideTip(target);
  	 			}

@@ -4,22 +4,22 @@
 	<meta charset="UTF-8">
 	<title></title>
 	<link rel="stylesheet" type="text/css" href="../../themes/default/tooltip.css">
-	<link rel="stylesheet" type="text/css" href="../../themes/default/validatebox.css">
+	<link rel="stylesheet" type="text/css" href="../../themes/default/validate.css">
 	<link rel="stylesheet" type="text/css" href="../../themes/default/icon.css">
 	<script type="text/javascript" src="../../jquery.min.js"></script>
 	<script type="text/javascript" src="../../src/jquery.parser.js"></script>
 	<script type="text/javascript" src="../../src/jquery.tooltip.js"></script>
-	<script type="text/javascript" src="../../src/jquery.validatebox.js"></script>
+	<script type="text/javascript" src="../../src/jquery.validate.js"></script>
 </head>
 <body>
 	<table cellpadding="5">
 		<tr>
 			<td>User Name:</td>
-			<td><input class="slui-validatebox textbox" data-options="required:true,validType:'length',validParams:[3,10],novalidate:true"></td>
+			<td><input class="slui-validate textbox" data-options="required:true,validType:'length',validParams:[3,10],novalidate:true"></td>
 		</tr>
 		<tr>
 			<td>Email:</td>
-			<td><input class="slui-validatebox textbox" data-options="required:true,validType:'email',novalidate:true"></td>
+			<td><input class="slui-validate textbox" data-options="required:true,validType:'email',novalidate:true"></td>
 		</tr>
 		<tr>
 			<td>Birthday:</td>
@@ -27,17 +27,17 @@
 		</tr>
 		<tr>
 			<td>URL:</td>
-			<td><input class="slui-validatebox textbox" data-options="required:true,validType:'url',novalidate:true"></td>
+			<td><input class="slui-validate textbox" data-options="required:true,validType:'url',novalidate:true"></td>
 		</tr>
 		<tr>
 			<td>Phone:</td>
-			<td><input class="slui-validatebox textbox" data-options="required:true,novalidate:true"></td>
+			<td><input class="slui-validate textbox" data-options="required:true,novalidate:true"></td>
 		</tr>
 	</table>
 	<script type="text/javascript">
 		$(function(){
-			$('.validatebox-text').bind('blur', function(){
-				$(this).validatebox('enableValidation').validatebox('validate');
+			$('.validate-text').bind('blur', function(){
+				$(this).validate('enableValidation').validate('validate');
 			});
 		})
 	</script>

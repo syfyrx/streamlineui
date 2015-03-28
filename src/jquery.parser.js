@@ -4,12 +4,10 @@
         auto: true,
         onComplete: function (context) { },
         plugins: ['draggable', 'droppable', 'resizable', 'pagination', 'tooltip',
-		         'linkbutton', 'menu', 'menubutton', 'splitbutton', 'progressbar',
-				 'tree', 'textbox', 'filebox', 'combo', 'combobox', 'combotree', 'combogrid', 'numberbox', 'validatebox', 'searchbox',
-				 'spinner', 'numberspinner', 'timespinner', 'datetimespinner', 'calendar', 'datebox', 'datetimebox', 'slider',
-				 'layout', 'panel', 'datagrid', 'propertygrid', 'treegrid', 'tabs', 'accordion', 'window', 'dialog', 'form'
-
-
+        'linkbutton', 'menu', 'menubutton', 'splitbutton', 'progressbar',
+        'tree', 'textbox', 'filebox', 'combo', 'combobox', 'combotree', 'combogrid', 'numberbox', 'validate', 'searchbox',
+        'spinner', 'numberspinner', 'timespinner', 'datetimespinner', 'calendar', 'datebox', 'datetimebox', 'slider',
+        'layout', 'panel', 'datagrid', 'propertygrid', 'treegrid', 'tabs', 'accordion', 'window', 'dialog', 'form'
         ],
         parse: function (context) {
             var aa = [];
@@ -66,7 +64,7 @@
 		 * $.parser.parseOptions(target);
 		 * $.parser.parseOptions(target, ['id','title','width',{fit:'boolean',border:'boolean'},{min:'number'}]);
 		 */
-        parseOptions: function (target, properties) {
+         parseOptions: function (target, properties) {
             var t = $(target);
             var options = {};
 
@@ -118,7 +116,7 @@
     /**
 	 * extend plugin to set box model width
 	 */
-    $.fn._outerWidth = function (width) {
+     $.fn._outerWidth = function (width) {
         if (width == undefined) {
             if (this[0] == window) {
                 return this.width() || document.body.clientWidth;
@@ -131,7 +129,7 @@
     /**
 	 * extend plugin to set box model height
 	 */
-    $.fn._outerHeight = function (height) {
+     $.fn._outerHeight = function (height) {
         if (height == undefined) {
             if (this[0] == window) {
                 return this.height() || document.body.clientHeight;
@@ -272,22 +270,22 @@
 /**
  * support for mobile devices
  */
-(function ($) {
+ (function ($) {
     var longTouchTimer = null;
     var dblTouchTimer = null;
     var isDblClick = false;
 
     function onTouchStart(e) {
         if (e.touches.length != 1) { return }
-        if (!isDblClick) {
-            isDblClick = true;
-            dblClickTimer = setTimeout(function () {
+            if (!isDblClick) {
+                isDblClick = true;
+                dblClickTimer = setTimeout(function () {
+                    isDblClick = false;
+                }, 500);
+            } else {
+                clearTimeout(dblClickTimer);
                 isDblClick = false;
-            }, 500);
-        } else {
-            clearTimeout(dblClickTimer);
-            isDblClick = false;
-            fire(e, 'dblclick');
+                fire(e, 'dblclick');
             //			e.preventDefault();
         }
         longTouchTimer = setTimeout(function () {
@@ -300,15 +298,15 @@
     }
     function onTouchMove(e) {
         if (e.touches.length != 1) { return }
-        if (longTouchTimer) {
-            clearTimeout(longTouchTimer);
+            if (longTouchTimer) {
+                clearTimeout(longTouchTimer);
+            }
+            fire(e, 'mousemove');
+            if ($.fn.draggable.isDragging || $.fn.resizable.isResizing) {
+                e.preventDefault();
+            }
         }
-        fire(e, 'mousemove');
-        if ($.fn.draggable.isDragging || $.fn.resizable.isResizing) {
-            e.preventDefault();
-        }
-    }
-    function onTouchEnd(e) {
+        function onTouchEnd(e) {
         //		if (e.touches.length > 0){return}
         if (longTouchTimer) {
             clearTimeout(longTouchTimer);

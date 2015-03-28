@@ -125,9 +125,9 @@
 			js:'jquery.combogrid.js',
 			dependencies:['combo','datagrid']
 		},
-		validatebox:{
-			js:'jquery.validatebox.js',
-			css:'validatebox.css',
+		validate:{
+			js:'jquery.validate.js',
+			css:'validate.css',
 			dependencies:['tooltip']
 		},
 		numberbox:{
@@ -334,13 +334,12 @@
 	easyloader = {
 		modules:modules,
 		locales:locales,
-		
 		base:'.',
 		theme:'default',
 		css:true,
 		locale:null,
 		timeout:2000,
-	
+		
 		load: function(name, callback){
 			if (/\.css$/i.test(name)){
 				if (/^http/i.test(name)){
@@ -382,5 +381,4 @@
 			});
 		});
 	}
-	
 })();
