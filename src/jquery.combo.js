@@ -106,8 +106,11 @@
  			downArrow.removeClass('combo-arrow-readonly');
  		}
  	}
+ 	/**
+ 	 * 
+ 	 */
  	function getText(target){
- 		
+
  	}
  	function _f(_10){
  		var _11=$.data(_10,'combo').panel;
