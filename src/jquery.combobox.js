@@ -26,7 +26,6 @@
 		var opts = state.options;
 		var panel=state.panel;
 		var item = opts.finder.getEl(target, value);
-		console.log(panel.position());
 		if (item.length){
 			if (item.position().top <= 0){
 				var h = panel.scrollTop() + item.position().top;
@@ -37,9 +36,11 @@
 			}
 		}
 	}
-	
+	/**
+	 * 键盘导航
+	 */
 	function nav(target, dir){
-		var opts = $.data(target, 'combobox').options;
+		var opts = $(target).data('combobox').options;
 		var panel = $(target).combobox('panel');
 		var item = panel.children('div.combobox-item-hover');
 		if (!item.length){
@@ -175,31 +176,25 @@
 			dd.push('</div>');
 		}
 		state.panel.html(dd.join(''));
-		
-		// if (opts.multiple){
-		// 	setValues(target, selected);
-		// } else {
-		// 	setValues(target, selected.length ? [selected[selected.length-1]] : []);
-		// }
-		
 		opts.onLoadSuccess.call(target, data);
 	}
 	
 	/**
-	 * request remote data if the url property is setted.
+	 * 请求远程服务器数据
 	 */
-	function request(target, url, param, remainText){
-		var opts = $.data(target, 'combobox').options;
+	function request(target, url, param){
+		var state=$(target).data('combobox');
+		var opts = state.options;
 		if (url){
 			opts.url = url;
 		}
-//		if (!opts.url) return;
 		param = param || {};
+		opts.queryParams=param;
 		
-		if (opts.onBeforeLoad.call(target, param) == false) return;
+		if (opts.onBeforeLoad.call(target, opts.queryParams) == false) return;
 
-		opts.loader.call(target, param, function(data){
-			loadData(target, data, remainText);
+		opts.loader.call(target, opts.queryParams, function(data){
+			loadData(target, data);
 		}, function(){
 			opts.onLoadError.apply(this, arguments);
 		});
@@ -366,7 +361,7 @@
 				loadData(this, state.options.data);
 
 			}
-			//request(this);
+			request(this);
 		});
 	};
 	
@@ -475,6 +470,7 @@
 		groupFormatter: function(group){return group;},
 		mode: 'local',	// or 'remote'
 		url: null,
+		queryParams:{},
 		method: 'post', // or 'get'
 		data: [],
 		keyHandler: {
