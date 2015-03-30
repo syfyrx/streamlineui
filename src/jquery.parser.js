@@ -13,7 +13,7 @@
             var aa = [];
             for (var i = 0; i < $.parser.plugins.length; i++) {
                 var name = $.parser.plugins[i];
-                var r = $('.slui-' + name, context);
+                var r = $('.slui-' + name,context);
                 if (r.length) {
                     if (r[name]) {
                         r[name]();
@@ -108,7 +108,7 @@
         }
     };
     $(function () {
-    	if (!window.easyloader && $.parser.auto) {
+    	if (!window.loader && $.parser.auto) {
             $.parser.parse();
         }
     });

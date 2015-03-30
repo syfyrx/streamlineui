@@ -1,0 +1,62 @@
+table,thead,tr,th,td,input {
+ margin: 0;
+ padding: 0;
+ font-family: verdana;
+ font-size: 12px;
+}
+
+.sldatagrid {
+ border: solid 1px #B4B4B4;
+ border-collapse: collapse;
+ margin: 1px 0 0 0;
+}
+
+.sldatagrid tr th {
+ height: 27px;
+ border: solid 1px #B4B4B4;
+ background-color: #F4F4F4;
+ word-break: keep-all;
+ white-space: nowrap;
+ padding: 1px 5px 1px 5px;
+}
+
+.sldatagrid tr td {
+ height: 25px;
+ border: solid 1px #B4B4B4;
+ word-break: keep-all;
+ white-space: nowrap;
+ padding: 0 5px 0 5px;
+}
+
+.sldatagrid-header-check {
+ width: 20px;
+}
+
+.sldatagrid-header-custom {
+ width: auto;
+}
+
+.sldatagrid-header-cell {
+ min-width: 50px;
+}
+
+.sldatagrid-row-check {
+ width: 20px;
+}
+
+.sldatagrid-row-custom {
+ 
+}
+
+.sldatagrid-row-cell {
+ padding: 0 5px 0 5px;
+ width: auto;
+}
+
+.sldatagrid-row-selected {
+ background-color: #FCFCB6;
+}
+
+.sldatagrid-row-enter {
+ background-color: #DDFAFB;
+}
