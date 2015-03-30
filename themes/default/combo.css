@@ -35,14 +35,6 @@
 }
 .combo-panel {
   overflow: auto;
-}
-.combo-panel {
-  background-color: #ffffff;
-}
-.combo .textbox-icon-disabled:hover {
-  cursor: default;
-}
-.textbox-invalid {
-  border-color: #ffa8a8;
-  background-color: #fff3f3;
+  border: 1px solid #95B8E7;  
+  border-top:none;
 }

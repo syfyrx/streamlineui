@@ -22,12 +22,12 @@
                     }
                 }
             }
-            if (aa.length && window.easyloader) {
+            if (aa.length && window.loader) {
                 var names = [];
                 for (var i = 0; i < aa.length; i++) {
                     names.push(aa[i].name);
                 }
-                easyloader.load(names, function () {
+                loader.load(names, function () {
                     for (var i = 0; i < aa.length; i++) {
                         var name = aa[i].name;
                         var jq = aa[i].jq;

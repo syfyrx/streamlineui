@@ -3,6 +3,8 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Basic Combo - jQuery EasyUI Demo</title>
+	<link rel="stylesheet" type="text/css" href="../../themes/default/tooltip.css">
+	<link rel="stylesheet" type="text/css" href="../../themes/default/validate.css">
 	<link rel="stylesheet" type="text/css" href="../../themes/default/combo.css">
 	<link rel="stylesheet" type="text/css" href="../../themes/default/icon.css">
 	<script type="text/javascript" src="../../jquery.min.js"></script>
@@ -30,11 +32,7 @@
 				editable:false
 			});
 			$('#sp').appendTo($('#cc').combo('panel'));
-			$('#sp input').click(function(){
-				var v = $(this).val();
-				var s = $(this).next('span').text();
-				$('#cc').combo('setValue', v).combo('setText', s).combo('hidePanel');
-			});
+			$('#cc').combo('setValue', '01').combo('setText', 'java').combo('hidePanel');
 		});
 	</script>
 </body>

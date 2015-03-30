@@ -1,8 +1,14 @@
 /*jQuery StreamLineUI v1.0*/
 (function(){
 	var modules = {
+		parser:{
+			js:'jquery.parser.js'
+		},
 		draggable:{
 			js:'jquery.draggable.js'
+		},
+		tooltip:{
+			js:'jquery.tooltip.js'
 		},
 		droppable:{
 			js:'jquery.droppable.js'
@@ -169,12 +175,6 @@
 		slider:{
 			js:'jquery.slider.js',
 			dependencies:['draggable']
-		},
-		tooltip:{
-			js:'jquery.tooltip.js'
-		},
-		parser:{
-			js:'jquery.parser.js'
 		}
 	};
 
@@ -230,13 +230,13 @@
 		
 		var module = modules[name];
 		var jsStatus = 'loading';
-		var cssStatus = (easyloader.css && module['css']) ? 'loading' : 'loaded';
+		var cssStatus = (loader.css && module['css']) ? 'loading' : 'loaded';
 		
-		if (easyloader.css && module['css']){
+		if (loader.css && module['css']){
 			if (/^http/i.test(module['css'])){
 				var url = module['css'];
 			} else {
-				var url = easyloader.base + 'themes/' + easyloader.theme + '/' + module['css'];
+				var url = loader.base + 'themes/' + loader.theme + '/' + module['css'];
 			}
 			loadCss(url, function(){
 				cssStatus = 'loaded';
@@ -249,7 +249,7 @@
 		if (/^http/i.test(module['js'])){
 			var url = module['js'];
 		} else {
-			var url = easyloader.base + 'plugins/' + module['js'];
+			var url = loader.base + 'plugins/' + module['js'];
 		}
 		loadJs(url, function(){
 			jsStatus = 'loaded';
@@ -260,7 +260,7 @@
 		
 		function finish(){
 			queues[name] = 'loaded';
-			easyloader.onProgress(name);
+			loader.onProgress(name);
 			if (callback){
 				callback();
 			}
@@ -294,7 +294,7 @@
 			if (callback){
 				callback();
 			}
-			easyloader.onLoad(name);
+			loader.onLoad(name);
 		}
 		
 		var time = 0;
@@ -311,14 +311,14 @@
 					mm.shift();
 					loadMm();
 				} else {
-					if (time < easyloader.timeout){
+					if (time < loader.timeout){
 						time += 10;
 						setTimeout(arguments.callee, 10);
 					}
 				}
 			} else {
-				if (easyloader.locale && doLoad == true && locales[easyloader.locale]){
-					var url = easyloader.base + 'locale/' + locales[easyloader.locale];
+				if (loader.locale && doLoad == true && locales[loader.locale]){
+					var url = loader.base + 'locale/' + locales[loader.locale];
 					runJs(url, function(){
 						finish();
 					});
@@ -331,7 +331,7 @@
 		loadMm();
 	}
 	
-	easyloader = {
+	loader = {
 		modules:modules,
 		locales:locales,
 		base:'.',
@@ -339,44 +339,43 @@
 		css:true,
 		locale:null,
 		timeout:2000,
-		
 		load: function(name, callback){
 			if (/\.css$/i.test(name)){
 				if (/^http/i.test(name)){
 					loadCss(name, callback);
 				} else {
-					loadCss(easyloader.base + name, callback);
+					loadCss(loader.base + name, callback);
 				}
 			} else if (/\.js$/i.test(name)){
 				if (/^http/i.test(name)){
 					loadJs(name, callback);
 				} else {
-					loadJs(easyloader.base + name, callback);
+					loadJs(loader.base + name, callback);
 				}
 			} else {
 				loadModule(name, callback);
 			}
 		},
-		
 		onProgress: function(name){},
 		onLoad: function(name){}
 	};
 
+	//设置基础目录
 	var scripts = document.getElementsByTagName('script');
 	for(var i=0; i<scripts.length; i++){
 		var src = scripts[i].src;
 		if (!src) continue;
-		var m = src.match(/easyloader\.js(\W|$)/i);
+		var m = src.match(/loader\.js(\W|$)/i);
 		if (m){
-			easyloader.base = src.substring(0, m.index);
+			loader.base = src.substring(0, m.index);
 		}
 	}
 
-	window.using = easyloader.load;
+	window.using = loader.load;
 	
 	if (window.jQuery){
 		jQuery(function(){
-			easyloader.load('parser', function(){
+			loader.load('parser', function(){
 				jQuery.parser.parse();
 			});
 		});
