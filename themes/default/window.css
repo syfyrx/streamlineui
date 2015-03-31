@@ -7,13 +7,16 @@
 }
 
 .window-header {
-	padding: 5px; position: relative; border: 1px solid #000000; background-color: #000000;
+	height: 30px; line-height: 30px; vertical-align: middle; position : relative; border: 1px solid #000000;
+	background-color: #000000; position: relative; border : 1px solid #000000; background-color : #000000; padding: 0 15px;
 }
 
 .window-title {
-	font-size: 12px; font-weight: bold; color: #FEFEFE; height: 16px; line-height: 16px;
+	font-size: 12px; font-weight: bold; color: #FEFEFE; height: 30px; line-height: 30px;
 }
-
+.window-tool {
+	right: 10px; width: auto;
+}
 .window-with-icon {
 	padding-left: 18px;
 }
@@ -26,17 +29,12 @@
 	left: 5px; width: 16px;
 }
 
-.window-tool {
-	right: 5px; width: auto;
-}
-
 .window-tool a {
-	display: inline-block; width: 16px; height: 16px; margin: 0 0 0 2px;
-	vertical-align: top;
+	display: inline-block; width: 16px; height: 16px; margin: 0 0 0 10px; vertical-align: top;
 }
 
 .window-tool a:hover {
-	opacity: 0.9; filter: alpha(opacity = 90); 
+	opacity: 0.9; filter: alpha(opacity = 90);
 }
 
 .window-body {

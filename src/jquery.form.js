@@ -1,39 +1,40 @@
-/*jQuery StreamLineUI v1.0
- *依赖parser
+/**
+ * jQuery StreamLineUI v1.0		依赖parser
  */
- 
-(function ($) {
-	function ajaxSubmit(target, options) {
-		var targetOpts = $(target).data('form').options;
-		$.extend(targetOpts, options || {});
 
-		var param = $.extend({}, targetOpts.queryParams);
-		if (targetOpts.onSubmit.call(target, param) == false) { return; }
+(function($) {
+	function ajaxSubmit(target, options) {
+		var opts = $(target).data('form').options;
+		$.extend(opts, options || {});
+
+		var param = $.extend({}, opts.queryParams);
+		if (opts.onSubmit.call(target, param) == false) {
+			return;
+		}
 
 		var frameObj = $('#slui_frame');
 		if (frameObj.length == 0)
 			frameObj = $('<iframe id="slui_frame" name="slui_frame"></iframe>').appendTo('body');
 
 		frameObj.attr('src', window.ActiveXObject ? 'javascript:false' : 'about:blank').css({
-			position: 'absolute',
-			top: -1000,
-			left: -1000
+			position : 'absolute',
+			top : -1000,
+			left : -1000,
+			display : 'none'
 		});
 		frameObj.bind('load', frameLoad);
 
 		submit(param);
 
 		function submit(param) {
-			var targetObj = $(target);
-			if (targetOpts.url) {
-				targetObj.attr('action', targetOpts.url);
+			var t = $(target);
+			if (opts.url) {
+				t.attr('action', opts.url);
 			}
-			targetObj.attr('target', 'slui_frame');
-			targetObj[0].submit();
+			t.attr('target', 'slui_frame');
+			t[0].submit();
 		}
 		function frameLoad() {
-			var frameObj = $('#' + frameId);
-			if (!frameObj.length) { return; }
 			frameObj.unbind();
 			var data = '';
 			var bodyObj = frameObj.contents().find('body');
@@ -41,75 +42,73 @@
 			if (data == '') {
 				return;
 			}
-			targetOpts.success(data);
+			opts.success(data);
 			frameObj.remove();
 		}
 	}
 
 	/**
-	 * load form data
-	 * if data is a URL string type load from remote site, 
-	 * otherwise load from local data object. 
+	 * 加载本地数据或远程数据
 	 */
 	function load(target, data) {
-		var targetOpts = $(target).data('form').options;
-
-		if (typeof data == 'string') {
+		var opts = $(target).data('form').options;
+		if (typeof data == 'string') {// 加载远程数据
 			var param = {};
-			if (opts.onBeforeLoad.call(target, param) == false) return;
-
+			if (opts.onBeforeLoad.call(target, param) == false)
+				return;
 			$.ajax({
-				url: data,
-				data: param,
-				dataType: 'json',
-				success: function (data) {
-					_load(data);
+				url : data,
+				data : param,
+				dataType : 'json',
+				success : function(data) {
 				},
-				error: function () {
+				error : function() {
 					opts.onLoadError.apply(target, arguments);
 				}
 			});
-		} else {
+		} else {// 加载本地数据
 			_load(data);
 		}
-
+		// 加载数据
 		function _load(data) {
-			var targetObj = $(target);
-			for (var name in data) {
+			var t = $(target);
+			for ( var name in data) {
 				var val = data[name];
 				var rr = _checkField(name, val);
 				if (!rr.length) {
 					var count = _loadOther(name, val);
 					if (!count) {
-						$('input[name="' + name + '"]', targetObj).val(val);
-						$('textarea[name="' + name + '"]', targetObj).val(val);
-						$('select[name="' + name + '"]', targetObj).val(val);
+						$('input[name="' + name + '"]', t).val(val);
+						$('textarea[name="' + name + '"]', t).val(val);
+						$('select[name="' + name + '"]', t).val(val);
 					}
 				}
 				_loadCombo(name, val);
 			}
-			targetOpts.onLoadSuccess.call(target, data);
+			opts.onLoadSuccess.call(target, data);
 			validate(target);
 		}
 
 		/**
-		 * check the checkbox and radio fields
+		 * 加载 checkbox 和 radio 字段
 		 */
 		function _checkField(name, val) {
 			var rr = $(target).find('input[name="' + name + '"][type=radio], input[name="' + name + '"][type=checkbox]');
-			rr._propAttr('checked', false);
-			rr.each(function () {
+			rr.attr('checked', false);
+			rr.each(function() {
 				var f = $(this);
-				if (f.val() == String(val) || $.inArray(f.val(), $.isArray(val) ? val : [val]) >= 0) {
-					f._propAttr('checked', true);
+				if (f.val() == String(val) || $.inArray(f.val(), $.isArray(val) ? val : [ val ]) >= 0) {
+					f.attr('checked', true);
 				}
 			});
 			return rr;
 		}
-
+		/**
+		 * 加载其他字段
+		 */
 		function _loadOther(name, val) {
 			var count = 0;
-			var pp = ['textbox', 'numberbox', 'slider'];
+			var pp = [ 'textbox', 'numberbox', 'slider' ];
 			for (var i = 0; i < pp.length; i++) {
 				var p = pp[i];
 				var f = $(target).find('input[' + p + 'Name="' + name + '"]');
@@ -123,16 +122,16 @@
 
 		function _loadCombo(name, val) {
 			var form = $(target);
-			var cc = ['combobox', 'combotree', 'combogrid', 'datetimebox', 'datebox', 'combo'];
+			var cc = [ 'combobox', 'combotree', 'combogrid', 'datetimebox', 'datebox', 'combo' ];
 			var c = form.find('[comboName="' + name + '"]');
 			if (c.length) {
 				for (var i = 0; i < cc.length; i++) {
 					var type = cc[i];
 					if (c.hasClass(type + '-f')) {
-						if (c[type]('options').multiple) {
+						if ($.isArray(val)) {
 							c[type]('setValues', val);
 						} else {
-							c[type]('setValue', val);
+							c[type]('setValues', [ val ]);
 						}
 						return;
 					}
@@ -142,20 +141,20 @@
 	}
 
 	/**
-	 * clear the form fields
+	 * 清除表单值
 	 */
 	function clear(target) {
-		$('input,select,textarea', target).each(function () {
+		$('input,select,textarea', target).each(function() {
 			var t = this.type, tag = this.tagName.toLowerCase();
 			if (t == 'text' || t == 'hidden' || t == 'password' || tag == 'textarea') {
 				this.value = '';
-			} else if (t == 'file') {
+			} else if (t == 'file') {// ???
 				var file = $(this);
 				var newfile = file.clone().val('');
 				newfile.insertAfter(file);
-				if (file.data('validatebox')) {
-					file.validatebox('destroy');
-					newfile.validatebox();
+				if (file.data('validate')) {
+					file.validate('destroy');
+					newfile.validate();
 				} else {
 					file.remove();
 				}
@@ -168,7 +167,7 @@
 		});
 
 		var t = $(target);
-		var plugins = ['textbox', 'combo', 'combobox', 'combotree', 'combogrid', 'slider'];
+		var plugins = [ 'textbox', 'combo', 'combobox', 'combotree', 'combogrid', 'slider' ];
 		for (var i = 0; i < plugins.length; i++) {
 			var plugin = plugins[i];
 			var r = t.find('.' + plugin + '-f');
@@ -178,12 +177,12 @@
 		}
 		validate(target);
 	}
-
+	/**
+	 * 重置表单数据
+	 */
 	function reset(target) {
-		target.reset();
 		var t = $(target);
-
-		var plugins = ['textbox', 'combo', 'combobox', 'combotree', 'combogrid', 'datebox', 'datetimebox', 'spinner', 'timespinner', 'numberbox', 'numberspinner', 'slider'];
+		var plugins = [ 'textbox', 'combo', 'combobox', 'combotree', 'combogrid', 'datebox', 'datetimebox', 'spinner', 'timespinner', 'numberbox', 'numberspinner', 'slider' ];
 		for (var i = 0; i < plugins.length; i++) {
 			var plugin = plugins[i];
 			var r = t.find('.' + plugin + '-f');
@@ -195,14 +194,14 @@
 	}
 
 	/**
-	 * set the form to make it can submit with ajax.
+	 * 设置表单
 	 */
 	function setForm(target) {
-		var options = $.data(target, 'form').options;
+		var options = $(target).data('form').options;
 		$(target).unbind('.form');
 		if (options.ajax) {
-			$(target).bind('submit.form', function () {
-				setTimeout(function () {
+			$(target).bind('submit.form', function() {
+				setTimeout(function() {
 					ajaxSubmit(target, options);
 				}, 0);
 				return false;
@@ -210,7 +209,9 @@
 		}
 		setValidation(target, options.novalidate);
 	}
-
+	/**
+	 * 初始化表单
+	 */
 	function initForm(target, options) {
 		options = options || {};
 		var state = $(target).data('form');
@@ -218,97 +219,110 @@
 			$.extend(state.options, options);
 		} else {
 			$(target).data('form', {
-				options: $.extend({}, $.fn.form.defaults, $.fn.form.parseOptions(target), options)
+				options : $.extend({}, $.fn.form.defaults, $.fn.form.parseOptions(target), options)
 			});
 		}
 	}
-
+	/**
+	 * 验证表单
+	 */
 	function validate(target) {
-		if ($.fn.validatebox) {
+		if ($.fn.validate) {
 			var t = $(target);
-			t.find('.validatebox-text:not(:disabled)').validatebox('validate');
-			var invalidbox = t.find('.validatebox-invalid');
+			t.find('.validate-text:not(:disabled)').validate('validate');
+			var invalidbox = t.find('.validate-invalid');
 			invalidbox.filter(':not(:disabled):first').focus();
 			return invalidbox.length == 0;
 		}
 		return true;
 	}
-
+	/**
+	 * 设置是否验证
+	 */
 	function setValidation(target, novalidate) {
-		var opts = $.data(target, 'form').options;
+		var opts = $(target).data('form').options;
 		opts.novalidate = novalidate;
-		$(target).find('.validatebox-text:not(:disabled)').validatebox(novalidate ? 'disableValidation' : 'enableValidation');
+		$(target).find('.validate-text:not(:disabled)').validate(novalidate ? 'disableValidation' : 'enableValidation');
 	}
 
-	$.fn.form = function (options, param) {
+	$.fn.form = function(options, param) {
 		if (typeof options == 'string') {
-			this.each(function () {
+			this.each(function() {
 				initForm(this);
 			});
 			return $.fn.form.methods[options](this, param);
 		}
 
-		return this.each(function () {
+		return this.each(function() {
 			initForm(this, options);
 			setForm(this);
 		});
 	};
 
 	$.fn.form.methods = {
-		options: function (jq) {
-			return $.data(jq[0], 'form').options;
+		options : function(jq) {
+			return $(jq[0]).data('form').options;
 		},
-		submit: function (jq, options) {
-			return jq.each(function () {
+		submit : function(jq, options) {
+			return jq.each(function() {
 				ajaxSubmit(this, options);
 			});
 		},
-		load: function (jq, data) {
-			return jq.each(function () {
+		load : function(jq, data) {
+			return jq.each(function() {
 				load(this, data);
 			});
 		},
-		clear: function (jq) {
-			return jq.each(function () {
+		clear : function(jq) {
+			return jq.each(function() {
 				clear(this);
 			});
 		},
-		reset: function (jq) {
-			return jq.each(function () {
+		reset : function(jq) {
+			return jq.each(function() {
 				reset(this);
 			});
 		},
-		validate: function (jq) {
+		validate : function(jq) {
 			return validate(jq[0]);
 		},
-		disableValidation: function (jq) {
-			return jq.each(function () {
+		disableValidation : function(jq) {
+			return jq.each(function() {
 				setValidation(this, true);
 			});
 		},
-		enableValidation: function (jq) {
-			return jq.each(function () {
+		enableValidation : function(jq) {
+			return jq.each(function() {
 				setValidation(this, false);
 			});
 		}
 	};
 
-	$.fn.form.parseOptions = function (target) {
-		var targetObj = $(target);
-		return $.extend({}, $.parser.parseOptions(target, [{ ajax: 'boolean' }]), {
-			url: (targetObj.attr('action') ? targetObj.attr('action') : undefined)
+	$.fn.form.parseOptions = function(target) {
+		var t = $(target);
+		return $.extend({}, $.parser.parseOptions(target, [ {
+			novalidate : 'boolean',
+			ajax : 'boolean'
+		} ]), {
+			url : (t.attr('action') ? t.attr('action') : undefined)
 		});
 	};
 
 	$.fn.form.defaults = {
-		novalidate: false,
-		ajax: true,
-		url: null,
-		queryParams: {},
-		onSubmit: function (param) { return $(this).form('validate'); },
-		success: function (data) { },
-		onBeforeLoad: function (param) { },
-		onLoadSuccess: function (data) { },
-		onLoadError: function () { }
+		novalidate : false,
+		ajax : true,
+		queryParams : {},
+		url : null,
+		onSubmit : function(param) {
+			return $(this).form('validate');
+		},
+		success : function(data) {
+		},
+		onBeforeLoad : function(param) {
+		},
+		onLoadSuccess : function(data) {
+		},
+		onLoadError : function() {
+		}
 	};
 })(jQuery);
