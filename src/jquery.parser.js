@@ -67,7 +67,7 @@
          parseOptions: function (target, properties) {
             var t = $(target);
             var options = {};
-
+            // 获取标准data-options属性
             var s = $.trim(t.attr('data-options'));
             if (s) {
                 if (s.substring(0, 1) != '{') {
@@ -75,6 +75,7 @@
                 }
                 options = (new Function('return ' + s))();
             }
+            // 设置width、height、left、top、minWidth、maxWidth、minHeight、maxHeight属性
             $.map(['width', 'height', 'left', 'top', 'minWidth', 'maxWidth', 'minHeight', 'maxHeight'], function (p) {
                 var pv = $.trim(target.style[p] || '');
                 if (pv) {
@@ -84,7 +85,7 @@
                     options[p] = pv;
                 }
             });
-
+            // 获取标签里的属性
             if (properties) {
                 var opts = {};
                 for (var i = 0; i < properties.length; i++) {
