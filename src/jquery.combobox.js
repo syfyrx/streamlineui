@@ -28,7 +28,7 @@
 	 	}
 	 	// 创建下拉按钮
 	 	if (!state.downArrow) {
-	 		state.downArrow = $('<span class="combobox-arrow"><span>').insertAfter(target);
+	 		state.downArrow = $('<span class="combobox-arrow"></span>').insertAfter(target);
 	 		state.downArrow.css({
 	 			width : opts.height,
 	 			height : opts.height

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" type="text/css" href="../../themes/base.css">
+<link rel="stylesheet" type="text/css" href="../../themes/default/messager.css">
+<link rel="stylesheet" type="text/css" href="../../themes/default/icon.css">
+<script type="text/javascript" src="../../jquery.min.js"></script>
+<script type="text/javascript" src="../../src/jquery.messager.js"></script>
+<style type="text/css">
+* {
+	margin: 0;
+	padding: 0;
+}
+</style>
+</head>
+<body>
+	<div style="margin: 20px 0;">
+		<a href="#" onclick="alert1()">Alert</a> <a href="#" onclick="alert2()">Error</a> <a href="#" onclick="alert3()">Info</a>
+		<a href="#" onclick="alert4()">Question</a> <a href="#" onclick="alert5()">Warning</a>
+	</div>
+	<script>
+		function alert1() {
+			$.messager.confirm('My Title', 'Here is a message sadfasdf sadf asdf  message sadfasdf sadf asdf message sadfasdf sadf asdf message sadfasdf sadf asdf!', 'error');
+		}
+		function alert2() {
+			$.messager.alert('My Title', 'Here is a error message!', 'error');
+		}
+		function alert3() {
+			$.messager.alert('My Title', 'Here is a info message!', 'info');
+		}
+		function alert4() {
+			$.messager.alert('My Title', 'Here is a question message!', 'question');
+		}
+		function alert5() {
+			$.messager.alert('My Title', 'Here is a warning message!', 'warning');
+		}
+	</script>
+</body>
+</html>

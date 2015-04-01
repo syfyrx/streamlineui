@@ -108,7 +108,7 @@
 		 */
 		function _loadOther(name, val) {
 			var count = 0;
-			var pp = [ 'textbox', 'numberbox', 'slider' ];
+			var pp = ['slider' ];
 			for (var i = 0; i < pp.length; i++) {
 				var p = pp[i];
 				var f = $(target).find('input[' + p + 'Name="' + name + '"]');

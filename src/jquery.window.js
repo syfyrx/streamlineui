@@ -115,8 +115,8 @@
 		}
 		if (opts.modal) {
 			// 创建遮罩层
-			if (!$('.window-mask').length) {
-				var mask = $('<div class="window-mask"></div>');
+			if (!$('.slui-mask').length) {
+				var mask = $('<div class="slui-mask"></div>');
 				mask.css({
 					width : getPageArea().width,
 					height : getPageArea().height,
