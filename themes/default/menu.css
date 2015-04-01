@@ -1,0 +1,9 @@
+@CHARSET "UTF-8";
+.menu { position: absolute; margin: 0; padding: 2px; border: 1px solid #bbb; overflow: hidden; background-color:#fff;}
+.menu-item { position: relative; margin: 0; padding-left: 20px; overflow: hidden; white-space: nowrap; cursor: pointer; vertical-align: middle; line-height: 20px; }
+.menu-item.menu-active { background-color: red; }
+.menu-item.menu-icon { background-position-x: left; }
+.menu-item.menu-item-disabled {  opacity: 0.5; filter: alpha(opacity=50); cursor: default; }
+.menu-item.menu-active-disabled { background-color:transparent; color: #444; }
+.menu-sep { margin: 3px 0px 3px 20px; height: 1px; background-color: #bbb; }
+.menu-rightarrow { position: absolute; top: 50%; right: 0px; margin-top: -5px; height: 0; width: 0; overflow: hidden; font-size: 0; line-height: 0; border-color: transparent transparent transparent #FF9600; border-style: solid; border-width: 5px; }
