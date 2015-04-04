@@ -17,18 +17,13 @@
 	}
 	$.messager = {
 		alert : function(title, msg, icon, fn) {
-			var mask;
-			if (!$('.slui-mask').length) {
-				mask = $('<div class="slui-mask"></div>');
-				mask.css({
-					width : getPageArea().width,
-					height : getPageArea().height,
-					display : 'none'
-				});
-				mask.appendTo(document.body);
-			} else {
-				mask = $('.slui-mask');
-			}
+			var mask= $('<div class="slui-mask"></div>');
+			mask.css({
+				width : getPageArea().width,
+				height : getPageArea().height,
+				display : 'none'
+			});
+			mask.appendTo(document.body);
 			var messagerObj = $('<div class="slui-messager"></div>').appendTo('body').addClass('messager');
 			var headerObj = $('<div class="messager-header"></div>').prependTo(messagerObj);
 			var titleObj = $('<div class="messager-title"></div>').html(title).appendTo(headerObj);
@@ -36,7 +31,7 @@
 			aObj.bind('click.messager', function() {
 				messagerObj.hide();
 				messagerObj.remove();
-				mask.hide();
+				mask.remove();
 				if (fn) {
 					fn();
 				}
@@ -47,13 +42,13 @@
 				iconObj.addClass('messager-icon-' + icon);
 			}
 			var contentObj = $('<div class="messager-content"></div>').appendTo(bodyObj);
-			var msgObj = $('<p class="messager-info"></p>').appendTo(contentObj).html(msg);
+			var msgObj = $('<div class="messager-info"></div>').appendTo(contentObj).html(msg);
 			var toolObj = $('<div class="messager-tool"></div>').appendTo(contentObj);
 			var cancelObj = $('<a href="javascript:void(0)"></a>').addClass('messager-button').appendTo(toolObj).html($.messager.defaults.cancel);
 			cancelObj.bind('click.messager', function() {
 				messagerObj.hide();
 				messagerObj.remove();
-				mask.hide();
+				mask.remove();
 				if (fn) {
 					fn();
 				}
@@ -71,18 +66,13 @@
 			mask.show();
 		},
 		confirm : function(title, msg, icon, fn) {
-			var mask;
-			if (!$('.slui-mask').length) {
-				mask = $('<div class="slui-mask"></div>');
-				mask.css({
-					width : getPageArea().width,
-					height : getPageArea().height,
-					display : 'none'
-				});
-				mask.appendTo(document.body);
-			} else {
-				mask = $('.slui-mask');
-			}
+			var mask = $('<div class="slui-mask"></div>');
+			mask.css({
+				width : getPageArea().width,
+				height : getPageArea().height,
+				display : 'none'
+			});
+			mask.appendTo(document.body);
 			var messagerObj = $('<div class="slui-messager"></div>').appendTo('body').addClass('messager');
 			var headerObj = $('<div class="messager-header"></div>').prependTo(messagerObj);
 			var titleObj = $('<div class="messager-title"></div>').html(title).appendTo(headerObj);
@@ -90,7 +80,7 @@
 			aObj.bind('click.messager', function() {
 				messagerObj.hide();
 				messagerObj.remove();
-				mask.hide();
+				mask.remove();
 				if (fn) {
 					fn(false);
 				}
@@ -98,13 +88,13 @@
 			var bodyObj = $('<div class="messager-body"></div>').appendTo(messagerObj);
 			var iconObj = $('<div class="messager-icon"></div>').appendTo(bodyObj).addClass('messager-icon-' + icon);
 			var contentObj = $('<div class="messager-content"></div>').appendTo(bodyObj);
-			var msgObj = $('<p class="messager-info"></p>').appendTo(contentObj).html(msg);
+			var msgObj = $('<div class="messager-info"></div>').appendTo(contentObj).html(msg);
 			var toolObj = $('<div class="messager-tool"></div>').appendTo(contentObj);
 			var okObj = $('<a href="javascript:void(0)"></a>').addClass('messager-button').appendTo(toolObj).html($.messager.defaults.ok);
 			okObj.bind('click.messager', function() {
 				messagerObj.hide();
 				messagerObj.remove();
-				mask.hide();
+				mask.remove();
 				if (fn) {
 					fn(true);
 				}
@@ -113,7 +103,7 @@
 			cancelObj.bind('click.messager', function() {
 				messagerObj.hide();
 				messagerObj.remove();
-				mask.hide();
+				mask.remove();
 				if (fn) {
 					fn(false);
 				}

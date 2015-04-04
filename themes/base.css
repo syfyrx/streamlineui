@@ -1,6 +1,8 @@
 @CHARSET "UTF-8";
 
-body {
+html,body {
+	color: #000;
+	background: #FFF;
 	font-size: 12px;
 	font-family: Verdana, 'Microsoft YaHei';
 }

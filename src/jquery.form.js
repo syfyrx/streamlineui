@@ -1,5 +1,5 @@
 /**
- * jQuery StreamLineUI v1.0		依赖parser
+ * jQuery StreamLineUI v1.0 依赖parser
  */
 
 (function($) {
@@ -12,17 +12,16 @@
 			return;
 		}
 
-		var frameObj = $('#slui_frame');
-		if (frameObj.length == 0)
-			frameObj = $('<iframe id="slui_frame" name="slui_frame"></iframe>').appendTo('body');
+		var frameId = 'slui_frame_' + (new Date().getTime());
+		var frame = $('<iframe id="' + frameId + '" name="' + frameId + '"></iframe>').appendTo('body');
 
-		frameObj.attr('src', window.ActiveXObject ? 'javascript:false' : 'about:blank').css({
+		frame.attr('src', window.ActiveXObject ? 'javascript:false' : 'about:blank').css({
 			position : 'absolute',
 			top : -1000,
 			left : -1000,
 			display : 'none'
 		});
-		frameObj.bind('load', frameLoad);
+		frame.bind('load', frameLoad);
 
 		submit(param);
 
@@ -31,19 +30,37 @@
 			if (opts.url) {
 				t.attr('action', opts.url);
 			}
-			t.attr('target', 'slui_frame');
-			t[0].submit();
+			t.attr('target', frameId);
+			for ( var n in param) {
+				var field = $('<input type="hidden" name="' + n + '">').val(param[n]).appendTo(t);
+			}
+			t.submit();
 		}
 		function frameLoad() {
-			frameObj.unbind();
+			frame.unbind();
 			var data = '';
-			var bodyObj = frameObj.contents().find('body');
-			data = bodyObj.html();
-			if (data == '') {
-				return;
+			try {
+				var body = frame.contents().find('body');
+				data = body.html();
+				if (data == '') {
+					return;
+				}
+				var ta = body.find('>textarea');
+				if (ta.length) {
+					data = ta.val();
+				} else {
+					var pre = body.find('>pre');
+					if (pre.length) {
+						data = pre.html();
+					}
+				}
+			} catch (e) {
 			}
 			opts.success(data);
-			frameObj.remove();
+			setTimeout(function() {
+				frame.unbind();
+				frame.remove();
+			}, 100);
 		}
 	}
 
@@ -108,7 +125,7 @@
 		 */
 		function _loadOther(name, val) {
 			var count = 0;
-			var pp = ['slider' ];
+			var pp = [ 'slider' ];
 			for (var i = 0; i < pp.length; i++) {
 				var p = pp[i];
 				var f = $(target).find('input[' + p + 'Name="' + name + '"]');
@@ -129,9 +146,9 @@
 					var type = cc[i];
 					if (c.hasClass(type + '-f')) {
 						if ($.isArray(val)) {
-							c[type]('setValues', val);
+							c[type]('setValue', val.join(c[type]('options').separator));
 						} else {
-							c[type]('setValues', [ val ]);
+							c[type]('setValue', val);
 						}
 						return;
 					}

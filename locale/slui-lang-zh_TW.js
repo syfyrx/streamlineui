@@ -13,12 +13,12 @@ if ($.messager){
 	$.messager.defaults.ok = '確定';
 	$.messager.defaults.cancel = '取消';
 }
-if ($.fn.validatebox){
-	$.fn.validatebox.defaults.missingMessage = '該輸入項為必輸項';
-	$.fn.validatebox.defaults.rules.email.message = '請輸入有效的電子郵件地址';
-	$.fn.validatebox.defaults.rules.url.message = '請輸入有效的URL地址';
-	$.fn.validatebox.defaults.rules.length.message = '輸入內容長度必須介於{0}和{1}之間';
-	$.fn.validatebox.defaults.rules.remote.message = '請修正此欄位';
+if ($.fn.validate){
+	$.fn.validate.defaults.missingMessage = '該輸入項為必輸項';
+	$.fn.validate.defaults.rules.email.message = '請輸入有效的電子郵件地址';
+	$.fn.validate.defaults.rules.url.message = '請輸入有效的URL地址';
+	$.fn.validate.defaults.rules.length.message = '輸入內容長度必須介於{0}和{1}之間';
+	$.fn.validate.defaults.rules.remote.message = '請修正此欄位';
 }
 if ($.fn.numberbox){
 	$.fn.numberbox.defaults.missingMessage = '該輸入項為必輸項';

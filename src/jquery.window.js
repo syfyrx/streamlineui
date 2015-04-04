@@ -1,6 +1,5 @@
 /**
- * jQuery StreamlineUI v1.0 
- * 依赖：parser、draggable、resizable
+ * jQuery StreamlineUI v1.0 依赖：parser、draggable、resizable
  */
 (function($) {
 	/**
@@ -18,13 +17,13 @@
 			body.html(opts.content);
 		}
 		$(target).css({
-			width:opts.width,
-			height:opts.height,
+			width : opts.width,
+			height : opts.height,
 			zIndex : opts.zIndex
 		});
 		body.css({
-			width:opts.width,
-			height:opts.height-header.outerHeight()-footer.outerHeight()
+			width : opts.width,
+			height : opts.height - header.outerHeight() - footer.outerHeight()
 		});
 		$.parser.parse(body);
 		/**
@@ -115,18 +114,14 @@
 		}
 		if (opts.modal) {
 			// 创建遮罩层
-			if (!$('.slui-mask').length) {
-				var mask = $('<div class="slui-mask"></div>');
-				mask.css({
-					width : getPageArea().width,
-					height : getPageArea().height,
-					display : 'none'
-				});
-				mask.appendTo(document.body);
-				state.mask = mask;
-			} else {
-				state.mask = $('.window.mask');
-			}
+			var mask = $('<div class="slui-mask"></div>');
+			mask.css({
+				width : getPageArea().width,
+				height : getPageArea().height,
+				display : 'none'
+			});
+			mask.appendTo(document.body);
+			state.mask = mask;
 		}
 		if (opts.left == null) {
 			hcenter(target);
@@ -176,6 +171,19 @@
 			}
 		});
 	}
+	// 销毁组件
+	function destroy(target){
+		var state=$(target).data('window');
+		$('.slui-combobox',target).combobox('destroy');
+		state.mask.remove();
+		$(target).remove();
+	}
+	// 清除组件内容
+	function clear(target){
+		var state=$(target).data('window');
+		$('.slui-combobox',target).combobox('destroy');
+		$(target).children('.window-body').empty();
+	}
 	/**
 	 * 设置标题文本
 	 */
@@ -214,7 +222,7 @@
 			opts.collapsed = false;
 			collapse(target);
 		}
-		if (!opts.collapsed) {
+		if (!opts.collapsed && !state.isLoaded) {
 			load(target);
 		}
 	}
@@ -258,8 +266,8 @@
 			height : opts.height
 		});
 		body.css({
-			width:opts.width,
-			height:$(target).outerHeight() - header.outerHeight() - footer.outerHeight()
+			width : opts.width,
+			height : $(target).outerHeight() - header.outerHeight() - footer.outerHeight()
 		});
 		opts.onResize.apply(target, [ opts.width, opts.height ]);
 	}
@@ -383,7 +391,7 @@
 	function load(target, queryParams) {
 		var state = $(target).data('window');
 		var opts = state.options;
-		var body=$(target).children('.window-body');
+		var body = $(target).children('.window-body');
 		if (!opts.href) {
 			return;
 		}
@@ -396,7 +404,7 @@
 				return;
 			}
 			state.isLoaded = false;
-			body.empty();
+			clear(target);
 			if (opts.loadingMessage) {
 				body.html($('<div class="window-loading"></div>').html(opts.loadingMessage));
 			}
@@ -447,12 +455,11 @@
 			}
 		}
 	}
-	/**
-	 * 标签上绑定的数据包括：
-	 * options：属性
-	 * isLoaded：是否加载结束
-	 * original：窗口最大化前的尺寸
-	 */
+	
+	// 标签上绑定的数据包括：
+	// options：属性
+	// isLoaded：是否加载结束
+	// original：窗口最大化前的尺寸
 	$.fn.window = function(options, param) {
 		if (typeof options == 'string') {
 			return $.fn.window.methods[options](this, param);
@@ -464,11 +471,12 @@
 				$.extend(state.options, options);
 			} else {
 				$(this).data('window', {
-					options : $.extend({}, $.fn.window.defaults, $.fn.window.parseOptions(this), options)
+					options : $.extend({}, $.fn.window.defaults, $.fn.window.parseOptions(this), options),
+					isLoaded : false,
+					original : null
 				});
 				state = $(this).data('window');
 			}
-			state.isLoaded = false;
 			create(this);
 			setProperties(this);
 		});
@@ -487,6 +495,11 @@
 		body : function(jq) {
 			return $(jq[0]).children('.window-body');
 		},
+		destroy:function(jq){
+			return jq.each(function(){
+				destroy(this);
+			});
+		},
 		setTitle : function(jq, title) {
 			return jq.each(function() {
 				setTitle(this, title);
@@ -504,7 +517,7 @@
 		},
 		clear : function(jq) {
 			return jq.each(function() {
-				$(this).children('.window-body').empty();
+				clear(this);
 			});
 		},
 		refresh : function(jq, param) {

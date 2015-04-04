@@ -13,12 +13,12 @@ if ($.messager){
 	$.messager.defaults.ok = 'Ok';
 	$.messager.defaults.cancel = 'Cancel';
 }
-if ($.fn.validatebox){
-	$.fn.validatebox.defaults.missingMessage = 'This field is required.';
-	$.fn.validatebox.defaults.rules.email.message = 'Please enter a valid email address.';
-	$.fn.validatebox.defaults.rules.url.message = 'Please enter a valid URL.';
-	$.fn.validatebox.defaults.rules.length.message = 'Please enter a value between {0} and {1}.';
-	$.fn.validatebox.defaults.rules.remote.message = 'Please fix this field.';
+if ($.fn.validate){
+	$.fn.validate.defaults.missingMessage = 'This field is required.';
+	$.fn.validate.defaults.rules.email.message = 'Please enter a valid email address.';
+	$.fn.validate.defaults.rules.url.message = 'Please enter a valid URL.';
+	$.fn.validate.defaults.rules.length.message = 'Please enter a value between {0} and {1}.';
+	$.fn.validate.defaults.rules.remote.message = 'Please fix this field.';
 }
 if ($.fn.numberbox){
 	$.fn.numberbox.defaults.missingMessage = 'This field is required.';

@@ -8,32 +8,32 @@
 	function create(target) {
 		var state = $(target).data('textbox');
 		var opts = state.options;
-		$(target).attr('type', opts.type).addClass('textbox-text');
-		var inputWidth=opts.width;// 输入框宽度
-		$.each(buttons, function(i, n) {
+		$(target).attr('type', opts.type).addClass('textbox').addClass('textbox-text');
+		var inputWidth = opts.width;// 输入框宽度
+		$.each(opts.buttons, function(i, n) {
 			var button = $('<a href="javascript:void(0)" class="' + n.css + '">' + n.text + '</a>');
 			if (n.align == 'left') {
 				button.insertBefore(target);
 			} else if (n.align == 'right') {
 				button.insertAfter(target);
 			}
-			if(n.disabled){
+			if (n.disabled) {
 				button.addClass('textbox-button-disabled');
 			}
-			button.click(function(){
-				if(!$(this).hasClass('textbox-button-disabled')){
-					opts.onClickButton.call(target,i);
+			button.click(function() {
+				if (!$(this).hasClass('textbox-button-disabled')) {
+					opts.onClickButton.call(target, i);
 				}
 			});
 			button.css({
-				height:opts.height
+				height : opts.height
 			});
-			inputWidth-=button.outerWidth();
+			inputWidth -= button.outerWidth();
 			state.buttons.push(button);
 		});
 		$(target).css({
-			width:inputWidth,
-			height:opts.height
+			width : inputWidth,
+			height : opts.height
 		});
 		setDisabled(target, opts.disabled);
 		setReadonly(target, opts.readonly);
@@ -53,23 +53,23 @@
 		var state = $(target).data('textbox');
 		var opts = state.options;
 		if (param) {
-			if(param.width){
+			if (param.width) {
 				opts.width = param.width;
 			}
-			if(param.height){
-				opts.height=param.height;
+			if (param.height) {
+				opts.height = param.height;
 			}
 		}
-		var inputWidth=opts.width;
-		for(int i=0;i<state.buttons.length;i++){
+		var inputWidth = opts.width;
+		for (var i = 0; i < state.buttons.length; i++) {
 			state.buttons[i].css({
-				height:opts.height
+				height : opts.height
 			});
-			inputWidth-=state.buttons[i].outerWidth();
+			inputWidth -= state.buttons[i].outerWidth();
 		}
 		$(target).css({
-			width:inputWidth,
-			height:opts.height
+			width : inputWidth,
+			height : opts.height
 		});
 		opts.onResize.call(target, opts.width, opts.height);
 	}
@@ -77,19 +77,10 @@
 	 * 绑定验证
 	 */
 	function bindValidate(target) {
-		var state=$(target).data('textbox');
+		var state = $(target).data('textbox');
 		var opts = state.options;
 		$(target).validate($.extend({}, opts, {
-			deltaX : getTipX(target),
-			onBeforeValidate : function() {
-				var box = $(this);
-				if (!box.is(':focus')) {
-					box.val(opts.value);
-				}
-			},
-			onValidate : function(_1f) {
-				var box = $(this);
-			}
+			deltaX : getTipX(target)
 		}));
 	}
 	/**
@@ -98,10 +89,10 @@
 	function getTipX(target) {
 		var state = $(target).data('textbox');
 		var opts = state.options;
-		var tipX=0;
-		for(int i=0;i<opts.buttons.length;i++){
-			if(opts.buttons[i].align=='right'){
-				tipX+=state.buttons.outerWidth();
+		var tipX = 0;
+		for (var i = 0; i < opts.buttons.length; i++) {
+			if (opts.buttons[i].align == 'right') {
+				tipX += state.buttons.outerWidth();
 			}
 		}
 		return tipX;
@@ -110,12 +101,11 @@
 		var t = $(target);
 		var state = t.data('textbox');
 		var opts = state.options;
-		var tb = state.textbox;
 		t.attr('placeholder', opts.prompt);
 		t.unbind('.textbox');
 		if (!opts.disabled && !opts.readonly) {
 			t.bind('blur.textbox', function(e) {
-				if (t.val()=='') {
+				if (t.val() == '') {
 					t.val(opts.prompt).addClass('textbox-prompt');
 				}
 				t.removeClass('textbox-focused');
@@ -124,7 +114,7 @@
 					t.val('');
 				}
 				$(this).removeClass('textbox-prompt');
-				tb.addClass('textbox-focused');
+				t.addClass('textbox-focused');
 			});
 		}
 	}
@@ -134,19 +124,19 @@
 	function setDisabled(target, param) {
 		var state = $(target).data('textbox');
 		var opts = state.options;
-		opts.disabled=param;
+		opts.disabled = param;
 		if (param) {
 			$(target).attr('disabled', 'disabled').addClass('textbox-disabled');
 		} else {
 			$(target).removeAttr('disabled').removeClass('textbox-disabled');
 		}
-		for(int i=0;i<state.buttons.length;i++){
-			 opts.buttons[i].disabled=param;
-			 if(param){
-				 state.buttons[i].addClass('textbox-button-disabled');
-			 }esle{
-				 state.buttons[i].removeClass('textbox-button-disabled');
-			 }
+		for (var i = 0; i < state.buttons.length; i++) {
+			opts.buttons[i].disabled = param;
+			if (param) {
+				state.buttons[i].addClass('textbox-button-disabled');
+			} else {
+				state.buttons[i].removeClass('textbox-button-disabled');
+			}
 		}
 	}
 	/**
@@ -155,10 +145,10 @@
 	function setReadonly(target, param) {
 		var state = $(target).data('textbox');
 		var opts = state.options;
-		opts.readonly=param;
-		if(param){
-			$(target).attr('readonly','readonly').addClass('textbox-readonly');
-		}else{
+		opts.readonly = param;
+		if (param) {
+			$(target).attr('readonly', 'readonly').addClass('textbox-readonly');
+		} else {
 			$(target).removeAttr('readonly').removeClass('textbox-readonly');
 		}
 	}
@@ -183,16 +173,16 @@
 				$.extend(state.options, options);
 			} else {
 				$(this).data('textbox', {
-					options : $.extend({}, $.fn.textbox.defaults, $.fn.textbox.parseOptions(this), options),
+					options : $.extend({}, $.fn.validate.defaults, $.fn.textbox.defaults, $.fn.textbox.parseOptions(this), options),
 					buttons : []
 				});
 				state = $(this).data('textbox');
 			}
+
 			create(this);
 			changeOptions(this);
 			resize(this);
 			bindValidate(this);
-			$(this).textbox('initValue', state.options.value);
 		});
 	};
 	$.fn.textbox.methods = {
@@ -247,16 +237,19 @@
 			});
 		}
 	};
+	/**
+	 * 将data-options中的属性字符串转换为属性对象
+	 */
 	$.fn.textbox.parseOptions = function(target) {
 		var t = $(target);
-		return $.extend({}, $.fn.validate.parseOptions(target), $.parser.parseOptions(target, [ 'prompt', 'type']), {
+		return $.extend({}, $.parser.parseOptions(target), {
 			value : (t.val() || undefined),
 			type : (t.attr('type') ? t.attr('type') : undefined),
 			disabled : (t.attr('disabled') ? true : undefined),
 			readonly : (t.attr('readonly') ? true : undefined)
 		});
 	};
-	$.fn.textbox.defaults = $.extend({}, $.fn.validate.defaults, {
+	$.fn.textbox.defaults = {
 		width : 150,
 		height : 22,
 		prompt : '',
@@ -265,12 +258,12 @@
 		disabled : false,
 		readonly : false,
 		buttons : [],
-		onChange : function(_4f, _50) {
+		onChange : function(newValue, oldValue) {
 		},
-		onResize : function(_51, _52) {
+		onResize : function(width, height) {
 		},
-		onClickButton:function(index){
-			
+		onClickButton : function(index) {
+
 		}
-	});
+	};
 })(jQuery);

@@ -144,6 +144,7 @@
  	 	}
  	 	options=options||{};
  	 	return this.each(function(){
+ 	 		
  	 		var state=$(this).data('validate');
  	 		if(state){
  	 			$.extend(state.options,options);
