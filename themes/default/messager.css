@@ -16,7 +16,7 @@
 }
 
 .messager-title {
-	padding:0 10px;
+	padding: 0 10px;
 	font-size: 12px;
 	font-weight: bold;
 	color: #FEFEFE;
@@ -45,25 +45,25 @@
 	overflow: hidden;
 	padding: 0;
 	border: 1px solid #FEFEFE;
-	border-top:none;
+	border-top: none;
 }
 
 .messager-icon {
-	width: 100px;
-	float:left;
+	width: 130px;
+	float: left;
 	height: 100%;
 }
 
 .messager-content {
-	width: 350px;
+	width: 320px;
 	height: 100%;
 	float: left;
 }
 
 .messager-info {
 	height: 70px;
-	padding:10px;
-	overflow:hidden;
+	padding: 10px;
+	overflow: hidden;
 }
 
 .messager-tool {
@@ -75,7 +75,7 @@
 .messager-button {
 	text-decoration: none;
 	text-align: center;
-	padding:8px 0;
+	padding: 8px 0;
 	background-color: #F7F7F7;
 	border: 1px solid #DEDEDE;
 	margin: 5px 15px;
@@ -94,13 +94,13 @@
 }
 
 .messager-icon-info {
-	background: url('images/messager_icons.png') no-repeat center center;
+	background: url('icons/info.png') no-repeat center center;
 }
 
 .messager-icon-question {
-	background: url('images/messager_icons.png') no-repeat center center;
+	background: url('icons/question.png') no-repeat center center;
 }
 
 .messager-icon-warning {
-	background: url('images/messager_icons.png') no-repeat center center;
+	background: url('icons/warning.png') no-repeat center center;
 }

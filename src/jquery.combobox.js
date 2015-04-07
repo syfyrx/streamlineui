@@ -234,8 +234,8 @@
 				vv.push(v);
 			}
 			$(target).val(ss.join(opts.separator));
+			opts.onChange.call(target, newValue, state.textbox.val());
 		}
-		opts.onChange.call(target, newValue, state.textbox.val());
 		state.textbox.val(newValue);
 		state.values = newValues;
 	}
@@ -547,7 +547,6 @@
 			return $(jq[0]).val();
 		},
 		getValue : function(jq) {
-			console.log($(jq[0]).data('combobox'));
 			return $(jq[0]).data('combobox').textbox.val();
 		},
 		setValue : function(jq, value) {
