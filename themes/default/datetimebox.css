@@ -1,0 +1,163 @@
+@CHARSET "UTF-8";
+
+.datetimebox {
+	display: inline-block;
+	white-space: nowrap;
+	margin: 0;
+	padding: 0 5px;
+	border: 1px solid #DEDEDE;
+	background-color: #fff;
+	overflow: hidden;
+	vertical-align: middle;
+	outline: none;
+}
+
+.datetimebox-disable,.datetimebox-readonly {
+	
+}
+
+.datetimebox-panel {
+	background-color: #ffffff;
+	overflow: auto;
+	border: 1px solid #DEDEDE;
+	border-top: none;
+}
+
+.datetimebox-arrow {
+	overflow: hidden;
+	display: inline-block;
+	vertical-align: top;
+	cursor: pointer;
+	background-color: #FBFAFA;
+	border: 1px solid #DEDEDE;
+	background: url('icons/cal.png') no-repeat center center;
+	border-left: none;
+}
+
+.datetimebox-arrow-disable,.datetimebox-arrow-readonly {
+	
+}
+
+.datetimebox-arrow:hover {
+	background-color: transparent;
+}
+
+.datetimebox-header {
+	hieght: 16px;
+	line-height: 16px;
+	vertical-align: middle;
+}
+
+.datetimebox-prevyear,.datetimebox-prevmonth,.datetimebox-nextmonth,.datetimebox-nextyear {
+	width: 16px;
+	height: 16px;
+	display: inline-block;
+}
+
+.datetimebox-prevmonth {
+	background: url('images/calendar_arrows.png') no-repeat -18px -2px;
+}
+
+.datetimebox-nextmonth {
+	background: url('images/calendar_arrows.png') no-repeat -34px -2px;
+}
+
+.datetimebox-prevyear {
+	background: url('images/calendar_arrows.png') no-repeat -1px -2px;
+}
+
+.datetimebox-nextyear {
+	background: url('images/calendar_arrows.png') no-repeat -49px -2px;
+}
+
+.datetimebox-title {
+	
+}
+
+.datetimebox-body {
+	
+}
+
+.datetimebox-calendar {
+	
+}
+
+.datetimebox-calendar thead tr th {
+	width: 30px;
+	height: 40px;
+}
+
+.datetimebox-calendar tbody tr td {
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.datetimebox-day:hover {
+	background-color: blue;
+}
+
+.datetimebox-selected {
+	background-color: yellow;
+}
+
+.datetimebox-other-month {
+	background-color: gray;
+}
+
+.datetimebox-timespinner {
+	margin: 0 auto;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.datetimebox-timespinner-hour,.datetimebox-timespinner-minute,.datetimebox-timespinner-seconds {
+	height: 20px;
+	width: 20px;
+}
+
+.datetimebox-timespinner-separator {
+	width: 10px;
+	display: inline-block;
+}
+
+.datetimebox-timespinner span {
+	display: inline-block;
+	width: 18px;
+	height: 22px;
+	vertical-align: top;
+	border: 1px solid red;
+	border-left: none;
+}
+
+.datetimebox-timespinner-up,.datetimebox-timespinner-down {
+	width: 100%;
+	height: 11px;
+	display: block;
+	overflow: hidden;
+}
+
+.datetimebox-timespinner-up {
+	background: url('images/spinner_arrows.png') no-repeat 1px center;
+}
+
+.datetimebox-timespinner-down {
+	background: url('images/spinner_arrows.png') no-repeat -15px center;
+}
+
+.datetimebox-button {
+	
+}
+
+.datetimebox-button table {
+	width: 100%;
+}
+
+.datetimebox-button table tbody tr td {
+	width: 33%;
+}
+
+.datetimebox-button table tbody tr td a {
+	text-decoration: none;
+}
