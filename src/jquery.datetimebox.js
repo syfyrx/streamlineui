@@ -567,7 +567,7 @@
 		timeSeparator : ':',
 		showSeconds : true,
 		value : null,
-		prompt : '123',
+		prompt : '',
 		required : false,
 		missingMessage : 'This field is required.',
 		onChange : function(newDate, oldDate) {
