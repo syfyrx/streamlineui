@@ -21,6 +21,7 @@
 	overflow: auto;
 	border: 1px solid #DEDEDE;
 	font-weight: bold;
+	-moz-user-select:none;
 }
 
 .datetimebox-arrow {

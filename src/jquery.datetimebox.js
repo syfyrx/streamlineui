@@ -86,7 +86,7 @@
 			panel = $('.datetimebox-panel');
 			state.panel = panel;
 		} else {
-			panel = $('<div></div>').css({
+			panel = $('<div onselectstart="return false"></div>').css({
 				display : 'none',
 				position : 'absolute',
 				zIndex : 10000
