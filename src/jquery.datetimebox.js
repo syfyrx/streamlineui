@@ -17,9 +17,38 @@
 		}).insertAfter(target);
 		arrow.click(function() {
 			if (!opts.disabled) {
+				if (state.value) {
+					opts.year = state.value[0];
+					opts.month = state.value[1];
+				}
 				createCalendar(target);
 				createTimeSpinner(target);
 				createButton(target);
+				var header = state.panel.find('.datetimebox-header');
+				header.find('.datetimebox-nextmonth').unbind('.datetimebox').bind('click.datetimebox', function() {
+					opts.month++;
+					if (opts.month > 12) {
+						opts.year++;
+						opts.month = 1;
+					}
+					createCalendar(target);
+				});
+				header.find('.datetimebox-prevmonth').unbind('.datetimebox').bind('click.datetimebox', function() {
+					opts.month--;
+					if (opts.month < 1) {
+						opts.year--;
+						opts.month = 12;
+					}
+					createCalendar(target);
+				});
+				header.find('.datetimebox-nextyear').unbind('.datetimebox').bind('click.datetimebox', function() {
+					opts.year++;
+					createCalendar(target);
+				});
+				header.find('.datetimebox-prevyear').unbind('.datetimebox').bind('click.datetimebox', function() {
+					opts.year--;
+					createCalendar(target);
+				});
 				if (opts.showTimeSpinner) {// 显示时间微调
 					$('.datetimebox-timespinner', state.panel).css({
 						'display' : 'block'
@@ -42,13 +71,16 @@
 						'display' : 'none'
 					});
 				}
-				state.panel.show();
+				state.panel.css({
+					left : $(this).offset().left - $(target).outerWidth(),
+					top : $(this).offset().top + $(target).outerHeight() + 1
+				}).show();
 			}
 		});
 		$(target).addClass('datetimebox').css({
 			width : opts.width - opts.height - $(target).css('padding-left').replace('px', '') - $(target).css('padding-right').replace('px', '') - arrow.css('border-right-width').replace('px', ''),
 			height : opts.height
-		}).attr('readonly', 'readonly');
+		}).attr('readonly', 'readonly').val(opts.prompt);
 		var panel = null;
 		if ($('.datetimebox-panel').length > 0) {
 			panel = $('.datetimebox-panel');
@@ -59,45 +91,13 @@
 				position : 'absolute',
 				zIndex : 10000
 			}).addClass('datetimebox-panel').appendTo('body');
-			var header = $('<div class="datetimebox-header">' + '<a class="datetimebox-prevyear"></a>' + '<a class="datetimebox-prevmonth"></a>' + '<span class="datetimebox-title"></span>' + '<a class="datetimebox-nextmonth"></a>' + '<a class="datetimebox-nextyear"></a>').appendTo(panel);
+			var header = $('<div class="datetimebox-header">' + '<a href="javascript:void(0)" class="datetimebox-prevyear"></a>' + '<a href="javascript:void(0)" class="datetimebox-prevmonth"></a>' + '<span class="datetimebox-title"></span>' + '<a href="javascript:void(0)" class="datetimebox-nextmonth"></a>' + '<a href="javascript:void(0)" class="datetimebox-nextyear"></a>').appendTo(panel);
 			var body = $('<div class="datetimebox-body"></div>').appendTo(panel);
 			state.panel = panel;
-
 		}
 		if (opts.disabled) {
 			$(target).attr('disabled', 'disabled');
 		}
-		$(header).find('.datetimebox-nextmonth').click(function() {
-			showMonth(target, 1);
-		});
-		$(header).find('.datetimebox-prevmonth').click(function() {
-			showMonth(target, -1);
-		});
-		$(header).find('.datetimebox-nextyear').click(function() {
-			showYear(target, 1);
-		});
-		$(header).find('.datetimebox-prevyear').click(function() {
-			showYear(target, -1);
-		});
-	}
-	// 显示指定月份
-	function showMonth(target, delta) {
-		var opts = $(target).data('datetimebox').options;
-		opts.month += delta;
-		if (opts.month > 12) {
-			opts.year++;
-			opts.month = 1;
-		} else if (opts.month < 1) {
-			opts.year--;
-			opts.month = 12;
-		}
-		createCalendar(target);
-	}
-	// 显示指定年份
-	function showYear(target, delta) {
-		var opts = $(target).data('datetimebox').options;
-		opts.year += delta;
-		createCalendar(target);
 	}
 	// 创建日历
 	function createCalendar(target) {
@@ -121,16 +121,25 @@
 			saIndex -= 7;
 		if (suIndex >= 7)
 			suIndex -= 7;
-
-		$(header).find('.datetimebox-title').html(opts.months[opts.month - 1] + ' ' + opts.year);
+		$(header).find('.datetimebox-title').html(opts.title.replace('{month}', opts.months[opts.month - 1]).replace('{year}', opts.year));
 		body.children('table').remove();
 		var data = [ '<table class="datetimebox-calendar" cellspacing="0" cellpadding="0" border="0">' ];
 		data.push('<thead><tr>');
 		for (var i = opts.firstDay; i < opts.weeks.length; i++) {
-			data.push('<th>' + opts.weeks[i] + '</th>');
+			if (i == saIndex)
+				data.push('<th class="datetimebox-th-saturday">' + opts.weeks[i] + '</th>');
+			else if (i == suIndex)
+				data.push('<th class="datetimebox-th-sunday">' + opts.weeks[i] + '</th>');
+			else
+				data.push('<th>' + opts.weeks[i] + '</th>');
 		}
 		for (var i = 0; i < opts.firstDay; i++) {
-			data.push('<th>' + opts.weeks[i] + '</th>');
+			if (i == saIndex)
+				data.push('<th class="datetimebox-th-saturday">' + opts.weeks[i] + '</th>');
+			else if (i == suIndex)
+				data.push('<th class="datetimebox-th-sunday">' + opts.weeks[i] + '</th>');
+			else
+				data.push('<th>' + opts.weeks[i] + '</th>');
 		}
 		data.push('</tr></thead>');
 		data.push('<tbody>');
@@ -281,43 +290,54 @@
 			$('.datetimebox-timespinner-seconds', timeSpinner).val((seconds < 10 ? ('0' + seconds) : seconds));
 		} else {
 			timeSpinner = $('<div class="datetimebox-timespinner"></div>').appendTo(body);
-			var str = '<input type="text" class="datetimebox-timespinner-hour" autocomplete="off" value="' + (hours < 10 ? ('0' + hours) : hours) + '"/>';
-			str += '<p class="datetimebox-timespinner-separator">' + opts.timeSeparator + '</p>';
-			str += '<input type="text" class="datetimebox-timespinner-minute" autocomplete="off" value="' + (minutes < 10 ? ('0' + minutes) : minutes) + '"/>';
-			str += '<p class="datetimebox-timespinner-separator">' + opts.timeSeparator + '</p>';
-			str += '<input type="text" class="datetimebox-timespinner-seconds" autocomplete="off" value="' + (seconds < 10 ? ('0' + seconds) : seconds) + '"/>';
-			str += '<span><a href="javascript:void(0)" class="datetimebox-timespinner-up" tabindex="-1"></a><a href="javascript:void(0)" class="datetimebox-timespinner-down" tabindex="-1"></a></span>';
+			var str = '<label class="datetimebox-timespinner-label">时间</label>';
+			str += '<input type="text" class="datetimebox-timespinner-hour" autocomplete="off" readonly="readonly" value="' + (hours < 10 ? ('0' + hours) : hours) + '"/>';
+			str += '<span class="datetimebox-timespinner-hour-spinner"><a href="javascript:void(0)" class="datetimebox-timespinner-hour-up" tabindex="-1"></a><a href="javascript:void(0)" class="datetimebox-timespinner-hour-down" tabindex="-1"></a></span>';
+			str += '<input type="text" class="datetimebox-timespinner-minute" autocomplete="off" readonly="readonly" value="' + (minutes < 10 ? ('0' + minutes) : minutes) + '"/>';
+			str += '<span class="datetimebox-timespinner-minute-spinner"><a href="javascript:void(0)" class="datetimebox-timespinner-minute-up" tabindex="-1"></a><a href="javascript:void(0)" class="datetimebox-timespinner-minute-down" tabindex="-1"></a></span>';
+			str += '<input type="text" class="datetimebox-timespinner-seconds" autocomplete="off" readonly="readonly" value="' + (seconds < 10 ? ('0' + seconds) : seconds) + '"/>';
+			str += '<span class="datetimebox-timespinner-seconds-spinner"><a href="javascript:void(0)" class="datetimebox-timespinner-seconds-up" tabindex="-1"></a><a href="javascript:void(0)" class="datetimebox-timespinner-seconds-down" tabindex="-1"></a></span>';
 			timeSpinner.append(str);
-			$('input', timeSpinner).unbind('.datetimebox').bind('focus.datetimebox', function() {
-				if ($(this).hasClass('datetimebox-timespinner-hour'))
-					opts.highlight = 0;
-				else if ($(this).hasClass('datetimebox-timespinner-minute'))
-					opts.highlight = 1;
-				else if ($(this).hasClass('datetimebox-timespinner-seconds'))
-					opts.highlight = 2;
-			});
-			$('.datetimebox-timespinner-up', timeSpinner).unbind('.datetimebox').bind('click.datetimebox', function() {
-				var input = $('input', timeSpinner).eq(opts.highlight).focus();
+			$('.datetimebox-timespinner-hour-up', timeSpinner).unbind('.datetimebox').bind('click.datetimebox', function() {
+				var input = $('input.datetimebox-timespinner-hour', timeSpinner);
 				var v = parseInt(input.val()) + 1;
-				if (opts.highlight == 0) {
-					if (v > 23)
-						v = 0;
-				} else {
-					if (v > 59)
-						v = 0;
-				}
+				if (v > 23)
+					v = 0;
 				input.val(v < 10 ? ('0' + v) : v);
 			});
-			$('.datetimebox-timespinner-down').unbind('.datetimebox').bind('click.datetimebox', function() {
-				var input = $('input', timeSpinner).eq(opts.highlight).focus();
+			$('.datetimebox-timespinner-minute-up', timeSpinner).unbind('.datetimebox').bind('click.datetimebox', function() {
+				var input = $('input.datetimebox-timespinner-minute', timeSpinner);
+				var v = parseInt(input.val()) + 1;
+				if (v > 59)
+					v = 0;
+				input.val(v < 10 ? ('0' + v) : v);
+			});
+			$('.datetimebox-timespinner-seconds-up', timeSpinner).unbind('.datetimebox').bind('click.datetimebox', function() {
+				var input = $('input.datetimebox-timespinner-seconds', timeSpinner);
+				var v = parseInt(input.val()) + 1;
+				if (v > 59)
+					v = 0;
+				input.val(v < 10 ? ('0' + v) : v);
+			});
+			$('.datetimebox-timespinner-hour-down', timeSpinner).unbind('.datetimebox').bind('click.datetimebox', function() {
+				var input = $('input.datetimebox-timespinner-hour', timeSpinner);
 				var v = parseInt(input.val()) - 1;
-				if (opts.highlight == 0) {
-					if (v < 0)
-						v = 23;
-				} else {
-					if (v < 0)
-						v = 59;
-				}
+				if (v < 0)
+					v = 23;
+				input.val(v < 10 ? ('0' + v) : v);
+			});
+			$('.datetimebox-timespinner-minute-down', timeSpinner).unbind('.datetimebox').bind('click.datetimebox', function() {
+				var input = $('input.datetimebox-timespinner-minute', timeSpinner);
+				var v = parseInt(input.val()) - 1;
+				if (v < 0)
+					v = 59;
+				input.val(v < 10 ? ('0' + v) : v);
+			});
+			$('.datetimebox-timespinner-seconds-down', timeSpinner).unbind('.datetimebox').bind('click.datetimebox', function() {
+				var input = $('input.datetimebox-timespinner-seconds', timeSpinner);
+				var v = parseInt(input.val()) - 1;
+				if (v < 0)
+					v = 59;
 				input.val(v < 10 ? ('0' + v) : v);
 			});
 		}
@@ -334,9 +354,10 @@
 		} else {
 			button = $('<div class="datetimebox-button"></div>').appendTo(body);
 			var table = '<table cellspacing="0" cellpadding="0"><tbody><tr>';
-			table += '<td>' + '<a href="javascript:void(0)">' + opts.currentText + '</a>';
-			table += '<td>' + '<a href="javascript:void(0)">' + opts.okText + '</a>';
-			table += '<td>' + '<a href="javascript:void(0)">' + opts.closeText + '</a>';
+			table += '<td>' + '<a href="javascript:void(0)">' + opts.currentText + '</a></td>';
+			table += '<td>' + '<a href="javascript:void(0)">' + opts.clearText + '</a></td>';
+			table += '<td></td>';
+			table += '<td>' + '<a href="javascript:void(0)">' + opts.okText + '</a></td>';
 			table += '</tr></tbody></table>';
 			button.append(table);
 		}
@@ -364,16 +385,23 @@
 			}
 		});
 		// 点击ok
-		$('a', button).eq(1).unbind('click.datetimebox').bind('click.datetimebox', function() {
+		$('a', button).eq(2).unbind('click.datetimebox').bind('click.datetimebox', function() {
 			var oldValue = null;
 			if (state.value) {
 				oldValue = new Date(state.value[0], state.value[1] - 1, state.value[2], state.value[3], state.value[4], state.value[5]);
 			}
-			var values = $('.datetimebox-calendar .datetimebox-selected', body).attr('abbr').split(',');
+			var selected = $('.datetimebox-calendar .datetimebox-selected', body);
 			state.value = [];
-			state.value[0] = values[0];
-			state.value[1] = values[1];
-			state.value[2] = values[2];
+			if (selected.length) {
+				var values = selected.attr('abbr').split(',');
+				state.value[0] = values[0];
+				state.value[1] = values[1];
+				state.value[2] = values[2];
+			} else {
+				state.value[0] = new Date().getFullYear();
+				state.value[1] = new Date().getMonth() + 1;
+				state.value[2] = new Date().getDate();
+			}
 			var timespinner = $('.datetimebox-timespinner', body);
 			state.value[3] = $('.datetimebox-timespinner-hour', timespinner).val();
 			state.value[4] = $('.datetimebox-timespinner-minute', timespinner).val();
@@ -381,10 +409,11 @@
 			var newValue = new Date(state.value[0], state.value[1] - 1, state.value[2], state.value[3], state.value[4], state.value[5]);
 			$(target).val(opts.formatter.call(target, newValue));
 			panel.hide();
-			opts.onChange.call(target, newValue, oldValue)
+			opts.onChange.call(target, newValue, oldValue);
 		});
 		// 点击close
-		$('a', button).eq(2).unbind('click.datetimebox').bind('click.datetimebox', function() {
+		$('a', button).eq(1).unbind('click.datetimebox').bind('click.datetimebox', function() {
+			$(target).datetimebox('reset');
 			panel.hide();
 		});
 	}
@@ -413,6 +442,7 @@
 			$(target).datetimebox('setValue', opts.value);
 		} else {
 			state.value = null;
+			$(target).val(opts.prompt);
 		}
 	}
 	// 清除组件值
@@ -510,12 +540,13 @@
 		height : 22,
 		weeks : [ 'S', 'M', 'T', 'W', 'T', 'F', 'S' ],
 		months : [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
+		title : '{month} {year}',
 		firstDay : 0,
 		year : new Date().getFullYear(),
 		month : new Date().getMonth() + 1,
 		currentText : 'Today',
 		okText : 'Ok',
-		closeText : 'Close',
+		clearText : 'Clear',
 		disabled : false,
 		formatter : function(date) {
 			var opts = $(this).data('datetimebox').options;
@@ -535,8 +566,10 @@
 		showTimeSpinner : true,
 		timeSeparator : ':',
 		showSeconds : true,
-		highlight : 0,
 		value : null,
+		prompt : '123',
+		required : false,
+		missingMessage : 'This field is required.',
 		onChange : function(newDate, oldDate) {
 		}
 	};

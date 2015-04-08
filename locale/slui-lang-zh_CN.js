@@ -34,9 +34,10 @@ if ($.fn.combogrid) {
 }
 if ($.fn.datetimebox) {
 	$.fn.datetimebox.defaults.weeks = [ '日', '一', '二', '三', '四', '五', '六' ];
-	$.fn.datetimebox.defaults.months = [ '一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月' ];
+	$.fn.datetimebox.defaults.months = [ '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月' ];
+	$.fn.datetimebox.defaults.title='{year}年{month}';
 	$.fn.datetimebox.defaults.currentText = '今天';
-	$.fn.datetimebox.defaults.closeText = '关闭';
+	$.fn.datetimebox.defaults.clearText = '清除';
 	$.fn.datetimebox.defaults.okText = '确定';
 	$.fn.datetimebox.defaults.missingMessage = '该输入项为必输项';
 	$.fn.datetimebox.defaults.formatter = function(date) {

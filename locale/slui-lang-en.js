@@ -35,8 +35,9 @@ if ($.fn.combogrid) {
 if ($.fn.datetimebox) {
 	$.fn.datetimebox.defaults.weeks = [ 'S', 'M', 'T', 'W', 'T', 'F', 'S' ];
 	$.fn.datetimebox.defaults.months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
+	$.fn.datetimebox.defaults.title='{month} {year}';
 	$.fn.datetimebox.defaults.currentText = 'Today';
-	$.fn.datetimebox.defaults.closeText = 'Close';
+	$.fn.datetimebox.defaults.clearText = 'Clear';
 	$.fn.datetimebox.defaults.okText = 'Ok';
 	$.fn.datetimebox.defaults.missingMessage = 'This field is required.';
 }
