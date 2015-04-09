@@ -91,11 +91,16 @@
 			setValue(target, opts.value);
 			$(target).val(opts.formatter.call(target, new Date(state.value[0], state.value[1], state.value[2], state.value[3], state.value[4], state.value[5])));
 		}
-		// 当获取焦点时触发验证
-		$(target).focus(function() {
-			validate(target);
-		});
-		validate(target);
+		if (opts.required) {
+			$(target).addClass('validate-text');
+			if ($.fn.validate) {
+				$(target).validate({
+					required : opts.required,
+					missingMessage : opts.missingMessage,
+					deltaX : opts.height
+				});
+			}
+		}
 		var panel = null;
 		if ($('.datetimebox-panel').length > 0) {
 			panel = $('.datetimebox-panel');
@@ -112,24 +117,6 @@
 		}
 		if (opts.disabled) {
 			$(target).attr('disabled', 'disabled');
-		}
-	}
-	function validate(target) {
-		var state = $(target).data('datetimebox');
-		var opts = state.options;
-		if (opts.required) {
-			$(target).addClass('validate-text validate-invalid');
-			if ($.fn.tooltip) {
-				$(target).tooltip({
-					position : 'right',
-					content : opts.missingMessage,
-					deltaX : opts.height
-				});
-			}
-			if (state.value) {
-				$(target).tooltip('destroy');
-				$(target).removeClass('validate-invalid');
-			}
 		}
 	}
 	// 创建日历
@@ -233,7 +220,11 @@
 				$(target).val(opts.formatter.call(target, newValue));
 				state.panel.hide();
 				opts.onChange.call(target, newValue, oldValue);
-				$(target).focus();
+				if (opts.required) {
+					if ($.fn.validate) {
+						$(target).validate('validate');
+					}
+				}
 			}
 		});
 		$('.datetimebox-other-month', calendar).click(function() {
@@ -417,7 +408,11 @@
 				$(target).val(opts.formatter.call(target, newValue));
 				panel.hide();
 				opts.onChange.call(target, newValue, oldValue);
-				$(target).focus();
+				if (opts.required) {
+					if ($.fn.validate) {
+						$(target).validate('validate');
+					}
+				}
 			}
 		});
 		// 点击ok
@@ -445,14 +440,22 @@
 			var newValue = new Date(state.value[0], state.value[1] - 1, state.value[2], state.value[3], state.value[4], state.value[5]);
 			$(target).val(opts.formatter.call(target, newValue));
 			panel.hide();
-			$(target).focus();
+			if (opts.required) {
+				if ($.fn.validate) {
+					$(target).validate('validate');
+				}
+			}
 			opts.onChange.call(target, newValue, oldValue);
 		});
 		// 点击clear
 		$('a', button).eq(1).unbind('click.datetimebox').bind('click.datetimebox', function() {
 			$(target).datetimebox('reset');
 			panel.hide();
-			$(target).focus();
+			if (opts.required) {
+				if ($.fn.validate) {
+					$(target).validate('validate');
+				}
+			}
 		});
 	}
 	// 设置值

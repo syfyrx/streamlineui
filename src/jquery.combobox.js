@@ -30,7 +30,7 @@
 				width : opts.height,
 				height : opts.height
 			}).bind('click.combobox', function(e) {
-				$(target).focus();
+				showPanel(target);
 			});
 		}
 		// 创建存储值的input
@@ -45,7 +45,6 @@
 				left : state.downArrow.offset().left - $(target).outerWidth(),
 				top : state.downArrow.offset().top + $(target).outerHeight()
 			});
-			showPanel(target);
 		}).bind('blur.combobox', function(e) {
 			if ($(target).val().length == 0) {
 				state.values = [];
@@ -53,12 +52,18 @@
 			if (!state.values.length) {
 				$(target).val(opts.prompt);
 			}
-			validate(target);
 		}).addClass('combobox').css({
 			width : opts.width - opts.height - $(target).css('padding-left').replace('px', '') - $(target).css('padding-right').replace('px', '') - state.downArrow.css('border-right-width').replace('px', ''),
 			height : opts.height
 		}).attr('comboName', $(target).attr('name')).removeAttr('name').addClass('combobox-f').val(opts.prompt);
-		validate(target);
+		if (opts.required) {
+			if ($.fn.validate)
+				$(target).validate($.extend({}, $.fn.validate.defaults, {
+					required : opts.required,
+					missingMessage : opts.missingMessage,
+					deltaX : opts.height
+				}));
+		}
 		state.textbox.attr('name', $(target).attr('comboName'));
 		state.panel.undelegate('div.combobox-item', '.combobox').delegate('div.combobox-item', 'mouseenter.combobox', function(e) {
 			$(this).addClass('combobox-item-hover');
@@ -94,26 +99,6 @@
 		}
 		if (opts.value) {
 			setValue(target, opts.value);
-		}
-	}
-	function validate(target) {
-		var state = $(target).data('combobox');
-		var opts = state.options;
-		if (opts.required) {
-			$(target).addClass('validate-text validate-invalid');
-			if ($.fn.tooltip) {
-				$(target).tooltip({
-					position : 'right',
-					content : opts.missingMessage,
-					deltaX : opts.height
-				});
-			}
-			if (state.values.length) {
-				if ($.fn.tooltip) {
-					$(target).tooltip('destroy');
-				}
-				$(target).removeClass('validate-invalid');
-			}
 		}
 	}
 	// 销毁组件
@@ -250,9 +235,9 @@
 		var panel = state.panel;
 		panel.find('div.combobox-item-selected').removeClass('combobox-item-selected');
 		var vv = [], ss = [];
-		var newValues = newValue.split(opts.separator);
-		if (newValue.length == 0) {
-			newValues = [];
+		var newValues = [];
+		if (newValue && newValue.length) {
+			newValues = newValue.split(opts.separator);
 		}
 		if (state.data.length) {
 			for (var i = 0; i < newValues.length; i++) {
@@ -275,7 +260,6 @@
 		}
 		state.textbox.val(newValue);
 		state.values = newValues;
-		validate(target);
 	}
 
 	/**
@@ -411,7 +395,6 @@
 						state.previousText = q;
 						t.combobox("showPanel");
 						opts.keyHandler.query.call(target, q, e);
-						t.combobox("validate");
 					}
 				}, opts.delay);
 			}
