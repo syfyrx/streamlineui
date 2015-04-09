@@ -21,7 +21,7 @@
 	overflow: auto;
 	border: 1px solid #DEDEDE;
 	font-weight: bold;
-	-moz-user-select:none;
+	-moz-user-select: none;
 }
 
 .datetimebox-arrow {
@@ -55,7 +55,7 @@
 	height: 16px;
 	display: inline-block;
 	vertical-align: middle;
-	margin:0 5px;
+	margin: 0 5px;
 }
 
 .datetimebox-prevmonth {
@@ -140,7 +140,7 @@
 
 .datetimebox-timespinner-label {
 	padding: 0 15px;
-	color:#8C8C8C;
+	color: #8C8C8C;
 }
 
 .datetimebox-timespinner span {
@@ -172,7 +172,10 @@
 .datetimebox-button {
 	background-color: #F7F7F7;
 	margin: 0 auto;
-	padding: 0 0 10px 0;
+	padding:0 0 10px 0;
+}
+.datetimebox-button-notimespinner{
+	padding-top:10px;
 }
 
 .datetimebox-button table {

@@ -53,8 +53,16 @@
 					$('.datetimebox-timespinner', state.panel).css({
 						'display' : 'block'
 					});
+					$('.datetimebox-button', state.panel).removeClass('datetimebox-button-notimespinner');
+					$('.datetimebox-button a', state.panel).eq(2).css({
+						'display' : 'inline-block'
+					});
 				} else {
 					$('.datetimebox-timespinner', state.panel).css({
+						'display' : 'none'
+					});
+					$('.datetimebox-button', state.panel).addClass('datetimebox-button-notimespinner');
+					$('.datetimebox-button a', state.panel).eq(2).css({
 						'display' : 'none'
 					});
 				}
@@ -81,6 +89,17 @@
 			width : opts.width - opts.height - $(target).css('padding-left').replace('px', '') - $(target).css('padding-right').replace('px', '') - arrow.css('border-right-width').replace('px', ''),
 			height : opts.height
 		}).attr('readonly', 'readonly').val(opts.prompt);
+		// 验证默认时间值是否格式正确
+		var reg = /^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$/;
+		if (opts.value && opts.value.match(reg)) {
+			setValue(target, opts.value);
+			$(target).val(opts.formatter.call(target, new Date(state.value[0], state.value[1], state.value[2], state.value[3], state.value[4], state.value[5])));
+		}
+		// 当获取焦点时触发验证
+		$(target).focus(function() {
+			validate(target);
+		});
+		validate(target);
 		var panel = null;
 		if ($('.datetimebox-panel').length > 0) {
 			panel = $('.datetimebox-panel');
@@ -97,6 +116,23 @@
 		}
 		if (opts.disabled) {
 			$(target).attr('disabled', 'disabled');
+		}
+	}
+	function validate(target) {
+		var state = $(target).data('datetimebox');
+		var opts = state.options;
+		if (opts.required) {
+			$(target).addClass('validate-text validate-invalid');
+			if ($.fn.tooltip) {
+				$(target).tooltip({
+					position : 'right',
+					content : opts.missingMessage
+				});
+			}
+			if (state.value) {
+				$(target).tooltip('destroy');
+				$(target).removeClass('validate-invalid');
+			}
 		}
 	}
 	// 创建日历
@@ -200,6 +236,7 @@
 				$(target).val(opts.formatter.call(target, newValue));
 				state.panel.hide();
 				opts.onChange.call(target, newValue, oldValue);
+				$(target).focus();
 			}
 		});
 		$('.datetimebox-other-month', calendar).click(function() {
@@ -375,6 +412,7 @@
 				if (state.value) {
 					oldValue = new Date(state.value[0], state.value[1] - 1, state.value[2]);
 				}
+				state.value = [];
 				state.value[0] = new Date().getFullYear();
 				state.value[1] = new Date().getMonth() + 1;
 				state.value[2] = new Date().getDate();
@@ -382,6 +420,7 @@
 				$(target).val(opts.formatter.call(target, newValue));
 				panel.hide();
 				opts.onChange.call(target, newValue, oldValue);
+				$(target).focus();
 			}
 		});
 		// 点击ok
@@ -409,13 +448,26 @@
 			var newValue = new Date(state.value[0], state.value[1] - 1, state.value[2], state.value[3], state.value[4], state.value[5]);
 			$(target).val(opts.formatter.call(target, newValue));
 			panel.hide();
+			$(target).focus();
 			opts.onChange.call(target, newValue, oldValue);
 		});
-		// 点击close
+		// 点击clear
 		$('a', button).eq(1).unbind('click.datetimebox').bind('click.datetimebox', function() {
 			$(target).datetimebox('reset');
 			panel.hide();
+			$(target).focus();
 		});
+	}
+	// 设置值
+	function setValue(target, value) {
+		var state = $(target).data('datetimebox');
+		var opts = state.options;
+		value.replace('/', opts.dateSeparator).replace('-', opts.dateSeparator);
+		var strdate = value.split(' ')[0];
+		var strtime = value.split(' ')[1];
+		var dates = strdate.split(opts.dateSeparator);
+		var times = strtime.split(opts.timeSeparator);
+		state.value = [ dates[0], dates[1], dates[2], times[0], times[1], times[2] ];
 	}
 	// 销毁组件
 	function destroy(target) {
@@ -500,13 +552,7 @@
 		},
 		setValue : function(jq, value) {
 			return jq.each(function() {
-				var state = $(this).data('datetimebox');
-				var opts = state.options;
-				var strdate = value.split(' ')[0];
-				var strtime = value.split(' ')[1];
-				var dates = strdate.split(opts.dateSeparator);
-				var times = strtime.split(opts.timeSeparator);
-				state.value = [ dates[0], dates[1], dates[2], times[0], times[1], times[2] ];
+				setValue(this, value);
 			});
 		},
 		enable : function(jq) {
