@@ -3,11 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <title></title>
+<link rel="stylesheet" type="text/css" href="../../themes/default/tooltip.css">
 <link rel="stylesheet" type="text/css" href="../../themes/default/combobox.css">
 <link rel="stylesheet" type="text/css" href="../../themes/default/icon.css">
 <script type="text/javascript" src="../../jquery.min.js"></script>
 <script type="text/javascript" src="../../src/jquery.parser.js"></script>
+<script type="text/javascript" src="../../src/jquery.tooltip.js"></script>
 <script type="text/javascript" src="../../src/jquery.combobox.js"></script>
+<script type="text/javascript" src="../../locale/slui-lang-zh_CN.js"></script>
 <style type="text/css">
 * {
 	margin: 0;
@@ -23,7 +26,7 @@
 </head>
 <body>
 	<input id="cc" class="slui-combobox"
-		data-options="multiple:true,editable:false,data:[{
+		data-options="multiple:false,prompt:'asdf',editable:true,required:true,data:[{
 		text:'1',
 		value:'1'
 	},{

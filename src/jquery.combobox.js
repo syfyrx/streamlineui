@@ -38,15 +38,27 @@
 			state.textbox = $('<input type="hidden" value=""/>').insertAfter(target);
 		}
 		$(target).unbind('.combobox').bind('focus.combobox', function(e) {
+			if (!state.values.length) {
+				$(target).val('');
+			}
 			state.panel.css({
 				left : state.downArrow.offset().left - $(target).outerWidth(),
 				top : state.downArrow.offset().top + $(target).outerHeight()
 			});
 			showPanel(target);
+		}).bind('blur.combobox', function(e) {
+			if ($(target).val().length == 0) {
+				state.values = [];
+			}
+			if (!state.values.length) {
+				$(target).val(opts.prompt);
+			}
+			validate(target);
 		}).addClass('combobox').css({
 			width : opts.width - opts.height - $(target).css('padding-left').replace('px', '') - $(target).css('padding-right').replace('px', '') - state.downArrow.css('border-right-width').replace('px', ''),
 			height : opts.height
-		}).attr('comboName', $(target).attr('name')).removeAttr('name').addClass('combobox-f');
+		}).attr('comboName', $(target).attr('name')).removeAttr('name').addClass('combobox-f').val(opts.prompt);
+		validate(target);
 		state.textbox.attr('name', $(target).attr('comboName'));
 		state.panel.undelegate('div.combobox-item', '.combobox').delegate('div.combobox-item', 'mouseenter.combobox', function(e) {
 			$(this).addClass('combobox-item-hover');
@@ -68,6 +80,7 @@
 			}
 			e.stopPropagation();
 		});
+
 		if (!opts.editable) {
 			readonly(target, true);
 		}
@@ -81,6 +94,26 @@
 		}
 		if (opts.value) {
 			setValue(target, opts.value);
+		}
+	}
+	function validate(target) {
+		var state = $(target).data('combobox');
+		var opts = state.options;
+		if (opts.required) {
+			$(target).addClass('validate-text validate-invalid');
+			if ($.fn.tooltip) {
+				$(target).tooltip({
+					position : 'right',
+					content : opts.missingMessage,
+					deltaX : opts.height
+				});
+			}
+			if (state.values.length) {
+				if ($.fn.tooltip) {
+					$(target).tooltip('destroy');
+				}
+				$(target).removeClass('validate-invalid');
+			}
 		}
 	}
 	// 销毁组件
@@ -218,6 +251,9 @@
 		panel.find('div.combobox-item-selected').removeClass('combobox-item-selected');
 		var vv = [], ss = [];
 		var newValues = newValue.split(opts.separator);
+		if (newValue.length == 0) {
+			newValues = [];
+		}
 		if (state.data.length) {
 			for (var i = 0; i < newValues.length; i++) {
 				var v = newValues[i];
@@ -233,11 +269,13 @@
 				}
 				vv.push(v);
 			}
-			$(target).val(ss.join(opts.separator));
+			if (ss.length)
+				$(target).val(ss.join(opts.separator));
 			opts.onChange.call(target, newValue, state.textbox.val());
 		}
 		state.textbox.val(newValue);
 		state.values = newValues;
+		validate(target);
 	}
 
 	/**
@@ -484,6 +522,7 @@
 				});
 				state = $(this).data('combobox');
 			}
+
 			create(this);
 			if (state.options.data) {
 				loadData(this, state.options.data);
@@ -584,6 +623,9 @@
 		disabled : false,
 		readonly : false,
 		value : null,
+		prompt : '',
+		required : false,
+		missingMessage : 'This field is required.',
 		delay : 200,
 		valueField : 'value',
 		textField : 'text',
