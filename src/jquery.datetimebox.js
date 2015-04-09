@@ -67,15 +67,11 @@
 					});
 				}
 				if (opts.showSeconds) {// 显示秒钟信息
-					$('.datetimebox-timespinner-seconds', state.panel).css({
-						'display' : 'inline-block'
-					}).prev('.datetimebox-timespinner-separator').css({
+					$('.datetimebox-timespinner-seconds,.datetimebox-timespinner-seconds-spinner', state.panel).css({
 						'display' : 'inline-block'
 					});
 				} else {
-					$('.datetimebox-timespinner-seconds', state.panel).css({
-						'display' : 'none'
-					}).prev('.datetimebox-timespinner-separator').css({
+					$('.datetimebox-timespinner-seconds,.datetimebox-timespinner-seconds-spinner', state.panel).css({
 						'display' : 'none'
 					});
 				}
@@ -126,7 +122,8 @@
 			if ($.fn.tooltip) {
 				$(target).tooltip({
 					position : 'right',
-					content : opts.missingMessage
+					content : opts.missingMessage,
+					deltaX : opts.height
 				});
 			}
 			if (state.value) {

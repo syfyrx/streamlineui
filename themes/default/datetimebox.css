@@ -1,5 +1,11 @@
 @CHARSET "UTF-8";
 
+input.validate-invalid {
+	border: 1px solid #ffa8a8;
+	background-color: #fff3f3;
+	color: #000;
+}
+
 .datetimebox {
 	display: inline-block;
 	white-space: nowrap;
@@ -122,7 +128,7 @@
 	text-align: center;
 	vertical-align: middle;
 	background-color: #F7F7F7;
-	text-align: center;
+	text-align: left;
 }
 
 .datetimebox-timespinner-hour,.datetimebox-timespinner-minute,.datetimebox-timespinner-seconds {
@@ -172,10 +178,11 @@
 .datetimebox-button {
 	background-color: #F7F7F7;
 	margin: 0 auto;
-	padding:0 0 10px 0;
+	padding: 0 0 10px 0;
 }
-.datetimebox-button-notimespinner{
-	padding-top:10px;
+
+.datetimebox-button-notimespinner {
+	padding-top: 10px;
 }
 
 .datetimebox-button table {

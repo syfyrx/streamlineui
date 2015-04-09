@@ -1,3 +1,9 @@
+input.validate-invalid {
+	border: 1px solid #ffa8a8;
+	background-color: #fff3f3;
+	color: #000;
+}
+
 .textbox {
 	position: relative;
 	border: 1px solid #DEDEDE;
