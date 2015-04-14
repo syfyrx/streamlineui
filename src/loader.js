@@ -7,9 +7,6 @@
 		draggable:{
 			js:'jquery.draggable.js'
 		},
-		tooltip:{
-			js:'jquery.tooltip.js'
-		},
 		droppable:{
 			js:'jquery.droppable.js'
 		},

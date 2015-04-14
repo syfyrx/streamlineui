@@ -3,6 +3,7 @@
 	function create(target) {
 		var state = $(target).data('datetimebox');
 		var opts = state.options;
+		$(target).addClass('slui-datetimebox');
 		// 点击组件外部时隐藏组件
 		$(document).unbind('.datetimebox').bind('mousedown.datetimebox mousewheel.datetimebox', function(e) {
 			if ($(e.target).closest('.datetimebox-panel,.datetimebox,.datetimebox-arrow').length) {
@@ -81,15 +82,20 @@
 				}).show();
 			}
 		});
-		$(target).addClass('datetimebox').css({
-			width : opts.width - opts.height - $(target).css('padding-left').replace('px', '') - $(target).css('padding-right').replace('px', '') - arrow.css('border-right-width').replace('px', ''),
-			height : opts.height
-		}).attr('readonly', 'readonly').val(opts.prompt);
+		$(target).addClass('datetimebox').css(
+				{
+					width : opts.width - opts.height - $(target).css('padding-left').replace('px', '')
+							- $(target).css('padding-right').replace('px', '')
+							- arrow.css('border-right-width').replace('px', ''),
+					height : opts.height
+				}).attr('readonly', 'readonly').val(opts.prompt);
 		// 验证默认时间值是否格式正确
 		var reg = /^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$/;
 		if (opts.value && opts.value.match(reg)) {
 			setValue(target, opts.value);
-			$(target).val(opts.formatter.call(target, new Date(state.value[0], state.value[1], state.value[2], state.value[3], state.value[4], state.value[5])));
+			$(target).val(
+					opts.formatter.call(target, new Date(state.value[0], state.value[1], state.value[2],
+							state.value[3], state.value[4], state.value[5])));
 		}
 		if (opts.required) {
 			$(target).addClass('validate-text');
@@ -111,7 +117,13 @@
 				position : 'absolute',
 				zIndex : 10000
 			}).addClass('datetimebox-panel').appendTo('body');
-			var header = $('<div class="datetimebox-header">' + '<a href="javascript:void(0)" class="datetimebox-prevyear"></a>' + '<a href="javascript:void(0)" class="datetimebox-prevmonth"></a>' + '<span class="datetimebox-title"></span>' + '<a href="javascript:void(0)" class="datetimebox-nextmonth"></a>' + '<a href="javascript:void(0)" class="datetimebox-nextyear"></a>').appendTo(panel);
+			var header = $(
+					'<div class="datetimebox-header">'
+							+ '<a href="javascript:void(0)" class="datetimebox-prevyear"></a>'
+							+ '<a href="javascript:void(0)" class="datetimebox-prevmonth"></a>'
+							+ '<span class="datetimebox-title"></span>'
+							+ '<a href="javascript:void(0)" class="datetimebox-nextmonth"></a>'
+							+ '<a href="javascript:void(0)" class="datetimebox-nextyear"></a>').appendTo(panel);
 			var body = $('<div class="datetimebox-body"></div>').appendTo(panel);
 			state.panel = panel;
 		}
@@ -141,7 +153,8 @@
 			saIndex -= 7;
 		if (suIndex >= 7)
 			suIndex -= 7;
-		$(header).find('.datetimebox-title').html(opts.title.replace('{month}', opts.months[opts.month - 1]).replace('{year}', opts.year));
+		$(header).find('.datetimebox-title').html(
+				opts.title.replace('{month}', opts.months[opts.month - 1]).replace('{year}', opts.year));
 		body.children('table').remove();
 		var data = [ '<table class="datetimebox-calendar" cellspacing="0" cellpadding="0" border="0">' ];
 		data.push('<thead><tr>');
@@ -227,14 +240,17 @@
 				}
 			}
 		});
-		$('.datetimebox-other-month', calendar).click(function() {
-			var values = $(this).attr('abbr').split(',');
-			opts.year = values[0];
-			opts.month = values[1];
-			createCalendar(target);
-			$('.datetimebox-calendar .datetimebox-selected', body).removeClass('datetimebox-selected');
-			$('.datetimebox-calendar .datetimebox-day[abbr="' + opts.year + ',' + opts.month + ',' + parseInt(values[2]) + '"]', body).addClass('datetimebox-selected');
-		});
+		$('.datetimebox-other-month', calendar).click(
+				function() {
+					var values = $(this).attr('abbr').split(',');
+					opts.year = values[0];
+					opts.month = values[1];
+					createCalendar(target);
+					$('.datetimebox-calendar .datetimebox-selected', body).removeClass('datetimebox-selected');
+					$(
+							'.datetimebox-calendar .datetimebox-day[abbr="' + opts.year + ',' + opts.month + ','
+									+ parseInt(values[2]) + '"]', body).addClass('datetimebox-selected');
+				});
 	}
 	// 获取周数据
 	function getWeeks(target, year, month) {
@@ -316,55 +332,64 @@
 		} else {
 			timeSpinner = $('<div class="datetimebox-timespinner"></div>').appendTo(body);
 			var str = '<label class="datetimebox-timespinner-label">时间</label>';
-			str += '<input type="text" class="datetimebox-timespinner-hour" autocomplete="off" readonly="readonly" value="' + (hours < 10 ? ('0' + hours) : hours) + '"/>';
+			str += '<input type="text" class="datetimebox-timespinner-hour" autocomplete="off" readonly="readonly" value="'
+					+ (hours < 10 ? ('0' + hours) : hours) + '"/>';
 			str += '<span class="datetimebox-timespinner-hour-spinner"><a href="javascript:void(0)" class="datetimebox-timespinner-hour-up" tabindex="-1"></a><a href="javascript:void(0)" class="datetimebox-timespinner-hour-down" tabindex="-1"></a></span>';
-			str += '<input type="text" class="datetimebox-timespinner-minute" autocomplete="off" readonly="readonly" value="' + (minutes < 10 ? ('0' + minutes) : minutes) + '"/>';
+			str += '<input type="text" class="datetimebox-timespinner-minute" autocomplete="off" readonly="readonly" value="'
+					+ (minutes < 10 ? ('0' + minutes) : minutes) + '"/>';
 			str += '<span class="datetimebox-timespinner-minute-spinner"><a href="javascript:void(0)" class="datetimebox-timespinner-minute-up" tabindex="-1"></a><a href="javascript:void(0)" class="datetimebox-timespinner-minute-down" tabindex="-1"></a></span>';
-			str += '<input type="text" class="datetimebox-timespinner-seconds" autocomplete="off" readonly="readonly" value="' + (seconds < 10 ? ('0' + seconds) : seconds) + '"/>';
+			str += '<input type="text" class="datetimebox-timespinner-seconds" autocomplete="off" readonly="readonly" value="'
+					+ (seconds < 10 ? ('0' + seconds) : seconds) + '"/>';
 			str += '<span class="datetimebox-timespinner-seconds-spinner"><a href="javascript:void(0)" class="datetimebox-timespinner-seconds-up" tabindex="-1"></a><a href="javascript:void(0)" class="datetimebox-timespinner-seconds-down" tabindex="-1"></a></span>';
 			timeSpinner.append(str);
-			$('.datetimebox-timespinner-hour-up', timeSpinner).unbind('.datetimebox').bind('click.datetimebox', function() {
-				var input = $('input.datetimebox-timespinner-hour', timeSpinner);
-				var v = parseInt(input.val()) + 1;
-				if (v > 23)
-					v = 0;
-				input.val(v < 10 ? ('0' + v) : v);
-			});
-			$('.datetimebox-timespinner-minute-up', timeSpinner).unbind('.datetimebox').bind('click.datetimebox', function() {
-				var input = $('input.datetimebox-timespinner-minute', timeSpinner);
-				var v = parseInt(input.val()) + 1;
-				if (v > 59)
-					v = 0;
-				input.val(v < 10 ? ('0' + v) : v);
-			});
-			$('.datetimebox-timespinner-seconds-up', timeSpinner).unbind('.datetimebox').bind('click.datetimebox', function() {
-				var input = $('input.datetimebox-timespinner-seconds', timeSpinner);
-				var v = parseInt(input.val()) + 1;
-				if (v > 59)
-					v = 0;
-				input.val(v < 10 ? ('0' + v) : v);
-			});
-			$('.datetimebox-timespinner-hour-down', timeSpinner).unbind('.datetimebox').bind('click.datetimebox', function() {
-				var input = $('input.datetimebox-timespinner-hour', timeSpinner);
-				var v = parseInt(input.val()) - 1;
-				if (v < 0)
-					v = 23;
-				input.val(v < 10 ? ('0' + v) : v);
-			});
-			$('.datetimebox-timespinner-minute-down', timeSpinner).unbind('.datetimebox').bind('click.datetimebox', function() {
-				var input = $('input.datetimebox-timespinner-minute', timeSpinner);
-				var v = parseInt(input.val()) - 1;
-				if (v < 0)
-					v = 59;
-				input.val(v < 10 ? ('0' + v) : v);
-			});
-			$('.datetimebox-timespinner-seconds-down', timeSpinner).unbind('.datetimebox').bind('click.datetimebox', function() {
-				var input = $('input.datetimebox-timespinner-seconds', timeSpinner);
-				var v = parseInt(input.val()) - 1;
-				if (v < 0)
-					v = 59;
-				input.val(v < 10 ? ('0' + v) : v);
-			});
+			$('.datetimebox-timespinner-hour-up', timeSpinner).unbind('.datetimebox').bind('click.datetimebox',
+					function() {
+						var input = $('input.datetimebox-timespinner-hour', timeSpinner);
+						var v = parseInt(input.val()) + 1;
+						if (v > 23)
+							v = 0;
+						input.val(v < 10 ? ('0' + v) : v);
+					});
+			$('.datetimebox-timespinner-minute-up', timeSpinner).unbind('.datetimebox').bind('click.datetimebox',
+					function() {
+						var input = $('input.datetimebox-timespinner-minute', timeSpinner);
+						var v = parseInt(input.val()) + 1;
+						if (v > 59)
+							v = 0;
+						input.val(v < 10 ? ('0' + v) : v);
+					});
+			$('.datetimebox-timespinner-seconds-up', timeSpinner).unbind('.datetimebox').bind('click.datetimebox',
+					function() {
+						var input = $('input.datetimebox-timespinner-seconds', timeSpinner);
+						var v = parseInt(input.val()) + 1;
+						if (v > 59)
+							v = 0;
+						input.val(v < 10 ? ('0' + v) : v);
+					});
+			$('.datetimebox-timespinner-hour-down', timeSpinner).unbind('.datetimebox').bind('click.datetimebox',
+					function() {
+						var input = $('input.datetimebox-timespinner-hour', timeSpinner);
+						var v = parseInt(input.val()) - 1;
+						if (v < 0)
+							v = 23;
+						input.val(v < 10 ? ('0' + v) : v);
+					});
+			$('.datetimebox-timespinner-minute-down', timeSpinner).unbind('.datetimebox').bind('click.datetimebox',
+					function() {
+						var input = $('input.datetimebox-timespinner-minute', timeSpinner);
+						var v = parseInt(input.val()) - 1;
+						if (v < 0)
+							v = 59;
+						input.val(v < 10 ? ('0' + v) : v);
+					});
+			$('.datetimebox-timespinner-seconds-down', timeSpinner).unbind('.datetimebox').bind('click.datetimebox',
+					function() {
+						var input = $('input.datetimebox-timespinner-seconds', timeSpinner);
+						var v = parseInt(input.val()) - 1;
+						if (v < 0)
+							v = 59;
+						input.val(v < 10 ? ('0' + v) : v);
+					});
 		}
 	}
 	// 创建按钮
@@ -387,66 +412,76 @@
 			button.append(table);
 		}
 		// 点击today
-		$('a', button).eq(0).unbind('click.datetimebox').bind('click.datetimebox', function() {
-			if (opts.showTimeSpinner) {
-				opts.year = new Date().getFullYear();
-				opts.month = new Date().getMonth() + 1;
-				createCalendar(target);
-				var calendar = $('.datetimebox-calendar', body);
-				$('.datetimebox-selected', calendar).removeClass('datetimebox-selected');
-				$('.datetimebox-day[abbr="' + opts.year + ',' + opts.month + ',' + new Date().getDate() + '"]').addClass('datetimebox-selected');
-			} else {
-				var oldValue = null;
-				if (state.value) {
-					oldValue = new Date(state.value[0], state.value[1] - 1, state.value[2]);
-				}
-				state.value = [];
-				state.value[0] = new Date().getFullYear();
-				state.value[1] = new Date().getMonth() + 1;
-				state.value[2] = new Date().getDate();
-				var newValue = new Date(state.value[0], state.value[1] - 1, state.value[2]);
-				$(target).val(opts.formatter.call(target, newValue));
-				panel.hide();
-				opts.onChange.call(target, newValue, oldValue);
-				if (opts.required) {
-					if ($.fn.validate) {
-						$(target).validate('validate');
+		$('a', button).eq(0).unbind('click.datetimebox').bind(
+				'click.datetimebox',
+				function() {
+					if (opts.showTimeSpinner) {
+						opts.year = new Date().getFullYear();
+						opts.month = new Date().getMonth() + 1;
+						createCalendar(target);
+						var calendar = $('.datetimebox-calendar', body);
+						$('.datetimebox-selected', calendar).removeClass('datetimebox-selected');
+						$('.datetimebox-day[abbr="' + opts.year + ',' + opts.month + ',' + new Date().getDate() + '"]')
+								.addClass('datetimebox-selected');
+					} else {
+						var oldValue = null;
+						if (state.value) {
+							oldValue = new Date(state.value[0], state.value[1] - 1, state.value[2]);
+						}
+						state.value = [];
+						state.value[0] = new Date().getFullYear();
+						state.value[1] = new Date().getMonth() + 1;
+						state.value[2] = new Date().getDate();
+						var newValue = new Date(state.value[0], state.value[1] - 1, state.value[2]);
+						$(target).val(opts.formatter.call(target, newValue));
+						panel.hide();
+						opts.onChange.call(target, newValue, oldValue);
+						if (opts.required) {
+							if ($.fn.validate) {
+								$(target).validate('validate');
+							}
+						}
 					}
-				}
-			}
-		});
+				});
 		// 点击ok
-		$('a', button).eq(2).unbind('click.datetimebox').bind('click.datetimebox', function() {
-			var oldValue = null;
-			if (state.value) {
-				oldValue = new Date(state.value[0], state.value[1] - 1, state.value[2], state.value[3], state.value[4], state.value[5]);
-			}
-			var selected = $('.datetimebox-calendar .datetimebox-selected', body);
-			state.value = [];
-			if (selected.length) {
-				var values = selected.attr('abbr').split(',');
-				state.value[0] = values[0];
-				state.value[1] = values[1];
-				state.value[2] = values[2];
-			} else {
-				state.value[0] = new Date().getFullYear();
-				state.value[1] = new Date().getMonth() + 1;
-				state.value[2] = new Date().getDate();
-			}
-			var timespinner = $('.datetimebox-timespinner', body);
-			state.value[3] = $('.datetimebox-timespinner-hour', timespinner).val();
-			state.value[4] = $('.datetimebox-timespinner-minute', timespinner).val();
-			state.value[5] = $('.datetimebox-timespinner-seconds', timespinner).val();
-			var newValue = new Date(state.value[0], state.value[1] - 1, state.value[2], state.value[3], state.value[4], state.value[5]);
-			$(target).val(opts.formatter.call(target, newValue));
-			panel.hide();
-			if (opts.required) {
-				if ($.fn.validate) {
-					$(target).validate('validate');
-				}
-			}
-			opts.onChange.call(target, newValue, oldValue);
-		});
+		$('a', button).eq(2).unbind('click.datetimebox').bind(
+				'click.datetimebox',
+				function() {
+					var oldValue = null;
+					if (state.value) {
+						oldValue = new Date(state.value[0], state.value[1] - 1, state.value[2], state.value[3],
+								state.value[4], state.value[5]);
+					}
+					var selected = $('.datetimebox-calendar .datetimebox-selected', body);
+					state.value = [];
+					if (selected.length) {
+						var values = selected.attr('abbr').split(',');
+						state.value[0] = values[0];
+						state.value[1] = values[1];
+						state.value[2] = values[2];
+					} else {
+						state.value[0] = new Date().getFullYear();
+						state.value[1] = new Date().getMonth() + 1;
+						state.value[2] = new Date().getDate();
+					}
+					var timespinner = $('.datetimebox-timespinner', body);
+					state.value[3] = $('.datetimebox-timespinner-hour', timespinner).val();
+					state.value[4] = $('.datetimebox-timespinner-minute', timespinner).val();
+					state.value[5] = $('.datetimebox-timespinner-seconds', timespinner).val();
+					if (opts.showSeconds == false) {
+						state.value[5] = 0;
+					}
+					var newValue = new Date(state.value[0], state.value[1] - 1, state.value[2], state.value[3],
+							state.value[4], state.value[5]);
+					$(target).val(opts.formatter.call(target, newValue));
+					panel.hide();
+					if (opts.required) {
+						if ($.fn.validate) {
+							$(target).validate('validate');
+						}
+					}
+					opts.onChange.call(target, newValue, oldValue);
+				});
 		// 点击clear
 		$('a', button).eq(1).unbind('click.datetimebox').bind('click.datetimebox', function() {
 			$(target).datetimebox('reset');
@@ -541,14 +576,21 @@
 		getValue : function(jq) {
 			var state = $(jq[0]).data('datetimebox');
 			var opts = state.options;
-			var values = state.value;
-			var year = values[0];
-			var month = values[1];
-			var date = values[2];
-			var hour = values[3];
-			var minute = values[4];
-			var second = values[5];
-			return year + opts.dateSeparator + (month < 10 ? ('0' + month) : month) + opts.dateSeparator + date + ' ' + (hour < 10 ? ('0' + hour) : hour) + opts.timeSeparator + (minute < 10 ? ('0' + minute) : minute) + (opts.showSeconds ? (opts.timeSeparator + (second < 10 ? ('0' + second) : second)) : '');
+			if (state.value) {
+				var values = state.value;
+				var year = parseInt(values[0]);
+				var month = parseInt(values[1]);
+				var date = parseInt(values[2]);
+				var hour = parseInt(values[3]);
+				var minute = parseInt(values[4]);
+				var seconds = parseInt(values[5]);
+				return year + opts.dateSeparator + (month < 10 ? ('0' + month) : month) + opts.dateSeparator
+						+ (date < 10 ? ('0' + date) : date) + ' ' + (hour < 10 ? ('0' + hour) : hour)
+						+ opts.timeSeparator + (minute < 10 ? ('0' + minute) : minute) + opts.timeSeparator
+						+ (seconds < 10 ? ('0' + seconds) : seconds);
+			} else {
+				return '';
+			}
 		},
 		setValue : function(jq, value) {
 			return jq.each(function() {
@@ -600,12 +642,16 @@
 			var month = date.getMonth() + 1;
 			var day = date.getDate();
 			if (opts.showTimeSpinner == false) {
-				return year + opts.dateSeparator + (month < 10 ? ('0' + month) : month) + opts.dateSeparator + (day < 10 ? ('0' + day) : day);
+				return year + opts.dateSeparator + (month < 10 ? ('0' + month) : month) + opts.dateSeparator
+						+ (day < 10 ? ('0' + day) : day);
 			} else {
 				var hour = date.getHours();
 				var minute = date.getMinutes();
 				var second = date.getSeconds();
-				return year + opts.dateSeparator + (month < 10 ? ('0' + month) : month) + opts.dateSeparator + (day < 10 ? ('0' + day) : day) + ' ' + (hour < 10 ? ('0' + hour) : hour) + opts.timeSeparator + (minute < 10 ? ('0' + minute) : minute) + (opts.showSeconds ? (opts.timeSeparator + (second < 10 ? ('0' + second) : second)) : '');
+				return year + opts.dateSeparator + (month < 10 ? ('0' + month) : month) + opts.dateSeparator
+						+ (day < 10 ? ('0' + day) : day) + ' ' + (hour < 10 ? ('0' + hour) : hour) + opts.timeSeparator
+						+ (minute < 10 ? ('0' + minute) : minute)
+						+ (opts.showSeconds ? (opts.timeSeparator + (second < 10 ? ('0' + second) : second)) : '');
 			}
 		},
 		dateSeparator : '-',

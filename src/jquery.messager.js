@@ -44,7 +44,7 @@
 			var contentObj = $('<div class="messager-content"></div>').appendTo(bodyObj);
 			var msgObj = $('<div class="messager-info"></div>').appendTo(contentObj).html(msg);
 			var toolObj = $('<div class="messager-tool"></div>').appendTo(contentObj);
-			var cancelObj = $('<a href="javascript:void(0)"></a>').addClass('messager-button').appendTo(toolObj).html($.messager.defaults.cancel);
+			var cancelObj = $('<a href="javascript:void(0)"></a>').addClass('messager-button').appendTo(toolObj).html($.messager.defaults.ok);
 			cancelObj.bind('click.messager', function() {
 				messagerObj.hide();
 				messagerObj.remove();

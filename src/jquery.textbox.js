@@ -31,10 +31,6 @@
 			inputWidth -= button.outerWidth();
 			state.buttons.push(button);
 		});
-		$(target).css({
-			width : inputWidth,
-			height : opts.height
-		});
 		setDisabled(target, opts.disabled);
 		setReadonly(target, opts.readonly);
 	}
@@ -68,7 +64,7 @@
 			inputWidth -= state.buttons[i].outerWidth();
 		}
 		$(target).css({
-			width : inputWidth,
+			width : inputWidth - $(target).css('padding-left').replace('px', '') - $(target).css('padding-right').replace('px', ''),
 			height : opts.height
 		});
 		opts.onResize.call(target, opts.width, opts.height);
