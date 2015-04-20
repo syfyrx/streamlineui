@@ -1,18 +1,18 @@
 ﻿/*jQuery StreamLineUI v1.0*/
 (function ($) {
-	$.fn.resizable = function (options, param) {
+	$.fn.slresizable = function (options, param) {
 		if (typeof options == 'string') {
-			return $.fn.resizable.methods[options](this, param);
+			return $.fn.slresizable.methods[options](this, param);
 		}
 		return this.each(function () {
 			var opts = null;
-			var state = $(this).data('resizable');
+			var state = $(this).data('slresizable');
 			if (state) {
-				$(this).unbind('.resizable');
+				$(this).unbind('.slresizable');
 				opts = $.extend(state.options, options || {});
 			} else {
-				opts = $.extend({}, $.fn.resizable.defaults, $.fn.resizable.parseOptions(this), options || {});
-				$(this).data('resizable', {
+				opts = $.extend({}, $.fn.slresizable.defaults, $.fn.slresizable.parseOptions(this), options || {});
+				$(this).data('slresizable', {
 					options: opts
 				});
 			}
@@ -21,18 +21,18 @@
 				return;
 			}
 
-			// bind mouse event using namespace resizable
-			$(this).bind('mousemove.resizable', { target: this }, function (e) {
-				if ($.fn.resizable.isResizing) { return; }
+			// bind mouse event using namespace slresizable
+			$(this).bind('mousemove.slresizable', { target: this }, function (e) {
+				if ($.fn.slresizable.isResizing) { return; }
 				var dir = getDirection(e);
 				if (dir == '') {
 					$(e.data.target).css('cursor', '');
 				} else {
 					$(e.data.target).css('cursor', dir + '-resize');
 				}
-			}).bind('mouseleave.resizable', { target: this }, function (e) {
+			}).bind('mouseleave.slresizable', { target: this }, function (e) {
 				$(e.data.target).css('cursor', '');
-			}).bind('mousedown.resizable', { target: this }, function (e) {
+			}).bind('mousedown.slresizable', { target: this }, function (e) {
 				var dir = getDirection(e);
 				if (dir == '')
 					return;
@@ -62,9 +62,9 @@
 					deltaWidth: $(e.data.target).outerWidth() - $(e.data.target).width(),
 					deltaHeight: $(e.data.target).outerHeight() - $(e.data.target).height()
 				};
-				$(document).bind('mousedown.resizable', data, doDown);
-				$(document).bind('mousemove.resizable', data, doMove);
-				$(document).bind('mouseup.resizable', data, doUp);
+				$(document).bind('mousedown.slresizable', data, doDown);
+				$(document).bind('mousemove.slresizable', data, doMove);
+				$(document).bind('mouseup.slresizable', data, doUp);
 				$('body').css('cursor', dir + '-resize');
 			});
 			// get the resize direction
@@ -98,25 +98,25 @@
 		});
 
 		function doDown(e) {
-			$.fn.resizable.isResizing = true;
-			$(e.data.target).data('resizable').options.onStartResize.call(e.data.target, e);
+			$.fn.slresizable.isResizing = true;
+			$(e.data.target).data('slresizable').options.onStartResize.call(e.data.target, e);
 			return false;
 		}
 
 		function doMove(e) {
 			resize(e);
-			if ($(e.data.target).data('resizable').options.onResize.call(e.data.target, e) != false) {
+			if ($(e.data.target).data('slresizable').options.onResize.call(e.data.target, e) != false) {
 				applySize(e)
 			}
 			return false;
 		}
 
 		function doUp(e) {
-			$.fn.resizable.isResizing = false;
+			$.fn.slresizable.isResizing = false;
 			resize(e, true);
 			applySize(e);
-			$(e.data.target).data('resizable').options.onStopResize.call(e.data.target, e);
-			$(document).unbind('.resizable');
+			$(e.data.target).data('slresizable').options.onStopResize.call(e.data.target, e);
+			$(document).unbind('.slresizable');
 			$('body').css('cursor', '');
 			return false;
 		}
@@ -134,7 +134,7 @@
 
 		function resize(e) {
 			var resizeData = e.data;
-			var options = $(resizeData.target).data('resizable').options;
+			var options = $(resizeData.target).data('slresizable').options;
 			if (resizeData.dir.indexOf('e') != -1) {
 				var width = resizeData.startWidth + e.pageX - resizeData.startX;
 				width = Math.min(
@@ -171,17 +171,17 @@
 			}
 		}
 	};
-	$.fn.resizable.parseOptions = function (target) {
+	$.fn.slresizable.parseOptions = function (target) {
 		var t = $(target);
 		return $.extend({},
-				$.parser.parseOptions(target, [
+				$.slparser.parseOptions(target, [
 					'handles', { minWidth: 'number', minHeight: 'number', maxWidth: 'number', maxHeight: 'number', edge: 'number' }
 				]), {
 					disabled: (t.attr('disabled') ? true : undefined)
 				})
 	};
 
-	$.fn.resizable.defaults = {
+	$.fn.slresizable.defaults = {
 		disabled: false,
 		handles: 'n, e, s, w, ne, se, sw, nw, all',
 		minWidth: 10,
@@ -194,20 +194,20 @@
 		onStopResize: function (e) { }
 	};
 
-	$.fn.resizable.isResizing = false;
+	$.fn.slresizable.isResizing = false;
 
-	$.fn.resizable.methods = {
+	$.fn.slresizable.methods = {
 		options: function (jq) {
-			return $(jq[0]).data('resizable').options;
+			return $(jq[0]).data('slresizable').options;
 		},
 		enable: function (jq) {
 			return jq.each(function () {
-				$(this).resizable({ disabled: false });
+				$(this).slresizable({ disabled: false });
 			});
 		},
 		disable: function (jq) {
 			return jq.each(function () {
-				$(this).resizable({ disabled: true });
+				$(this).slresizable({ disabled: true });
 			});
 		}
 	};

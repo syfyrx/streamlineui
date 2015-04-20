@@ -1,14 +1,14 @@
 /**
- * jQuery StreamlineUI v1.0 依赖：parser、tooltip、validate
+ * jQuery StreamlineUI v1.0 依赖：slparser、tooltip、validate
  */
 (function($) {
 	/**
 	 * 创建组件
 	 */
 	function create(target) {
-		var state = $(target).data('textbox');
+		var state = $(target).data('sltextbox');
 		var opts = state.options;
-		$(target).attr('type', opts.type).addClass('textbox').addClass('textbox-text');
+		$(target).attr('type', opts.type).addClass('sltextbox').addClass('sltextbox-text');
 		var inputWidth = opts.width;// 输入框宽度
 		$.each(opts.buttons, function(i, n) {
 			var button = $('<a href="javascript:void(0)" class="' + n.css + '">' + n.text + '</a>');
@@ -18,10 +18,10 @@
 				button.insertAfter(target);
 			}
 			if (n.disabled) {
-				button.addClass('textbox-button-disabled');
+				button.addClass('sltextbox-button-disabled');
 			}
 			button.click(function() {
-				if (!$(this).hasClass('textbox-button-disabled')) {
+				if (!$(this).hasClass('sltextbox-button-disabled')) {
 					opts.onClickButton.call(target, i);
 				}
 			});
@@ -38,15 +38,17 @@
 	 * 销毁组件
 	 */
 	function destroy(target) {
-		var state = $(target).data('textbox');
-		$(target).validate('destroy');
+		var state = $(target).data('sltextbox');
+		if ($.fn.slvalidate) {
+			$(target).slvalidate('destroy');
+		}
 		$(target).remove();
 	}
 	/**
 	 * 改变组件大小
 	 */
 	function resize(target, param) {
-		var state = $(target).data('textbox');
+		var state = $(target).data('sltextbox');
 		var opts = state.options;
 		if (param) {
 			if (param.width) {
@@ -73,17 +75,19 @@
 	 * 绑定验证
 	 */
 	function bindValidate(target) {
-		var state = $(target).data('textbox');
+		var state = $(target).data('sltextbox');
 		var opts = state.options;
-		$(target).validate($.extend({}, opts, {
-			deltaX : getTipX(target)
-		}));
+		if ($.fn.slvalidate) {
+			$(target).slvalidate($.extend({}, opts, {
+				deltaX : getTipX(target)
+			}));
+		}
 	}
 	/**
 	 * 获取tooltip水平偏移
 	 */
 	function getTipX(target) {
-		var state = $(target).data('textbox');
+		var state = $(target).data('sltextbox');
 		var opts = state.options;
 		var tipX = 0;
 		for (var i = 0; i < opts.buttons.length; i++) {
@@ -95,22 +99,22 @@
 	}
 	function changeOptions(target) {
 		var t = $(target);
-		var state = t.data('textbox');
+		var state = t.data('sltextbox');
 		var opts = state.options;
 		t.attr('placeholder', opts.prompt);
-		t.unbind('.textbox');
+		t.unbind('.sltextbox');
 		if (!opts.disabled && !opts.readonly) {
-			t.bind('blur.textbox', function(e) {
+			t.bind('blur.sltextbox', function(e) {
 				if (t.val() == '') {
-					t.val(opts.prompt).addClass('textbox-prompt');
+					t.val(opts.prompt).addClass('sltextbox-prompt');
 				}
-				t.removeClass('textbox-focused');
-			}).bind('focus.textbox', function(e) {
+				t.removeClass('sltextbox-focused');
+			}).bind('focus.sltextbox', function(e) {
 				if (t.val() == opts.prompt) {
 					t.val('');
 				}
-				$(this).removeClass('textbox-prompt');
-				t.addClass('textbox-focused');
+				$(this).removeClass('sltextbox-prompt');
+				t.addClass('sltextbox-focused');
 			});
 		}
 	}
@@ -118,20 +122,20 @@
 	 * 启用/禁用组件
 	 */
 	function setDisabled(target, param) {
-		var state = $(target).data('textbox');
+		var state = $(target).data('sltextbox');
 		var opts = state.options;
 		opts.disabled = param;
 		if (param) {
-			$(target).attr('disabled', 'disabled').addClass('textbox-disabled');
+			$(target).attr('disabled', 'disabled').addClass('sltextbox-disabled');
 		} else {
-			$(target).removeAttr('disabled').removeClass('textbox-disabled');
+			$(target).removeAttr('disabled').removeClass('sltextbox-disabled');
 		}
 		for (var i = 0; i < state.buttons.length; i++) {
 			opts.buttons[i].disabled = param;
 			if (param) {
-				state.buttons[i].addClass('textbox-button-disabled');
+				state.buttons[i].addClass('sltextbox-button-disabled');
 			} else {
-				state.buttons[i].removeClass('textbox-button-disabled');
+				state.buttons[i].removeClass('sltextbox-button-disabled');
 			}
 		}
 	}
@@ -139,40 +143,42 @@
 	 * 设置只读模式
 	 */
 	function setReadonly(target, param) {
-		var state = $(target).data('textbox');
+		var state = $(target).data('sltextbox');
 		var opts = state.options;
 		opts.readonly = param;
 		if (param) {
-			$(target).attr('readonly', 'readonly').addClass('textbox-readonly');
+			$(target).attr('readonly', 'readonly').addClass('sltextbox-readonly');
 		} else {
-			$(target).removeAttr('readonly').removeClass('textbox-readonly');
+			$(target).removeAttr('readonly').removeClass('sltextbox-readonly');
 		}
 	}
 	/**
 	 * 绑定数据 options：属性对象 buttons：按钮数组
 	 */
-	$.fn.textbox = function(options, param) {
+	$.fn.sltextbox = function(options, param) {
 		if (typeof options == 'string') {
-			var method = $.fn.textbox.methods[options];
+			var method = $.fn.sltextbox.methods[options];
 			if (method) {
 				return method(this, param);
 			} else {
-				return this.each(function() {
-					$(this).validate(options, param);
-				});
+				if ($.fn.slvalidate) {
+					return this.each(function() {
+						$(this).slvalidate(options, param);
+					});
+				}
 			}
 		}
 		options = options || {};
 		return this.each(function() {
-			var state = $(this).data('textbox');
+			var state = $(this).data('sltextbox');
 			if (state) {
 				$.extend(state.options, options);
 			} else {
-				$(this).data('textbox', {
-					options : $.extend({}, $.fn.validate.defaults, $.fn.textbox.defaults, $.fn.textbox.parseOptions(this), options),
+				$(this).data('sltextbox', {
+					options : $.extend({}, $.fn.slvalidate ? $.fn.slvalidate.defaults : {}, $.fn.sltextbox.defaults, $.fn.sltextbox.parseOptions(this), options),
 					buttons : []
 				});
-				state = $(this).data('textbox');
+				state = $(this).data('sltextbox');
 			}
 
 			create(this);
@@ -181,9 +187,9 @@
 			bindValidate(this);
 		});
 	};
-	$.fn.textbox.methods = {
+	$.fn.sltextbox.methods = {
 		options : function(jq) {
-			return $(jq[0]).data('textbox').options;
+			return $(jq[0]).data('sltextbox').options;
 		},
 		destroy : function(jq) {
 			return jq.each(function() {
@@ -220,8 +226,8 @@
 		},
 		reset : function(jq) {
 			return jq.each(function() {
-				var opts = $(this).textbox('options');
-				$(this).textbox('setValue', opts.value);
+				var opts = $(this).sltextbox('options');
+				$(this).sltextbox('setValue', opts.value);
 			});
 		},
 		getValue : function(jq) {
@@ -236,16 +242,16 @@
 	/**
 	 * 将data-options中的属性字符串转换为属性对象
 	 */
-	$.fn.textbox.parseOptions = function(target) {
+	$.fn.sltextbox.parseOptions = function(target) {
 		var t = $(target);
-		return $.extend({}, $.parser.parseOptions(target), {
+		return $.extend({}, $.slparser.parseOptions(target), {
 			value : (t.val() || undefined),
 			type : (t.attr('type') ? t.attr('type') : undefined),
 			disabled : (t.attr('disabled') ? true : undefined),
 			readonly : (t.attr('readonly') ? true : undefined)
 		});
 	};
-	$.fn.textbox.defaults = {
+	$.fn.sltextbox.defaults = {
 		width : 150,
 		height : 22,
 		prompt : '',

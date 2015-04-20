@@ -1,10 +1,8 @@
-/**
- * jQuery StreamLineUI v1.0 依赖parser
- */
-
+// jQuery StreamLineUI v1.0 
+// 依赖：slparser
 (function($) {
 	function ajaxSubmit(target, options) {
-		var opts = $(target).data('form').options;
+		var opts = $(target).data('slform').options;
 		$.extend(opts, options || {});
 
 		var param = $.extend({}, opts.queryParams);
@@ -68,7 +66,7 @@
 	 * 加载本地数据或远程数据
 	 */
 	function load(target, data) {
-		var opts = $(target).data('form').options;
+		var opts = $(target).data('slform').options;
 		if (typeof data == 'string') {// 加载远程数据
 			var param = {};
 			if (opts.onBeforeLoad.call(target, param) == false)
@@ -138,9 +136,9 @@
 		}
 
 		function _loadCombo(name, val) {
-			var form = $(target);
+			var slform = $(target);
 			var cc = [ 'combobox', 'combotree', 'combogrid', 'datetimebox', 'datebox', 'combo' ];
-			var c = form.find('[comboName="' + name + '"]');
+			var c = slform.find('[comboName="' + name + '"]');
 			if (c.length) {
 				for (var i = 0; i < cc.length; i++) {
 					var type = cc[i];
@@ -214,10 +212,10 @@
 	 * 设置表单
 	 */
 	function setForm(target) {
-		var options = $(target).data('form').options;
-		$(target).unbind('.form');
+		var options = $(target).data('slform').options;
+		$(target).unbind('.slform');
 		if (options.ajax) {
-			$(target).bind('submit.form', function() {
+			$(target).bind('submit.slform', function() {
 				setTimeout(function() {
 					ajaxSubmit(target, options);
 				}, 0);
@@ -231,23 +229,21 @@
 	 */
 	function initForm(target, options) {
 		options = options || {};
-		var state = $(target).data('form');
+		var state = $(target).data('slform');
 		if (state) {
 			$.extend(state.options, options);
 		} else {
-			$(target).data('form', {
-				options : $.extend({}, $.fn.form.defaults, $.fn.form.parseOptions(target), options)
+			$(target).data('slform', {
+				options : $.extend({}, $.fn.slform.defaults, $.fn.slform.parseOptions(target), options)
 			});
 		}
 	}
-	/**
-	 * 验证表单
-	 */
+	// 验证表单
 	function validate(target) {
-		if ($.fn.validate) {
+		if ($.fn.slvalidate) {
 			var t = $(target);
-			t.find('.validate-text:not(:disabled)').validate('validate');
-			var invalidbox = t.find('.validate-invalid');
+			t.find('.slvalidate-text:not(:disabled)').slvalidate('validate');
+			var invalidbox = t.find('.slvalidate-invalid');
 			invalidbox.filter(':not(:disabled):first').focus();
 			return invalidbox.length == 0;
 		}
@@ -257,17 +253,17 @@
 	 * 设置是否验证
 	 */
 	function setValidation(target, novalidate) {
-		var opts = $(target).data('form').options;
+		var opts = $(target).data('slform').options;
 		opts.novalidate = novalidate;
-		$(target).find('.validate-text:not(:disabled)').validate(novalidate ? 'disableValidation' : 'enableValidation');
+		$(target).find('.slvalidate-text:not(:disabled)').slvalidate(novalidate ? 'disableValidation' : 'enableValidation');
 	}
 
-	$.fn.form = function(options, param) {
+	$.fn.slform = function(options, param) {
 		if (typeof options == 'string') {
 			this.each(function() {
 				initForm(this);
 			});
-			return $.fn.form.methods[options](this, param);
+			return $.fn.slform.methods[options](this, param);
 		}
 
 		return this.each(function() {
@@ -276,9 +272,9 @@
 		});
 	};
 
-	$.fn.form.methods = {
+	$.fn.slform.methods = {
 		options : function(jq) {
-			return $(jq[0]).data('form').options;
+			return $(jq[0]).data('slform').options;
 		},
 		submit : function(jq, options) {
 			return jq.each(function() {
@@ -315,9 +311,9 @@
 		}
 	};
 
-	$.fn.form.parseOptions = function(target) {
+	$.fn.slform.parseOptions = function(target) {
 		var t = $(target);
-		return $.extend({}, $.parser.parseOptions(target, [ {
+		return $.extend({}, $.slparser.parseOptions(target, [ {
 			novalidate : 'boolean',
 			ajax : 'boolean'
 		} ]), {
@@ -325,13 +321,13 @@
 		});
 	};
 
-	$.fn.form.defaults = {
+	$.fn.slform.defaults = {
 		novalidate : false,
 		ajax : true,
 		queryParams : {},
 		url : null,
 		onSubmit : function(param) {
-			return $(this).form('validate');
+			return $(this).slform('validate');
 		},
 		success : function(data) {
 		},

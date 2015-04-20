@@ -1,22 +1,22 @@
 /**
  * jQuery StreamlineUI v1.0
- * 依赖：parser
+ * 依赖：slparser
  */
  (function($){
  	/**
  	 * 绑定事件
  	 */
  	function bindEvent(target){
- 		var opts=$(target).data('tooltip').options;
- 		$(target).unbind('.tooltip').bind(opts.showEvent+'.tooltip',function(e){
- 			$(target).tooltip('show',e);
- 		}).bind(opts.hideEvent+'.tooltip',function(e){
- 			$(target).tooltip('hide',e);
- 		}).bind('mousemove.tooltip',function(e){
+ 		var opts=$(target).data('sltooltip').options;
+ 		$(target).unbind('.sltooltip').bind(opts.showEvent+'.sltooltip',function(e){
+ 			$(target).sltooltip('show',e);
+ 		}).bind(opts.hideEvent+'.sltooltip',function(e){
+ 			$(target).sltooltip('hide',e);
+ 		}).bind('mousemove.sltooltip',function(e){
  			if(opts.trackMouse){
  				opts.trackMouseX=e.pageX;
  				opts.trackMouseY=e.pageY;
- 				$(target).tooltip('reposition');
+ 				$(target).sltooltip('reposition');
  			}
  		});
  	};
@@ -24,7 +24,7 @@
  	 * 清除延时timer
  	 */
  	function clearTimer(target){
- 		var state=$(target).data('tooltip');
+ 		var state=$(target).data('sltooltip');
  		if(state.showTimer){
  			clearTimeout(state.showTimer);
  			state.showTimer=null;
@@ -38,7 +38,7 @@
  	 * 重置提示框位置
  	 */
  	function reposition(target){
- 		var state=$(target).data('tooltip');
+ 		var state=$(target).data('sltooltip');
  		if(!state||!state.tip){
  			return;
  		}
@@ -58,7 +58,7 @@
  				if(opts.position=='left'){
  					positionObj=getPosition('right');
  				}else{
- 					$(target).tooltip('arrow').css('left',tip._outerWidth()/2+positionObj.left);
+ 					$(target).sltooltip('arrow').css('left',tip._outerWidth()/2+positionObj.left);
  					positionObj.left=0;
  				}
  			}else{
@@ -68,7 +68,7 @@
  					}else{
  						var left=positionObj.left;
  						positionObj.left=$(window)._outerWidth()+$(document)._scrollLeft()-tip._outerWidth();
- 						$(target).tooltip('arrow').css('left',tip._outerWidth()/2-(positionObj.left-left));
+ 						$(target).sltooltip('arrow').css('left',tip._outerWidth()/2-(positionObj.left-left));
  					}
  				}
  			}
@@ -77,7 +77,7 @@
  		opts.onPosition.call(target,positionObj.left,positionObj.top);
  		function getPosition(strPosition){
  			opts.position=strPosition||'bottom';
- 			tip.removeClass('tooltip-top tooltip-bottom tooltip-left tooltip-right').addClass('tooltip-'+opts.position);
+ 			tip.removeClass('sltooltip-top sltooltip-bottom sltooltip-left sltooltip-right').addClass('sltooltip-'+opts.position);
  			var left,top;
  			if(opts.trackMouse){
  				left=opts.trackMouseX+opts.deltaX;
@@ -112,21 +112,21 @@
  	 * 显示提示框
  	 */
  	function show(target,e){
- 		var state=$(target).data('tooltip');
+ 		var state=$(target).data('sltooltip');
  		var opts=state.options;
  		var tip=state.tip;
  		if(!tip){
- 			tip=$('<div tabindex="-1" class="tooltip">'+'<div class="tooltip-content"></div>'+'<div class="tooltip-arrow-outer"></div>'+'<div class="tooltip-arrow"></div>'+'</div>').appendTo('body');
+ 			tip=$('<div tabindex="-1" class="sltooltip">'+'<div class="sltooltip-content"></div>'+'<div class="sltooltip-arrow-outer"></div>'+'<div class="sltooltip-arrow"></div>'+'</div>').appendTo('body');
  			state.tip=tip;
  			update(target);
  		}
  		clearTimer(target);
  		state.showTimer=setTimeout(function(){
- 			$(target).tooltip('reposition');
+ 			$(target).sltooltip('reposition');
  			tip.show();
  			opts.onShow.call(target,e);
- 			var arrowOuter=tip.children('.tooltip-arrow-outer');
- 			var arrow=tip.children('.tooltip-arrow');
+ 			var arrowOuter=tip.children('.sltooltip-arrow-outer');
+ 			var arrow=tip.children('.sltooltip-arrow');
  			var bc='border-'+opts.position+'-color';
  			arrowOuter.add(arrow).css({borderTopColor:'',borderBottomColor:'',borderLeftColor:'',borderRightColor:''});
  			arrowOuter.css(bc,tip.css(bc));
@@ -137,7 +137,7 @@
  	 * 隐藏提示框
  	 */
  	function hide(target,e){
- 		var state=$(target).data('tooltip');
+ 		var state=$(target).data('sltooltip');
  		if(state&&state.tip){
  			clearTimer(target);
  			state.hideTimer=setTimeout(function(){
@@ -150,7 +150,7 @@
  	 * 更新提示框信息
  	 */
  	function update(target,content){
- 		var state=$(target).data('tooltip');
+ 		var state=$(target).data('sltooltip');
  		var opts=state.options;
  		if(content){
  			opts.content=content;
@@ -159,14 +159,14 @@
  			return;
  		}
  		var cc=(typeof opts.content=='function'?opts.content.call(target):opts.content);
- 		state.tip.children('.tooltip-content').html(cc);
+ 		state.tip.children('.sltooltip-content').html(cc);
  		opts.onUpdate.call(target,cc);
  	};
  	/**
  	 * 销毁提示框
  	 */
  	function destroy(target){
- 		var state=$(target).data('tooltip');
+ 		var state=$(target).data('sltooltip');
  		if(state){
  			clearTimer(target);
  			var opts=state.options;
@@ -176,37 +176,37 @@
  			if(opts._title){
  				$(target).attr('title',opts._title);
  			}
- 			$(target).removeData('tooltip');
- 			$(target).unbind('.tooltip').removeClass('tooltip-f');
+ 			$(target).removeData('sltooltip');
+ 			$(target).unbind('.sltooltip').removeClass('sltooltip-f');
  			opts.onDestroy.call(target);
  		}
  	};
- 	$.fn.tooltip=function(options,param){
+ 	$.fn.sltooltip=function(options,param){
  		if(typeof options=='string'){
- 			return $.fn.tooltip.methods[options](this,param);
+ 			return $.fn.sltooltip.methods[options](this,param);
  		}
  		options=options||{};
  		return this.each(function(){
- 			var state=$(this).data('tooltip');
+ 			var state=$(this).data('sltooltip');
  			if(state){
  				$.extend(state.options,options);
  			}else{
- 				$(this).data('tooltip',{options:$.extend({},$.fn.tooltip.defaults,$.fn.tooltip.parseOptions(this),options)});
- 				$(this).addClass('tooltip-f');
+ 				$(this).data('sltooltip',{options:$.extend({},$.fn.sltooltip.defaults,$.fn.sltooltip.parseOptions(this),options)});
+ 				$(this).addClass('sltooltip-f');
  			}
  			bindEvent(this);
  			update(this);
  		});
  	};
- 	$.fn.tooltip.methods={
+ 	$.fn.sltooltip.methods={
  		options:function(jq){
- 			return $(jq[0]).data('tooltip').options;
+ 			return $(jq[0]).data('sltooltip').options;
  		},
  		tip:function(jq){
- 			return $(jq[0]).data('tooltip').tip;
+ 			return $(jq[0]).data('sltooltip').tip;
  		},
  		arrow:function(jq){
- 			return jq.tooltip("tip").children(".tooltip-arrow-outer,.tooltip-arrow");
+ 			return jq.sltooltip("tip").children(".sltooltip-arrow-outer,.sltooltip-arrow");
 	 	},
 	 	show:function(jq,e){
 	 		return jq.each(function(){
@@ -234,9 +234,9 @@
 	 		});
  		}
 	};
- 	$.fn.tooltip.parseOptions=function(target){
+ 	$.fn.sltooltip.parseOptions=function(target){
  		var t=$(target);
- 		var opts=$.extend({},$.parser.parseOptions(target,['position','showEvent','hideEvent','content',{trackMouse:'boolean',deltaX:'number',deltaY:'number',showDelay:'number',hideDelay:'number'}]));
+ 		var opts=$.extend({},$.slparser.parseOptions(target,['position','showEvent','hideEvent','content',{trackMouse:'boolean',deltaX:'number',deltaY:'number',showDelay:'number',hideDelay:'number'}]));
  		opts._title=t.attr('title');
  		t.attr('title','');
  		if(!opts.content){
@@ -244,7 +244,7 @@
  		}
  		return opts;
  	};
- 	$.fn.tooltip.defaults={
+ 	$.fn.sltooltip.defaults={
  		position:'bottom',
  		content:null,
  		trackMouse:false,

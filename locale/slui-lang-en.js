@@ -1,51 +1,51 @@
-if ($.fn.pagination) {
-	$.fn.pagination.defaults.beforePageText = 'Page';
-	$.fn.pagination.defaults.afterPageText = 'of {pages}';
-	$.fn.pagination.defaults.displayMsg = 'Displaying {from} to {to} of {total} items';
+if ($.fn.slpagination) {
+	$.fn.slpagination.defaults.beforePageText = 'Page';
+	$.fn.slpagination.defaults.afterPageText = 'of {pages}';
+	$.fn.slpagination.defaults.displayMsg = 'Displaying {from} to {to} of {total} items';
 }
-if ($.fn.datagrid) {
-	$.fn.datagrid.defaults.loadMsg = 'Processing, please wait ...';
+if ($.fn.sldatagrid) {
+	$.fn.sldatagrid.defaults.loadMsg = 'Processing, please wait ...';
 }
-if ($.fn.treegrid && $.fn.datagrid) {
-	$.fn.treegrid.defaults.loadMsg = $.fn.datagrid.defaults.loadMsg;
+if ($.fn.sltreegrid && $.fn.datagrid) {
+	$.fn.sltreegrid.defaults.loadMsg = $.fn.datagrid.defaults.loadMsg;
 }
-if ($.messager) {
-	$.messager.defaults.ok = 'Ok';
-	$.messager.defaults.cancel = 'Cancel';
+if ($.slmessager) {
+	$.slmessager.defaults.ok = 'Ok';
+	$.slmessager.defaults.cancel = 'Cancel';
 }
-if ($.fn.validate) {
-	$.fn.validate.defaults.missingMessage = 'This field is required.';
-	$.fn.validate.defaults.rules.email.message = 'Please enter a valid email address.';
-	$.fn.validate.defaults.rules.url.message = 'Please enter a valid URL.';
-	$.fn.validate.defaults.rules.length.message = 'Please enter a value between {0} and {1}.';
-	$.fn.validate.defaults.rules.remote.message = 'Please fix this field.';
+if ($.fn.slvalidate) {
+	$.fn.slvalidate.defaults.missingMessage = 'This field is required.';
+	$.fn.slvalidate.defaults.rules.email.message = 'Please enter a valid email address.';
+	$.fn.slvalidate.defaults.rules.url.message = 'Please enter a valid URL.';
+	$.fn.slvalidate.defaults.rules.length.message = 'Please enter a value between {0} and {1}.';
+	$.fn.slvalidate.defaults.rules.remote.message = 'Please fix this field.';
 }
-if ($.fn.numberbox) {
-	$.fn.numberbox.defaults.missingMessage = 'This field is required.';
+if ($.fn.slnumberbox) {
+	$.fn.slnumberbox.defaults.missingMessage = 'This field is required.';
 }
-if ($.fn.combobox) {
-	$.fn.combobox.defaults.missingMessage = 'This field is required.';
+if ($.fn.slcombobox) {
+	$.fn.slcombobox.defaults.missingMessage = 'This field is required.';
 }
-if ($.fn.combotree) {
-	$.fn.combotree.defaults.missingMessage = 'This field is required.';
+if ($.fn.slcombotree) {
+	$.fn.slcombotree.defaults.missingMessage = 'This field is required.';
 }
-if ($.fn.combogrid) {
-	$.fn.combogrid.defaults.missingMessage = 'This field is required.';
+if ($.fn.slcombogrid) {
+	$.fn.slcombogrid.defaults.missingMessage = 'This field is required.';
 }
-if ($.fn.datetimebox) {
-	$.fn.datetimebox.defaults.weeks = [ 'S', 'M', 'T', 'W', 'T', 'F', 'S' ];
-	$.fn.datetimebox.defaults.months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
-	$.fn.datetimebox.defaults.title='{month} {year}';
-	$.fn.datetimebox.defaults.currentText = 'Today';
-	$.fn.datetimebox.defaults.clearText = 'Clear';
-	$.fn.datetimebox.defaults.okText = 'Ok';
-	$.fn.datetimebox.defaults.missingMessage = 'This field is required.';
+if ($.fn.sldatetimebox) {
+	$.fn.sldatetimebox.defaults.weeks = [ 'S', 'M', 'T', 'W', 'T', 'F', 'S' ];
+	$.fn.sldatetimebox.defaults.months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
+	$.fn.sldatetimebox.defaults.title='{month} {year}';
+	$.fn.sldatetimebox.defaults.currentText = 'Today';
+	$.fn.sldatetimebox.defaults.clearText = 'Clear';
+	$.fn.sldatetimebox.defaults.okText = 'Ok';
+	$.fn.sldatetimebox.defaults.missingMessage = 'This field is required.';
 }
-if ($.fn.datetimebox && $.fn.datebox) {
-	$.extend($.fn.datetimebox.defaults, {
-		currentText : $.fn.datebox.defaults.currentText,
-		closeText : $.fn.datebox.defaults.closeText,
-		okText : $.fn.datebox.defaults.okText,
-		missingMessage : $.fn.datebox.defaults.missingMessage
+if ($.fn.sldatetimebox && $.fn.datebox) {
+	$.extend($.fn.sldatetimebox.defaults, {
+		currentText : $.fn.sldatebox.defaults.currentText,
+		closeText : $.fn.sldatebox.defaults.closeText,
+		okText : $.fn.sldatebox.defaults.okText,
+		missingMessage : $.fn.sldatebox.defaults.missingMessage
 	});
 }

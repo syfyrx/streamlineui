@@ -1,90 +1,90 @@
 /*jQuery StreamLineUI v1.0*/
 (function(){
 	var modules = {
-		parser:{
-			js:'jquery.parser.js'
+			slslparser:{
+			js:'jquery.slslparser.js'
 		},
-		draggable:{
-			js:'jquery.draggable.js'
+		sldraggable:{
+			js:'jquery.sldraggable.js'
 		},
-		droppable:{
-			js:'jquery.droppable.js'
+		sldroppable:{
+			js:'jquery.sldroppable.js'
 		},
-		resizable:{
-			js:'jquery.resizable.js'
+		slresizable:{
+			js:'jquery.slresizable.js'
 		},
-		linkbutton:{
-			js:'jquery.linkbutton.js',
-			css:'linkbutton.css'
+		slbutton:{
+			js:'jquery.sllinkbutton.js',
+			css:'sllinkbutton.css'
 		},
-		progressbar:{
-			js:'jquery.progressbar.js',
-			css:'progressbar.css'
+		slprogressbar:{
+			js:'jquery.slprogressbar.js',
+			css:'slprogressbar.css'
 		},
-		tooltip:{
-			js:'jquery.tooltip.js',
-			css:'tooltip.css'
+		sltooltip:{
+			js:'jquery.sltooltip.js',
+			css:'sltooltip.css'
 		},
-		pagination:{
-			js:'jquery.pagination.js',
-			css:'pagination.css',
-			dependencies:['linkbutton']
+		slpagination:{
+			js:'jquery.slpagination.js',
+			css:'slpagination.css',
+			dependencies:['slbutton']
 		},
-		datagrid:{
-			js:'jquery.datagrid.js',
-			css:'datagrid.css',
-			dependencies:['panel','resizable','linkbutton','pagination']
+		sldatagrid:{
+			js:'jquery.sldatagrid.js',
+			css:'sldatagrid.css',
+			dependencies:['slpanel','slresizable','slbutton','slpagination']
 		},
-		treegrid:{
-			js:'jquery.treegrid.js',
-			css:'tree.css',
-			dependencies:['datagrid']
+		sltreegrid:{
+			js:'jquery.sltreegrid.js',
+			css:'sltree.css',
+			dependencies:['sldatagrid']
 		},
-		propertygrid:{
-			js:'jquery.propertygrid.js',
-			css:'propertygrid.css',
-			dependencies:['datagrid']
+		slpropertygrid:{
+			js:'jquery.slpropertygrid.js',
+			css:'slpropertygrid.css',
+			dependencies:['sldatagrid']
 		},
-		panel: {
-			js:'jquery.panel.js',
-			css:'panel.css'
+		slpanel: {
+			js:'jquery.slpanel.js',
+			css:'slpanel.css'
 		},
-		window:{
-			js:'jquery.window.js',
-			css:'window.css',
-			dependencies:['resizable','draggable','panel']
+		slwindow:{
+			js:'jquery.slwindow.js',
+			css:'slwindow.css',
+			dependencies:['slresizable','sldraggable','slpanel']
 		},
-		dialog:{
-			js:'jquery.dialog.js',
-			css:'dialog.css',
-			dependencies:['linkbutton','window']
+		sldialog:{
+			js:'jquery.sldialog.js',
+			css:'sldialog.css',
+			dependencies:['slbutton','slwindow']
 		},
-		messager:{
-			js:'jquery.messager.js',
-			css:'messager.css',
-			dependencies:['linkbutton','window','progressbar']
+		slmessager:{
+			js:'jquery.slmessager.js',
+			css:'slmessager.css',
+			dependencies:['slbutton','slwindow','slprogressbar']
 		},
-		layout:{
-			js:'jquery.layout.js',
-			css:'layout.css',
-			dependencies:['resizable','panel']
+		sllayout:{
+			js:'jquery.sllayout.js',
+			css:'sllayout.css',
+			dependencies:['slresizable','slpanel']
 		},
-		form:{
-			js:'jquery.form.js'
+		slform:{
+			js:'jquery.slform.js'
 		},
-		menu:{
-			js:'jquery.menu.js',
-			css:'menu.css'
+		slmenu:{
+			js:'jquery.slmenu.js',
+			css:'slmenu.css'
 		},
-		tabs:{
-			js:'jquery.tabs.js',
-			css:'tabs.css',
-			dependencies:['panel','linkbutton']
+		sltabs:{
+			js:'jquery.sltabs.js',
+			css:'sltabs.css',
+			dependencies:['slpanel','slbutton']
 		},
-		menubutton:{
-			js:'jquery.menubutton.js',
-			css:'menubutton.css',
-			dependencies:['linkbutton','menu']
+		slmenubutton:{
+			js:'jquery.slmenubutton.js',
+			css:'slmenubutton.css',
+			dependencies:['slbutton','menu']
 		},
 		splitbutton:{
 			js:'jquery.splitbutton.js',
@@ -372,8 +372,8 @@
 	
 	if (window.jQuery){
 		jQuery(function(){
-			loader.load('parser', function(){
-				jQuery.parser.parse();
+			loader.load('slparser', function(){
+				jQuery.slparser.parse();
 			});
 		});
 	}

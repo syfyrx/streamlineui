@@ -1,17 +1,17 @@
 /**
  * jQuery StreamlineUI v1.0
- * 依赖：parser
+ * 依赖：slparser
  */
  (function($){
  	/**
  	 * 改变面板大小
  	 */
  	function resize(target,params){
- 		var state=$(target).data('panel');
+ 		var state=$(target).data('slpanel');
  		var opts=state.options;
- 		var header=$(target).children('.panel-header');
- 		var body=$(target).children('.panel-body');
- 		var footer=$(target).children('.panel-footer');
+ 		var header=$(target).children('.slpanel-header');
+ 		var body=$(target).children('.slpanel-body');
+ 		var footer=$(target).children('.slpanel-footer');
  		if(params){
  			if(params.width){
  				opts.width=params.width;
@@ -25,7 +25,7 @@
  		opts.onResize.apply(target,[opts.width,opts.height]);
  	};
  	function move(target,params){
- 		var opts=$(target).data('panel').options;
+ 		var opts=$(target).data('slpanel').options;
  		if(params){
  			if(params.left){
  				opts.left=params.left;
@@ -38,51 +38,51 @@
  		opts.onMove.apply(target,[opts.left,opts.top]);
  	};
  	function init(target){
- 		$(target).addClass('panel');
- 		var state=$(target).data('panel');
+ 		$(target).addClass('slpanel');
+ 		var state=$(target).data('slpanel');
  		var opts=state.options;
  		setBody();
- 		var body=$(target).panel('body');
+ 		var body=$(target).slpanel('body');
  		setHeader();
- 		var header=$(target).panel('header');
+ 		var header=$(target).slpanel('header');
  		setFooter();
- 		var footer=$(target).panel('footer');
+ 		var footer=$(target).slpanel('footer');
  		if(opts.border){
- 			header.removeClass('panel-header-noborder');
- 			body.removeClass('panel-body-noborder');
- 			footer.removeClass('panel-footer-noborder');
+ 			header.removeClass('slpanel-header-noborder');
+ 			body.removeClass('slpanel-body-noborder');
+ 			footer.removeClass('slpanel-footer-noborder');
  		}else{
- 			header.addClass('panel-header-noborder');
- 			body.addClass('panel-body-noborder');
- 			footer.addClass('panel-footer-noborder');
+ 			header.addClass('slpanel-header-noborder');
+ 			body.addClass('slpanel-body-noborder');
+ 			footer.addClass('slpanel-footer-noborder');
  		}
  		$(target).attr('id',opts.id||'');
  		if(opts.content){
  			body.empty();
  			body.html(opts.content);
  		}
- 		$.parser.parse(body);
+ 		$.slparser.parse(body);
  		body.outerHeight($(target).outerHeight()-header.outerHeight()-footer.outerHeight());
  		function setHeader(){
  			if(opts.noheader||opts.title==null){
- 				$(target).children('.panel-header').remove();
- 				body.addClass('panel-body-noheader');
+ 				$(target).children('.slpanel-header').remove();
+ 				body.addClass('slpanel-body-noheader');
  			}else{
- 				var header=$(target).children('.panel-header');
+ 				var header=$(target).children('.slpanel-header');
  				header.addClass(opts.headerCls);
 				if(header.length==0){
-					header=$('<div class="panel-header"></div>').prependTo(target);
+					header=$('<div class="slpanel-header"></div>').prependTo(target);
 				}
 				if(!$.isArray(opts.tools)){
-					header.find('.panel-tool .panel-tool-a').appendTo(opts.tools);
+					header.find('.slpanel-tool .slpanel-tool-a').appendTo(opts.tools);
 				}
 				header.empty();
-				var title=$('<div class="panel-title"></div>').html(opts.title).appendTo(header);
+				var title=$('<div class="slpanel-title"></div>').html(opts.title).appendTo(header);
 				if(opts.iconCls){
-					$('<div class="panel-icon"></div>').addClass(opts.iconCls).prependTo(header);
-					title.addClass('panel-with-icon');
+					$('<div class="slpanel-icon"></div>').addClass(opts.iconCls).prependTo(header);
+					title.addClass('slpanel-with-icon');
 				}
-				var tool=$('<div class="panel-tool"></div>').appendTo(header);
+				var tool=$('<div class="slpanel-tool"></div>').appendTo(header);
 				tool.bind('click',function(e){
 					e.stopPropagation();//阻止事件冒泡
 				});
@@ -93,7 +93,7 @@
 						});
 					}else{
 						$(opts.tools).children().each(function(){
-							$(this).addClass('panel-tool-a').appendTo(tool);
+							$(this).addClass('slpanel-tool-a').appendTo(tool);
 						});
 					}
 				}
@@ -128,7 +128,7 @@
  		function setBody(){
  			var str=$(target).html();
  			$(target).empty();
- 			$('<div class="panel-body"></div>').appendTo(target).html(str).addClass(opts.bodyCls);
+ 			$('<div class="slpanel-body"></div>').appendTo(target).html(str).addClass(opts.bodyCls);
  		}
  		/**
  		 * 添加工具栏按钮
@@ -142,16 +142,16 @@
  		 */
  		function setFooter(){
  			if(opts.footer){
- 				$(opts.footer).addClass('panel-footer').appendTo(target);
- 				body.removeClass('panel-body-nofooter');
+ 				$(opts.footer).addClass('slpanel-footer').appendTo(target);
+ 				body.removeClass('slpanel-body-nofooter');
  			}else{
- 				$(target).children('.panel-footer').remove();
- 				body.addClass('panel-body-nofooter');
+ 				$(target).children('.slpanel-footer').remove();
+ 				body.addClass('slpanel-body-nofooter');
  			}
  		};
  	};
  	function load(target,queryParams){
- 		var state=$(target).data('panel');
+ 		var state=$(target).data('slpanel');
  		var opts=state.options;
  		if(!opts.href){
  			return;
@@ -165,14 +165,14 @@
  				return;
  			}
  			state.isLoaded=false;
- 			$(target).panel('clear');
+ 			$(target).slpanel('clear');
  			if(opts.loadingMessage){
- 				$(target).panel('body').html($('<div class="panel-loading"></div>').html(opts.loadingMessage));
+ 				$(target).slpanel('body').html($('<div class="slpanel-loading"></div>').html(opts.loadingMessage));
  			}
  			opts.loader.call(target,queryParams,function(data){
  				var filterData=opts.extractor.call(target,data);
- 				$(target).panel('body').html(filterData);
- 				$.parser.parse($(target).panel('body'));
+ 				$(target).slpanel('body').html(filterData);
+ 				$.slparser.parse($(target).slpanel('body'));
  				opts.onLoad.apply(target,arguments);
  				state.isLoaded=true;
  			},function(){
@@ -184,13 +184,13 @@
  	 * 清除面板内容
  	 */
  	function clear(target){
- 		$(target).children('.panel-body').empty();
+ 		$(target).children('.slpanel-body').empty();
  	};
  	/**
- 	 * 展开panel
+ 	 * 展开slpanel
  	 */
  	function open(target,forceOpen){
- 		var opts=$(target).data('panel').options;
+ 		var opts=$(target).data('slpanel').options;
  		if(forceOpen!=true){
  			if(opts.onBeforeOpen.call(target)==false){
  				return;
@@ -198,7 +198,7 @@
  		}
  		$(target).show();
  		opts.closed=false;
- 		if($(target).children('.panel-header').find('a.panel-tool-restore').length){
+ 		if($(target).children('.slpanel-header').find('a.slpanel-tool-restore').length){
  			opts.maximized=true;
  		}
  		opts.onOpen.call(target);
@@ -218,7 +218,7 @@
  	 * 关闭面板
  	 */
  	function close(target,forceClose){
- 		var opts=$(target).data('panel').options;
+ 		var opts=$(target).data('slpanel').options;
  		if(forceClose!=true){
  			if(opts.onBeforeClose.call(target)==false){
  				return;
@@ -232,18 +232,18 @@
  	 * 折叠面板
  	 */
  	function collapse(target,animate){
- 		var opts=$(target).data('panel').options;
+ 		var opts=$(target).data('slpanel').options;
  		if(opts.collapsed==true){
  			return;
  		}
- 		var panel=$(target).data('panel').panel;
- 		var body=$(target).children('.panel-body');
- 		var toolCollapse=$(target).children('.panel-header').find('a.panel-tool-collapse');
+ 		var slpanel=$(target).data('slpanel').slpanel;
+ 		var body=$(target).children('.slpanel-body');
+ 		var toolCollapse=$(target).children('.slpanel-header').find('a.slpanel-tool-collapse');
  		body.stop(true,true);
  		if(opts.onBeforeCollapse.call(target)==false){
  			return;
  		}
- 		toolCollapse.addClass('panel-tool-expand');
+ 		toolCollapse.addClass('slpanel-tool-expand');
  		if(animate==true){
  			body.slideUp('normal',function(){
  				opts.collapsed=true;
@@ -259,9 +259,9 @@
  	 * 展开面板
  	 */
  	function expand(target,animate){
- 		var opts=$(target).data('panel').options;
- 		var body=$(target).children('.panel-body');
- 		var toolCollapse=$(target).children('.panel-header').find('a.panel-tool-collapse');
+ 		var opts=$(target).data('slpanel').options;
+ 		var body=$(target).children('.slpanel-body');
+ 		var toolCollapse=$(target).children('.slpanel-header').find('a.slpanel-tool-collapse');
  		if(opts.collapsed==false){
  			return;
  		}
@@ -269,7 +269,7 @@
  		if(opts.onBeforeExpand.call(target)==false){
  			return;
  		}
- 		toolCollapse.removeClass('panel-tool-expand');
+ 		toolCollapse.removeClass('slpanel-tool-expand');
  		if(animate==true){
  			body.slideDown('normal',function(){
  				opts.collapsed=false;
@@ -287,14 +287,14 @@
  	 * 最大化面板
  	 */
  	function maximize(target){
- 		var opts=$(target).data('panel').options;
+ 		var opts=$(target).data('slpanel').options;
  		if(opts.maximized==true){
  			return;
  		}
- 		var toolMax=$(target).children('.panel-header').find('a.panel-tool-max');
- 		toolMax.addClass('panel-tool-restore');
- 		if(!$(target).data('panel').original){
- 			$(target).data('panel').original={
+ 		var toolMax=$(target).children('.slpanel-header').find('a.slpanel-tool-max');
+ 		toolMax.addClass('slpanel-tool-restore');
+ 		if(!$(target).data('slpanel').original){
+ 			$(target).data('slpanel').original={
  				width:opts.width,
  				height:opts.height,
  				left:opts.left,
@@ -319,13 +319,13 @@
  	 * 恢复面板
  	 */
  	function restore(target){
- 		var opts=$(target).data('panel').options;
+ 		var opts=$(target).data('slpanel').options;
  		if(opts.maximized==false){
  			return;
  		}
- 		var toolMax=$(target).children('.panel-header').find('a.panel-tool-max');
- 		toolMax.removeClass('panel-tool-restore');
- 		var original=$(target).data('panel').original;
+ 		var toolMax=$(target).children('.slpanel-header').find('a.slpanel-tool-max');
+ 		toolMax.removeClass('slpanel-tool-restore');
+ 		var original=$(target).data('slpanel').original;
  		opts.fit=false;
  		resize(target,{
  			width:original.width,
@@ -336,32 +336,32 @@
  			top:original.top
  		});
  		opts.maximized=false;
- 		$(target).data('panel').original=null;
+ 		$(target).data('slpanel').original=null;
  		opts.onRestore.call(target);
  	};
  	/**
  	 * 设置标题文本
  	 */
  	function setTitle(target,title){
- 		$(target).data('panel').options.title=title;
- 		$(target).panel('header').find('div.panel-title').html(title);
+ 		$(target).data('slpanel').options.title=title;
+ 		$(target).slpanel('header').find('div.slpanel-title').html(title);
  	};
- 	$.fn.panel=function(options,param){
+ 	$.fn.slpanel=function(options,param){
  		if(typeof options=='string'){
- 			return $.fn.panel.methods[options](this,param);
+ 			return $.fn.slpanel.methods[options](this,param);
  		}
  		options=options||{};
  		return this.each(function(){
- 			var state=$(this).data('panel');
+ 			var state=$(this).data('slpanel');
  			if(state){
  				$.extend(state.options,options);
  				state.isLoaded=false;
  			}else{
- 				$(this).data('panel',{
- 					options:$.extend({},$.fn.panel.defaults,$.fn.panel.parseOptions(this),options),
+ 				$(this).data('slpanel',{
+ 					options:$.extend({},$.fn.slpanel.defaults,$.fn.slpanel.parseOptions(this),options),
  					isLoaded:false
  				});
- 				state=$(this).data('panel');
+ 				state=$(this).data('slpanel');
  			}
  			init(this);
  			if(state.options.closed==true){
@@ -369,18 +369,18 @@
  			}
  		});
  	};
- 	$.fn.panel.methods={
+ 	$.fn.slpanel.methods={
  		options:function(jq){
- 			return $(jq[0]).data('panel').options;
+ 			return $(jq[0]).data('slpanel').options;
 	 	},
 	 	header:function(jq){
-	 		return $(jq[0]).children('.panel-header');
+	 		return $(jq[0]).children('.slpanel-header');
 	 	},
 	 	footer:function(jq){
-	 		return $(jq[0]).children('.panel-footer');
+	 		return $(jq[0]).children('.slpanel-footer');
 	 	},
 	 	body:function(jq){
-	 		return $(jq[0]).children('.panel-body');
+	 		return $(jq[0]).children('.slpanel-body');
 	 	},
 	 	setTitle:function(jq,title){
 	 		return jq.each(function(){
@@ -404,7 +404,7 @@
 	 	},
 	 	refresh:function(jq,param){
 	 		return jq.each(function(){
-	 			var state=$(this).data('panel');
+	 			var state=$(this).data('slpanel');
 	 			state.isLoaded=false;
 	 			if(param){
 	 				if(typeof param=='string'){
@@ -447,12 +447,12 @@
 	 		});
  		}
  	};
- 	$.fn.panel.parseOptions=function(target){
+ 	$.fn.slpanel.parseOptions=function(target){
  		var t=$(target);
- 		var ff=t.children('.panel-footer,footer');
- 		return $.extend({},$.parser.parseOptions(target,['id','title','iconCls','width','height','left','top','headerCls','bodyCls','tools','href','method','content','footer',{cache:'boolean',fit:'boolean',border:'boolean',noheader:'boolean'},{collapsible:'boolean',maximizable:'boolean'},{closable:'boolean',collapsed:'boolean',maximized:'boolean',closed:'boolean'},'openAnimation','closeAnimation',{openDuration:'number',closeDuration:'number'},]),{loadingMessage:(t.attr('loadingMessage')!=undefined?t.attr('loadingMessage'):undefined),footer:(ff.length?ff.removeClass('panel-footer'):undefined)});
+ 		var ff=t.children('.slpanel-footer,footer');
+ 		return $.extend({},$.slparser.parseOptions(target,['id','title','iconCls','width','height','left','top','headerCls','bodyCls','tools','href','method','content','footer',{cache:'boolean',fit:'boolean',border:'boolean',noheader:'boolean'},{collapsible:'boolean',maximizable:'boolean'},{closable:'boolean',collapsed:'boolean',maximized:'boolean',closed:'boolean'},'openAnimation','closeAnimation',{openDuration:'number',closeDuration:'number'},]),{loadingMessage:(t.attr('loadingMessage')!=undefined?t.attr('loadingMessage'):undefined),footer:(ff.length?ff.removeClass('slpanel-footer'):undefined)});
  	};
- 	$.fn.panel.defaults={
+ 	$.fn.slpanel.defaults={
  		id:null,
  		title:null,
  		iconCls:null,
@@ -488,7 +488,7 @@
  		method:'get',
  		queryParams:{},
  		loader:function(param,success,error){
- 			var opts=$(this).panel('options');
+ 			var opts=$(this).slpanel('options');
  			if(!opts.href){
  				return false;
  			}
@@ -529,13 +529,13 @@
  		defaultTools: {
 	 		maxTool: {
 	 			text:'',
-	 			css: "panel-tool-max"
+	 			css: "slpanel-tool-max"
 	 		}, closeTool: {
 	 			text:'',
-	 			css: "panel-tool-close"
+	 			css: "slpanel-tool-close"
 	 		}, collapseTool: {
 	 			text:'',
-	 			css: "ppanel-tool-collapse"
+	 			css: "pslpanel-tool-collapse"
 	 		}
 	 	}
  	};

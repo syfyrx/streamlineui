@@ -1,9 +1,9 @@
 /**
- * jQuery StreamLineUI v1.0 依赖：parser
+ * jQuery StreamLineUI v1.0 依赖：slparser
  */
 (function($) {
 	function setSize(target, param) {
-		var opts = $(target).data('linkbutton').options;
+		var opts = $(target).data('sllinkbutton').options;
 		if (param) {
 			$.extend(opts, param);
 		}
@@ -19,7 +19,7 @@
 	}
 
 	function createButton(target) {
-		var opts = $(target).data('linkbutton').options;
+		var opts = $(target).data('sllinkbutton').options;
 		var t = $(target).empty();
 
 		t.addClass('l-btn').removeClass('l-btn-plain l-btn-selected l-btn-plain-selected');
@@ -44,19 +44,19 @@
 		if (opts.iconAlign) {
 			inner.addClass("l-btn-icon-" + opts.iconAlign);
 		}
-		t.unbind('.linkbutton').bind('focus.linkbutton', function() {
+		t.unbind('.sllinkbutton').bind('focus.sllinkbutton', function() {
 			if (!opts.disabled) {
 				$(this).addClass('l-btn-focus');
 			}
-		}).bind('blur.linkbutton', function() {
+		}).bind('blur.sllinkbutton', function() {
 			$(this).removeClass('l-btn-focus');
-		}).bind('click.linkbutton', function() {
+		}).bind('click.sllinkbutton', function() {
 			if (!opts.disabled) {
 				if (opts.toggle) {
 					if (opts.selected) {
-						$(this).linkbutton('unselect');
+						$(this).sllinkbutton('unselect');
 					} else {
-						$(this).linkbutton('select');
+						$(this).sllinkbutton('select');
 					}
 				}
 				opts.onClick.call(this);
@@ -68,11 +68,11 @@
 	}
 
 	function setSelected(target, selected) {
-		var opts = $(target).data('linkbutton').options;
+		var opts = $(target).data('sllinkbutton').options;
 		if (selected) {
 			if (opts.group) {
 				$('a.l-btn[group="' + opts.group + '"]').each(function() {
-					var o = $(this).linkbutton('options');
+					var o = $(this).sllinkbutton('options');
 					if (o.toggle) {
 						$(this).removeClass('l-btn-selected l-btn-plain-selected');
 						o.selected = false;
@@ -90,7 +90,7 @@
 	}
 
 	function setDisabled(target, disabled) {
-		var state = $(target).data('linkbutton');
+		var state = $(target).data('sllinkbutton');
 		var opts = state.options;
 		$(target).removeClass('l-btn-disabled l-btn-plain-disabled');
 		if (disabled) {
@@ -116,19 +116,19 @@
 		}
 	}
 
-	$.fn.linkbutton = function(options, param) {
+	$.fn.sllinkbutton = function(options, param) {
 		if (typeof options == 'string') {
-			return $.fn.linkbutton.methods[options](this, param);
+			return $.fn.sllinkbutton.methods[options](this, param);
 		}
 
 		options = options || {};
 		return this.each(function() {
-			var state = $(this).data('linkbutton');
+			var state = $(this).data('sllinkbutton');
 			if (state) {
 				$.extend(state.options, options);
 			} else {
-				$(this).data('linkbutton', {
-					options : $.extend({}, $.fn.linkbutton.defaults, $.fn.linkbutton.parseOptions(this), options)
+				$(this).data('sllinkbutton', {
+					options : $.extend({}, $.fn.sllinkbutton.defaults, $.fn.sllinkbutton.parseOptions(this), options)
 				});
 				$(this).removeAttr('disabled');
 			}
@@ -137,9 +137,9 @@
 		});
 	};
 
-	$.fn.linkbutton.methods = {
+	$.fn.sllinkbutton.methods = {
 		options : function(jq) {
-			return $.data(jq[0], 'linkbutton').options;
+			return $.data(jq[0], 'sllinkbutton').options;
 		},
 		resize : function(jq, param) {
 			return jq.each(function() {
@@ -168,7 +168,7 @@
 		}
 	};
 
-	$.fn.linkbutton.parseOptions = function(target) {
+	$.fn.sllinkbutton.parseOptions = function(target) {
 		var t = $(target);
 		var options = {};
 		var s = $.trim(t.attr('data-options'));
@@ -184,7 +184,7 @@
 		});
 	};
 
-	$.fn.linkbutton.defaults = {
+	$.fn.sllinkbutton.defaults = {
 		disabled : false,
 		toggle : false,
 		selected : false,

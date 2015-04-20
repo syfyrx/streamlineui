@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" type="text/css" href="../../themes/default/sltree.css">
+<link rel="stylesheet" type="text/css" href="../../themes/default/icon.css">
+<script type="text/javascript" src="../../jquery.min.js"></script>
+<script type="text/javascript" src="../../src/jquery.slparser.js"></script>
+<script type="text/javascript" src="../../src/jquery.sldraggable.js"></script>
+<script type="text/javascript" src="../../src/jquery.sldroppable.js"></script>
+<script type="text/javascript" src="../../src/jquery.sltree.js"></script>
+<script type="text/javascript" src="../../locale/slui-lang-zh_CN.js"></script>
+</head>
+<body>
+	<ul id="tt"></ul>
+	<script type="text/javascript">
+		$('#tt').sltree({
+			url : 'tree_data1.json',
+			method : 'get',
+			animate : true,
+			checkbox : true,
+			dnd : true
+		});
+	</script>
+</body>
+</html>

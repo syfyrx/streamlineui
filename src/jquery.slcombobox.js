@@ -1,21 +1,21 @@
 // jQuery StreamlineUI v1.0 
-// 依赖：parser
+// 依赖：slparser
 (function($) {
 	// 创建组件
 	function create(target) {
-		var state = $(target).data('combobox');
+		var state = $(target).data('slcombobox');
 		var opts = state.options;
-		$(target).addClass('slui-combobox');
+		$(target).addClass('slui-slcombobox');
 		// 点击组件外部时隐藏组件
-		$(document).unbind('.combobox').bind('mousedown.combobox mousewheel.combobox', function(e) {
-			if ($(e.target).closest('.combobox-panel,.combobox,.combobox-arrow').length) {
+		$(document).unbind('.slcombobox').bind('mousedown.slcombobox mousewheel.slcombobox', function(e) {
+			if ($(e.target).closest('.slcombobox-panel,.slcombobox,.slcombobox-arrow').length) {
 				return;
 			}
-			$('.combobox').combobox('hidePanel');
+			$('.slcombobox').slcombobox('hidePanel');
 		});
 		// 创建弹出面板
 		if (!state.panel) {
-			state.panel = $('<div class="combobox-panel"></div>').appendTo('body');
+			state.panel = $('<div class="slcombobox-panel"></div>').appendTo('body');
 			state.panel.css({
 				position : 'absolute',
 				display : 'none',
@@ -26,11 +26,11 @@
 		}
 		// 创建下拉按钮
 		if (!state.downArrow) {
-			state.downArrow = $('<span class="combobox-arrow"></span>').insertAfter(target);
+			state.downArrow = $('<span class="slcombobox-arrow"></span>').insertAfter(target);
 			state.downArrow.css({
 				width : opts.height,
 				height : opts.height
-			}).bind('click.combobox', function(e) {
+			}).bind('click.slcombobox', function(e) {
 				$(target).focus();
 				showPanel(target);
 			});
@@ -39,26 +39,26 @@
 		if (!state.textbox) {
 			state.textbox = $('<input type="hidden" value=""/>').insertAfter(target);
 		}
-		$(target).unbind('.combobox').bind('focus.combobox', function(e) {
+		$(target).unbind('.slcombobox').bind('focus.slcombobox', function(e) {
 			if (!state.values.length) {
 				$(target).val('');
 			}
-		}).bind('click.combobox', function(e) {
+		}).bind('click.slcombobox', function(e) {
 			showPanel(target);
-		}).bind('blur.combobox', function(e) {
+		}).bind('blur.slcombobox', function(e) {
 			if ($(target).val().length == 0) {
 				state.values = [];
 			}
 			if (!state.values.length) {
 				$(target).val(opts.prompt);
 			}
-		}).addClass('combobox').css(
+		}).addClass('slcombobox').css(
 				{
 					width : opts.width - opts.height - $(target).css('padding-left').replace('px', '')
 							- $(target).css('padding-right').replace('px', '')
 							- state.downArrow.css('border-right-width').replace('px', ''),
 					height : opts.height
-				}).attr('comboName', $(target).attr('name')).removeAttr('name').addClass('combobox-f').val(opts.prompt);
+				}).attr('comboName', $(target).attr('name')).removeAttr('name').addClass('slcombobox-f').val(opts.prompt);
 		if (opts.required) {
 			if ($.fn.validate)
 				$(target).validate($.extend({}, $.fn.validate.defaults, {
@@ -68,17 +68,17 @@
 				}));
 		}
 		state.textbox.attr('name', $(target).attr('comboName'));
-		state.panel.undelegate('div.combobox-item', '.combobox').delegate('div.combobox-item', 'mouseenter.combobox',
+		state.panel.undelegate('div.slcombobox-item', '.slcombobox').delegate('div.slcombobox-item', 'mouseenter.slcombobox',
 				function(e) {
-					$(this).addClass('combobox-item-hover');
+					$(this).addClass('slcombobox-item-hover');
 					e.stopPropagation();
-				}).delegate('div.combobox-item', 'mouseleave.combobox', function(e) {
-			$(this).removeClass('combobox-item-hover');
+				}).delegate('div.slcombobox-item', 'mouseleave.slcombobox', function(e) {
+			$(this).removeClass('slcombobox-item-hover');
 			e.stopPropagation();
-		}).delegate('div.combobox-item', 'click.combobox', function(e) {
+		}).delegate('div.slcombobox-item', 'click.slcombobox', function(e) {
 			var value = $(this).attr('value');
 			if (opts.multiple) {
-				if ($(this).hasClass('combobox-item-selected')) {
+				if ($(this).hasClass('slcombobox-item-selected')) {
 					unselect(target, value);
 				} else {
 					select(target, value);
@@ -97,7 +97,7 @@
 			setDisable(target, true);
 		}
 		for ( var e in opts.inputEvents) {
-			$(target).bind(e + ".combobox", {
+			$(target).bind(e + ".slcombobox", {
 				target : target
 			}, opts.inputEvents[e]);
 		}
@@ -107,7 +107,7 @@
 	}
 	// 销毁组件
 	function destroy(target) {
-		var state = $(target).data('combobox');
+		var state = $(target).data('slcombobox');
 		if (state.panel) {
 			state.panel.remove();
 		}
@@ -123,8 +123,8 @@
 	}
 	// 显示面板
 	function showPanel(target) {
-		$('.combobox').combobox('hidePanel');
-		var state = $(target).data('combobox');
+		$('.slcombobox').slcombobox('hidePanel');
+		var state = $(target).data('slcombobox');
 		var opts = state.options;
 		state.panel.css({
 			left : state.downArrow.offset().left - $(target).outerWidth(),
@@ -135,14 +135,14 @@
 	}
 	// 隐藏面板
 	function hidePanel(target) {
-		var state = $(target).data('combobox');
+		var state = $(target).data('slcombobox');
 		var opts = state.options;
 		state.panel.hide();
 		opts.onHidePanel.call(target);
 	}
 	// 根据value获取数据索引号
 	function getRowIndex(target, value) {
-		var state = $(target).data('combobox');
+		var state = $(target).data('slcombobox');
 		var opts = state.options;
 		var data = state.data;
 		for (var i = 0; i < data.length; i++) {
@@ -154,7 +154,7 @@
 	}
 	// 显示指定项位置
 	function scrollTo(target, value) {
-		var state = $(target).data('combobox');
+		var state = $(target).data('slcombobox');
 		var opts = state.options;
 		var panel = state.panel;
 		var item = opts.finder.getEl(target, value);
@@ -170,16 +170,16 @@
 	}
 	// 键盘导航
 	function nav(target, dir) {
-		var state = $(target).data('combobox');
+		var state = $(target).data('slcombobox');
 		var opts = state.options;
 		var panel = state.panel;
-		var item = panel.children('div.combobox-item-hover');
+		var item = panel.children('div.slcombobox-item-hover');
 		if (!item.length) {
-			item = panel.children('div.combobox-item-selected');
+			item = panel.children('div.slcombobox-item-selected');
 		}
-		item.removeClass('combobox-item-hover');
-		var firstSelector = 'div.combobox-item:visible:first';
-		var lastSelector = 'div.combobox-item:visible:last';
+		item.removeClass('slcombobox-item-hover');
+		var firstSelector = 'div.slcombobox-item:visible:first';
+		var lastSelector = 'div.slcombobox-item:visible:last';
 		if (!item.length) {
 			item = panel.children(dir == 'next' ? firstSelector : lastSelector);
 		} else {
@@ -196,7 +196,7 @@
 			}
 		}
 		if (item.length) {
-			item.addClass('combobox-item-hover');
+			item.addClass('slcombobox-item-hover');
 			var row = opts.finder.getRow(target, item.attr('value'));
 			if (row) {
 				scrollTo(target, item.attr('value'));
@@ -205,7 +205,7 @@
 	}
 	// 选中某一项
 	function select(target, value) {
-		var state = $(target).data('combobox');
+		var state = $(target).data('slcombobox');
 		var opts = state.options;
 		var values = state.values;
 		if ($.inArray(value, values) == -1) {
@@ -223,7 +223,7 @@
 	 * 取消某一项选中状态
 	 */
 	function unselect(target, value) {
-		var state = $(target).data('combobox');
+		var state = $(target).data('slcombobox');
 		var opts = state.options;
 		var values = state.values;
 		var index = $.inArray(value, values);
@@ -238,10 +238,10 @@
 	 * 设置组件值
 	 */
 	function setValue(target, newValue) {
-		var state = $(target).data('combobox');
+		var state = $(target).data('slcombobox');
 		var opts = state.options;
 		var panel = state.panel;
-		panel.find('div.combobox-item-selected').removeClass('combobox-item-selected');
+		panel.find('div.slcombobox-item-selected').removeClass('slcombobox-item-selected');
 		var vv = [], ss = [];
 		var newValues = [];
 		if (newValue && newValue.length) {
@@ -253,7 +253,7 @@
 				var s = v;
 				var rowIndex = getRowIndex(target, v);
 				if (rowIndex > -1) {
-					panel.children().eq(rowIndex).addClass('combobox-item-selected');
+					panel.children().eq(rowIndex).addClass('slcombobox-item-selected');
 					var row = state.data[rowIndex];
 					if (row) {
 						s = row[opts.textField];
@@ -279,13 +279,13 @@
 	 * 加载数据
 	 */
 	function loadData(target, data) {
-		var state = $(target).data('combobox');
+		var state = $(target).data('slcombobox');
 		var opts = state.options;
 		opts.data = data;
 		state.data = opts.loadFilter.call(target, data);
 		data = state.data;
 
-		var selected = $(target).combobox('getValue');
+		var selected = $(target).slcombobox('getValue');
 		var dd = [];
 		var group = undefined;
 		for (var i = 0; i < data.length; i++) {
@@ -298,7 +298,7 @@
 				if (group != g) {
 					group = g;
 					state.groups.push(g);
-					dd.push('<div class="combobox-group" value="' + g + '">');
+					dd.push('<div class="slcombobox-group" value="' + g + '">');
 					dd.push(opts.groupFormatter ? opts.groupFormatter.call(target, g) : g);
 					dd.push('</div>');
 				}
@@ -306,7 +306,7 @@
 				group = undefined;
 			}
 
-			dd.push('<div class="combobox-item" value="' + v + '">');
+			dd.push('<div class="slcombobox-item" value="' + v + '">');
 			dd.push(opts.formatter ? opts.formatter.call(target, row) : s);
 			dd.push('</div>');
 		}
@@ -319,7 +319,7 @@
 	 * 请求远程服务器数据
 	 */
 	function request(target, url, param) {
-		var state = $(target).data('combobox');
+		var state = $(target).data('slcombobox');
 		var opts = state.options;
 		if (url) {
 			opts.url = url;
@@ -336,17 +336,17 @@
 	 * 启用/禁用组件
 	 */
 	function setDisable(target, param) {
-		var state = $(target).data('combobox');
+		var state = $(target).data('slcombobox');
 		var opts = state.options;
 		opts.disabled = param;
 		if (param) {
-			$(target).addClass('combobox-disable').attr('disabled', 'disabled');
-			state.downArrow.addClass('combobox-arrow-disable');
+			$(target).addClass('slcombobox-disable').attr('disabled', 'disabled');
+			state.downArrow.addClass('slcombobox-arrow-disable');
 			state.onclick = state.downArrow.onclick;
 			state.downArrow.onclick = null;
 		} else {
-			$(target).removeClass('combobox-disable').removeAttr('disabled');
-			state.downArrow.removeClass('combobox-arrow-disable');
+			$(target).removeClass('slcombobox-disable').removeAttr('disabled');
+			state.downArrow.removeClass('slcombobox-arrow-disable');
 			state.downArrow.onclick = state.onclick;
 			state.onclick = null;
 		}
@@ -355,17 +355,17 @@
 	 * 启用/禁用只读模式
 	 */
 	function readonly(target, param) {
-		var state = $(target).data('combobox');
+		var state = $(target).data('slcombobox');
 		var opts = state.options;
 		opts.readonly = param;
 		if (param) {
-			$(target).addClass('combobox-readonly').attr('readonly', 'readonly');
-			state.downArrow.addClass('combobox-arrow-readonly');
+			$(target).addClass('slcombobox-readonly').attr('readonly', 'readonly');
+			state.downArrow.addClass('slcombobox-arrow-readonly');
 			state.onclick = state.downArrow.onclick;
 			state.downArrow.onclick = null;
 		} else {
-			$(target).removeClass('combobox-readonly').removeAttr('readonly');
-			state.downArrow.removeClass('combobox-arrow-readonly');
+			$(target).removeClass('slcombobox-readonly').removeAttr('readonly');
+			state.downArrow.removeClass('slcombobox-arrow-readonly');
 			state.downArrow.onclick = state.onclick;
 			state.onclick = null;
 		}
@@ -376,7 +376,7 @@
 	function inputChange(e) {
 		var target = e.data.target;
 		var t = $(target);
-		var state = t.data("combobox");
+		var state = t.data("slcombobox");
 		var opts = state.options;
 		switch (e.keyCode) {
 		case 38:
@@ -403,10 +403,10 @@
 					clearTimeout(state.timer);
 				}
 				state.timer = setTimeout(function() {
-					var q = t.combobox("getText");
+					var q = t.slcombobox("getText");
 					if (state.previousText != q) {
 						state.previousText = q;
-						t.combobox("showPanel");
+						t.slcombobox("showPanel");
 						opts.keyHandler.query.call(target, q, e);
 					}
 				}, opts.delay);
@@ -418,7 +418,7 @@
 	 * 查询数据
 	 */
 	function doQuery(target, q) {
-		var state = $(target).data('combobox');
+		var state = $(target).data('slcombobox');
 		var opts = state.options;
 
 		if (opts.mode == 'remote') {
@@ -427,9 +427,9 @@
 			});
 		} else {
 			var panel = state.panel;
-			panel.find('div.combobox-item-selected,div.combobox-item-hover').removeClass(
-					'combobox-item-selected combobox-item-hover');
-			panel.find('div.combobox-item,div.combobox-group').hide();
+			panel.find('div.slcombobox-item-selected,div.slcombobox-item-hover').removeClass(
+					'slcombobox-item-selected slcombobox-item-hover');
+			panel.find('div.slcombobox-item,div.slcombobox-group').hide();
 			var data = state.data;
 			var vv = [];
 			var qq = q.split(opts.separator);
@@ -445,11 +445,11 @@
 						var item = opts.finder.getEl(target, v).show();
 						if (s.toLowerCase() == q.toLowerCase()) {
 							vv.push(v);
-							item.addClass('combobox-item-selected');
+							item.addClass('slcombobox-item-selected');
 						}
 						if (opts.groupField && group != g) {
 							if ($.inArray(g, state.groups)) {
-								$('.combobox-group[value="' + g + '"]').show();
+								$('.slcombobox-group[value="' + g + '"]').show();
 							}
 							group = g;
 						}
@@ -464,15 +464,15 @@
 
 	function doEnter(target) {
 		var t = $(target);
-		var state = t.data('combobox');
+		var state = t.data('slcombobox');
 		var opts = state.options;
 		var panel = state.panel;
-		var item = panel.children('div.combobox-item-hover');
+		var item = panel.children('div.slcombobox-item-hover');
 		if (item.length) {
 			var row = opts.finder.getRow(target, item.attr('value'));
 			var value = row[opts.valueField];
 			if (opts.multiple) {
-				if (item.hasClass('combobox-item-selected')) {
+				if (item.hasClass('slcombobox-item-selected')) {
 					unselect(target, value);
 				} else {
 					select(target, value);
@@ -482,7 +482,7 @@
 			}
 		}
 		if (!opts.multiple) {
-			t.combobox('hidePanel');
+			t.slcombobox('hidePanel');
 		}
 	}
 	// 绑定数据：
@@ -496,24 +496,24 @@
 	// onclick：点击下拉按钮事件
 	// timer：
 	// previousText：
-	$.fn.combobox = function(options, param) {
+	$.fn.slcombobox = function(options, param) {
 		if (typeof options == 'string') {
-			return $.fn.combobox.methods[options](this, param);
+			return $.fn.slcombobox.methods[options](this, param);
 		}
 		options = options || {};
 		return this.each(function() {
-			var state = $(this).data('combobox');
+			var state = $(this).data('slcombobox');
 			if (state) {
 				$.extend(state.options, options);
 			} else {
-				$(this).data('combobox', {
-					options : $.extend({}, $.fn.combobox.defaults, $.fn.combobox.parseOptions(this), options),
+				$(this).data('slcombobox', {
+					options : $.extend({}, $.fn.slcombobox.defaults, $.fn.slcombobox.parseOptions(this), options),
 					data : [],
 					values : [],
 					groups : [],
 					previousText : ''
 				});
-				state = $(this).data('combobox');
+				state = $(this).data('slcombobox');
 			}
 
 			create(this);
@@ -524,9 +524,9 @@
 		});
 	};
 
-	$.fn.combobox.methods = {
+	$.fn.slcombobox.methods = {
 		options : function(jq) {
-			return $(jq[0]).data('combobox').options;
+			return $(jq[0]).data('slcombobox').options;
 		},
 		destroy : function(jq) {
 			return jq.each(function() {
@@ -534,10 +534,10 @@
 			});
 		},
 		panel : function(jq) {
-			return $(jq[0]).data('combobox').panel;
+			return $(jq[0]).data('slcombobox').panel;
 		},
 		textbox : function(jq) {
-			return $(jq[0]).data('combobox').textbox;
+			return $(jq[0]).data('slcombobox').textbox;
 		},
 		showPanel : function(jq) {
 			return jq.each(function() {
@@ -571,15 +571,15 @@
 		},
 		reset : function(jq) {
 			return jq.each(function() {
-				var opts = $(this).combobox('options');
-				$(this).combobox('setValue', opts.value);
+				var opts = $(this).slcombobox('options');
+				$(this).slcombobox('setValue', opts.value);
 			});
 		},
 		getText : function(jq) {
 			return $(jq[0]).val();
 		},
 		getValue : function(jq) {
-			return $(jq[0]).data('combobox').textbox.val();
+			return $(jq[0]).data('slcombobox').textbox.val();
 		},
 		setValue : function(jq, value) {
 			return jq.each(function() {
@@ -587,7 +587,7 @@
 			});
 		},
 		getData : function(jq) {
-			return $(jq[0]).data('combobox').data;
+			return $(jq[0]).data('slcombobox').data;
 		},
 		loadData : function(jq, data) {
 			return jq.each(function() {
@@ -600,11 +600,11 @@
 			});
 		}
 	};
-	$.fn.combobox.parseOptions = function(target) {
-		return $.extend({}, $.parser.parseOptions(target));
+	$.fn.slcombobox.parseOptions = function(target) {
+		return $.extend({}, $.slparser.parseOptions(target));
 	};
 
-	$.fn.combobox.defaults = {
+	$.fn.slcombobox.defaults = {
 		width : 150,
 		height : 22,
 		panelWidth : null,
@@ -648,15 +648,15 @@
 			}
 		},
 		filter : function(q, row) {
-			var opts = $(this).combobox('options');
+			var opts = $(this).slcombobox('options');
 			return row[opts.textField].toLowerCase().indexOf(q.toLowerCase()) == 0;
 		},
 		formatter : function(row) {
-			var opts = $(this).combobox('options');
+			var opts = $(this).slcombobox('options');
 			return row[opts.textField];
 		},
 		loader : function(param, success, error) {
-			var opts = $(this).combobox('options');
+			var opts = $(this).slcombobox('options');
 			if (!opts.url)
 				return false;
 			$.ajax({
@@ -678,11 +678,11 @@
 		finder : {
 			getEl : function(target, value) {
 				var index = getRowIndex(target, value);
-				return $(target).data('combobox').panel.children().eq(index);
+				return $(target).data('slcombobox').panel.children().eq(index);
 			},
 			getRow : function(target, value) {
 				var index = getRowIndex(target, value);
-				return $(target).data('combobox').data[index];
+				return $(target).data('slcombobox').data[index];
 			}
 		},
 		inputEvents : {

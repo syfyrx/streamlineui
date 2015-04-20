@@ -1,7 +1,7 @@
 /*jQuery StreamLineUI v1.0*/
 (function ($) {
 	function drag(e) {
-		var state = $(e.data.target).data('draggable');
+		var state = $(e.data.target).data('sldraggable');
 		var opts = state.options;
 		var proxy = state.proxy;
 
@@ -46,7 +46,7 @@
 	}
 
 	function applyDrag(e) {
-		var state = $(e.data.target).data('draggable');
+		var state = $(e.data.target).data('sldraggable');
 		var opts = state.options;
 		var proxy = state.proxy;
 		if (!proxy) {
@@ -60,14 +60,14 @@
 	}
 
 	function doDown(e) {
-		$.fn.draggable.isDragging = true;
-		var state = $(e.data.target).data('draggable');
+		$.fn.sldraggable.isDragging = true;
+		var state = $(e.data.target).data('sldraggable');
 		var opts = state.options;
 
-		var droppables = $('.droppable').filter(function () {
+		var droppables = $('.sldroppable').filter(function () {
 			return e.data.target != this;
 		}).filter(function () {
-			var accept = $(this).data('droppable').options.accept;
+			var accept = $(this).data('sldroppable').options.accept;
 			if (accept) {
 				return $(accept).filter(function () {
 					return this == e.data.target;
@@ -101,7 +101,7 @@
 	}
 
 	function doMove(e) {
-		var state = $(e.data.target).data('draggable');
+		var state = $(e.data.target).data('sldraggable');
 		drag(e);
 		if (state.options.onDrag.call(e.data.target, e) != false) {
 			applyDrag(e);
@@ -110,7 +110,7 @@
 		var source = e.data.target;
 		state.droppables.each(function () {
 			var dropObj = $(this);
-			if (dropObj.droppable('options').disabled) {
+			if (dropObj.sldroppable('options').disabled) {
 				return;
 			}
 
@@ -134,10 +134,10 @@
 	}
 
 	function doUp(e) {
-		$.fn.draggable.isDragging = false;
+		$.fn.sldraggable.isDragging = false;
 		doMove(e);
 
-		var state = $(e.data.target).data('draggable');
+		var state = $(e.data.target).data('sldraggable');
 		var proxy = state.proxy;
 		var opts = state.options;
 		if (opts.revert) {
@@ -183,7 +183,7 @@
 
 		opts.onStopDrag.call(e.data.target, e);
 
-		$(document).unbind('.draggable');
+		$(document).unbind('.sldraggable');
 		setTimeout(function () {
 			$('body').css('cursor', '');
 		}, 100);
@@ -199,7 +199,7 @@
 			var dropped = false;
 			state.droppables.each(function () {
 				var dropObj = $(this);
-				if (dropObj.droppable('options').disabled) {
+				if (dropObj.sldroppable('options').disabled) {
 					return;
 				}
 
@@ -229,23 +229,23 @@
 		return false;
 	}
 
-	$.fn.draggable = function (options, param) {
+	$.fn.sldraggable = function (options, param) {
 		if (typeof options == 'string') {
-			return $.fn.draggable.methods[options](this, param);
+			return $.fn.sldraggable.methods[options](this, param);
 		}
 
 		return this.each(function () {
 			var opts;
-			var state = $(this).data('draggable');
+			var state = $(this).data('sldraggable');
 			if (state) {
-				state.handle.unbind('.draggable');
+				state.handle.unbind('.sldraggable');
 				opts = $.extend(state.options, options);
 			} else {
-				opts = $.extend({}, $.fn.draggable.defaults, $.fn.draggable.parseOptions(this), options || {});
+				opts = $.extend({}, $.fn.sldraggable.defaults, $.fn.sldraggable.parseOptions(this), options || {});
 			}
 			var handle = opts.handle ? (typeof opts.handle == 'string' ? $(opts.handle, this) : opts.handle) : $(this);
 
-			$(this).data('draggable', {
+			$(this).data('sldraggable', {
 				options: opts,
 				handle: handle
 			});
@@ -255,19 +255,19 @@
 				return;
 			}
 
-			handle.unbind('.draggable').bind('mousemove.draggable', { target: this }, function (e) {
-				if ($.fn.draggable.isDragging) {
+			handle.unbind('.sldraggable').bind('mousemove.sldraggable', { target: this }, function (e) {
+				if ($.fn.sldraggable.isDragging) {
 					return;
 				}
-				var opts = $(e.data.target).data('draggable').options;
+				var opts = $(e.data.target).data('sldraggable').options;
 				if (checkArea(e)) {
 					$(this).css('cursor', opts.cursor);
 				} else {
 					$(this).css('cursor', '');
 				}
-			}).bind('mouseleave.draggable', { target: this }, function (e) {
+			}).bind('mouseleave.sldraggable', { target: this }, function (e) {
 				$(this).css('cursor', '');
-			}).bind('mousedown.draggable', { target: this }, function (e) {
+			}).bind('mousedown.sldraggable', { target: this }, function (e) {
 				if (checkArea(e) == false)
 					return;
 				$(this).css('cursor', '');
@@ -289,18 +289,18 @@
 				};
 
 				$.extend(e.data, data);
-				var opts = $(e.data.target).data('draggable').options;
+				var opts = $(e.data.target).data('sldraggable').options;
 				if (opts.onBeforeDrag.call(e.data.target, e) == false)
 					return;
 
-				$(document).bind('mousedown.draggable', e.data, doDown);
-				$(document).bind('mousemove.draggable', e.data, doMove);
-				$(document).bind('mouseup.draggable', e.data, doUp);
+				$(document).bind('mousedown.sldraggable', e.data, doDown);
+				$(document).bind('mousemove.sldraggable', e.data, doMove);
+				$(document).bind('mouseup.sldraggable', e.data, doUp);
 			});
 
 			// check if the handle can be dragged
 			function checkArea(e) {
-				var state = $(e.data.target).data('draggable');
+				var state = $(e.data.target).data('sldraggable');
 				var handle = state.handle;
 				var offset = $(handle).offset();
 				var width = $(handle).outerWidth();
@@ -316,35 +316,35 @@
 		});
 	};
 
-	$.fn.draggable.methods = {
+	$.fn.sldraggable.methods = {
 		options: function (jq) {
-			return $(jq[0]).data('draggable').options;
+			return $(jq[0]).data('sldraggable').options;
 		},
 		proxy: function (jq) {
-			return $(jq[0]).data('draggable').proxy;
+			return $(jq[0]).data('sldraggable').proxy;
 		},
 		enable: function (jq) {
 			return jq.each(function () {
-				$(this).draggable({ disabled: false });
+				$(this).sldraggable({ disabled: false });
 			});
 		},
 		disable: function (jq) {
 			return jq.each(function () {
-				$(this).draggable({ disabled: true });
+				$(this).sldraggable({ disabled: true });
 			});
 		}
 	};
 
-	$.fn.draggable.parseOptions = function (target) {
+	$.fn.sldraggable.parseOptions = function (target) {
 		var t = $(target);
 		return $.extend({},
-				$.parser.parseOptions(target, ['cursor', 'handle', 'axis',
+				$.slparser.parseOptions(target, ['cursor', 'handle', 'axis',
 				       { 'revert': 'boolean', 'deltaX': 'number', 'deltaY': 'number', 'edge': 'number' }]), {
 				       	disabled: (t.attr('disabled') ? true : undefined)
 				       });
 	};
 
-	$.fn.draggable.defaults = {
+	$.fn.sldraggable.defaults = {
 		proxy: null,	// 'clone' or a function that will create the proxy object, the function has the source parameter that indicate the source object dragged.
 		revert: false,
 		cursor: 'move',
@@ -361,6 +361,6 @@
 		onStopDrag: function (e) { }
 	};
 
-	$.fn.draggable.isDragging = false;
+	$.fn.sldraggable.isDragging = false;
 
 })(jQuery);

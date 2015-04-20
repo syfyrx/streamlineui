@@ -1,14 +1,12 @@
 /**
- * jQuery StreamlineUI v1.0 依赖：parser、draggable、resizable
+ * jQuery StreamlineUI v1.0 依赖：slparser、sldraggable、slresizable
  */
 (function($) {
-	/**
-	 * 创建窗口
-	 */
+	// 创建窗口
 	function create(target) {
-		var state = $(target).data('window');
+		var state = $(target).data('slwindow');
 		var opts = state.options;
-		$(target).addClass('window');
+		$(target).addClass('slwindow');
 		var body = setBody();
 		var header = setHeader();
 		var footer = setFooter();
@@ -23,28 +21,50 @@
 		});
 		body.css({
 			width : opts.width,
-			height : opts.height - header.outerHeight() - footer.outerHeight()
+			height : opts.height - header.outerHeight() - (footer ? footer.outerHeight() : 0)
 		});
-		$.parser.parse(body);
-		/**
-		 * 设置窗口标题栏
-		 */
+		$.slparser.parse(body);
+		if (opts.modal) {
+			// 创建遮罩层
+			var mask = $('<div class="slui-mask"></div>');
+			mask.css({
+				width : getPageArea().width,
+				height : getPageArea().height,
+				display : 'none'
+			});
+			mask.appendTo(document.body);
+			state.mask = mask;
+		}
+		if (opts.left == null) {
+			hcenter(target);
+		}
+		if (opts.top == null) {
+			vcenter(target);
+		}
+		if (opts.closed) {
+			close(target);
+		} else {
+			if (opts.modal) {
+				state.mask.show();
+			}
+		}
+		// 设置窗口标题栏
 		function setHeader() {
-			var header = $(target).children('.window-header');
+			var header = $(target).children('.slwindow-header');
 			if (header.length == 0) {
-				header = $('<div class="window-header"></div>').prependTo(target);
+				header = $('<div class="slwindow-header"></div>').prependTo(target);
 			}
 			header.addClass(opts.headerCls);
 			if (!$.isArray(opts.tools)) {
-				header.find('.window-tool .window-tool-a').appendTo(opts.tools);
+				header.find('.slwindow-tool .slwindow-tool-a').appendTo(opts.tools);
 			}
 			header.empty();
-			var title = $('<div class="window-title"></div>').html(opts.title).appendTo(header);
+			var title = $('<div class="slwindow-title"></div>').html(opts.title).appendTo(header);
 			if (opts.iconCls) {
-				$('<div class="window-icon"></div>').addClass(opts.iconCls).prependTo(header);
-				title.addClass('window-with-icon');
+				$('<div class="slwindow-icon"></div>').addClass(opts.iconCls).prependTo(header);
+				title.addClass('slwindow-with-icon');
 			}
-			var tool = $('<div class="window-tool"></div>').appendTo(header);
+			var tool = $('<div class="slwindow-tool"></div>').appendTo(header);
 			tool.bind('click', function(e) {
 				e.stopPropagation();// 阻止事件冒泡
 			});
@@ -55,7 +75,7 @@
 					});
 				} else {
 					$(opts.tools).children().each(function() {
-						$(this).addClass('window-tool-a').appendTo(tool);
+						$(this).addClass('slwindow-tool-a').appendTo(tool);
 					});
 				}
 			}
@@ -84,118 +104,92 @@
 			}
 			return header;
 		}
-		/**
-		 * 设置窗口主体
-		 */
+		// 设置窗口主体
 		function setBody() {
-			var str = $(target).html();
-			$(target).empty();
-			return $('<div class="window-body"></div>').appendTo(target).html(str).addClass(opts.bodyCls);
+			var body = $(target).children('.slwindow-body');
+			if (body.length == 0) {
+				var str = $(target).html();
+				$(target).empty();
+				body = $('<div class="slwindow-body"></div>').appendTo(target).html(str).addClass(opts.bodyCls);
+			}
+			return body;
 		}
-		/**
-		 * 添加工具栏按钮
-		 */
+		// 添加工具栏按钮
 		function addTool(tool, text, css, handler) {
 			var a = $('<a href="javascript:void(0)">' + text + '</a>').addClass(css).appendTo(tool);
 			a.bind('click', handler);
 		}
-		/**
-		 * 设置面板底部
-		 */
+		// 设置面板底部
 		function setFooter() {
+			var footer = $(target).children('.slwindow-footer');
+			footer.remove();
 			if (opts.footer) {
-				$(opts.footer).addClass('window-footer').appendTo(target);
-				body.removeClass('window-body-nofooter');
+				footer = $(opts.footer).addClass('slwindow-footer').appendTo(target);
+				body.removeClass('slwindow-body-nofooter');
 			} else {
-				$(target).children('.window-footer').remove();
-				body.addClass('window-body-nofooter');
+				body.addClass('slwindow-body-nofooter');
+				footer = null;
 			}
-			return $(opts.footer);
-		}
-		if (opts.modal) {
-			// 创建遮罩层
-			var mask = $('<div class="slui-mask"></div>');
-			mask.css({
-				width : getPageArea().width,
-				height : getPageArea().height,
-				display : 'none'
-			});
-			mask.appendTo(document.body);
-			state.mask = mask;
-		}
-		if (opts.left == null) {
-			hcenter(target);
-		}
-		if (opts.top == null) {
-			vcenter(target);
-		}
-		if (opts.closed) {
-			close(target);
-		} else {
-			if (opts.modal) {
-				state.mask.show();
-			}
+			return footer;
 		}
 	}
-	/**
-	 * 设置窗口拖动和改变大小属性
-	 */
+	// 设置窗口拖动和改变大小属性
 	function setProperties(target) {
-		var state = $(target).data('window');
-		$(target).draggable({
-			handle : '.window-header .window-title',
-			disabled : state.options.draggable == false,
-			onStartDrag : function(e) {
-			},
-			onDrag : function(e) {
-				move(target, {
-					left : e.data.left,
-					top : e.data.top
-				});
-			},
-			onStopDrag : function(e) {
+		var state = $(target).data('slwindow');
+		if ($.fn.sldraggable) {
+			$(target).sldraggable({
+				handle : '.slwindow-header .slwindow-title',
+				disabled : state.options.draggable == false,
+				onStartDrag : function(e) {
+				},
+				onDrag : function(e) {
+					move(target, {
+						left : e.data.left,
+						top : e.data.top
+					});
+				},
+				onStopDrag : function(e) {
 
-			}
-		});
-		$(target).resizable({
-			disabled : state.options.resizable == false,
-			onStartResize : function(e) {
-			},
-			onResize : function(e) {
-				resize(target, {
-					width : e.data.width,
-					height : e.data.height
-				});
-			},
-			onStopResize : function(e) {
-			}
-		});
+				}
+			});
+		}
+		if ($.fn.slresizable) {
+			$(target).slresizable({
+				disabled : state.options.resizable == false,
+				onStartResize : function(e) {
+				},
+				onResize : function(e) {
+					resize(target, {
+						width : e.data.width,
+						height : e.data.height
+					});
+				},
+				onStopResize : function(e) {
+				}
+			});
+		}
 	}
 	// 销毁组件
-	function destroy(target){
-		var state=$(target).data('window');
-		$('.slui-combobox',target).combobox('destroy');
+	function destroy(target) {
+		var state = $(target).data('slwindow');
+		$('.slui-combobox', target).slcombobox('destroy');
 		state.mask.remove();
 		$(target).remove();
 	}
 	// 清除组件内容
-	function clear(target){
-		var state=$(target).data('window');
-		$('.slui-combobox',target).combobox('destroy');
-		$(target).children('.window-body').empty();
+	function clear(target) {
+		var state = $(target).data('slwindow');
+		$('.slui-combobox', target).slcombobox('destroy');
+		$(target).children('.slwindow-body').empty();
 	}
-	/**
-	 * 设置标题文本
-	 */
+	// 设置标题文本
 	function setTitle(target, title) {
-		$(target).data('window').options.title = title;
-		$(target).find('.window-header .window-title').html(title);
+		$(target).data('slwindow').options.title = title;
+		$(target).find('.slwindow-header .slwindow-title').html(title);
 	}
-	/**
-	 * 打开窗口
-	 */
+	// 打开窗口
 	function open(target, forceOpen) {
-		var state = $(target).data('window');
+		var state = $(target).data('slwindow');
 		var opts = state.options;
 		if (forceOpen != true) {
 			if (opts.onBeforeOpen.call(target) == false) {
@@ -204,7 +198,7 @@
 		}
 		opts.closed = false;
 		$(target).show();
-		if ($(target).children('.window-header').find('a.window-tool-restore').length) {
+		if ($(target).children('.slwindow-header').find('a.slwindow-tool-restore').length) {
 			opts.maximized = true;
 		}
 		if (state.mask) {
@@ -226,11 +220,9 @@
 			load(target);
 		}
 	}
-	/**
-	 * 关闭窗口
-	 */
+	// 关闭窗口
 	function close(target, forceClose) {
-		var state = $(target).data('window');
+		var state = $(target).data('slwindow');
 		var opts = state.options;
 		if (forceClose != true) {
 			if (opts.onBeforeClose.call(target) == false) {
@@ -244,15 +236,13 @@
 		}
 		opts.onClose.call(target);
 	}
-	/**
-	 * 改变窗口大小
-	 */
+	// 改变窗口大小
 	function resize(target, params) {
-		var state = $(target).data('window');
+		var state = $(target).data('slwindow');
 		var opts = state.options;
-		var header = $(target).children('.window-header');
-		var body = $(target).children('.window-body');
-		var footer = $(target).children('.window-footer');
+		var header = $(target).children('.slwindow-header');
+		var body = $(target).children('.slwindow-body');
+		var footer = $(target).children('.slwindow-footer');
 		if (params) {
 			if (params.width != null && params.width != undefined) {
 				opts.width = params.width;
@@ -271,11 +261,9 @@
 		});
 		opts.onResize.apply(target, [ opts.width, opts.height ]);
 	}
-	/**
-	 * 移动窗口
-	 */
+	// 移动窗口
 	function move(target, params) {
-		var opts = $(target).data('window').options;
+		var opts = $(target).data('slwindow').options;
 		if (params) {
 			if (params.left != null && params.left != undefined) {
 				opts.left = params.left;
@@ -290,18 +278,16 @@
 		});
 		opts.onMove.apply(target, [ opts.left, opts.top ]);
 	}
-	/**
-	 * 最大化窗口
-	 */
+	// 最大化窗口
 	function maximize(target) {
-		var opts = $(target).data('window').options;
+		var opts = $(target).data('slwindow').options;
 		if (opts.maximized == true) {
 			return;
 		}
-		var toolMax = $(target).children('.window-header').find('a.window-tool-max');
-		toolMax.addClass('window-tool-restore');
-		if (!$(target).data('window').original) {
-			$(target).data('window').original = {
+		var toolMax = $(target).children('.slwindow-header').find('a.slwindow-tool-max');
+		toolMax.addClass('slwindow-tool-restore');
+		if (!$(target).data('slwindow').original) {
+			$(target).data('slwindow').original = {
 				width : opts.width,
 				height : opts.height,
 				left : opts.left,
@@ -325,17 +311,15 @@
 		opts.maximized = true;
 		opts.onMaximize.call(target);
 	}
-	/**
-	 * 恢复窗口
-	 */
+	// 恢复窗口
 	function restore(target) {
-		var opts = $(target).data('window').options;
+		var opts = $(target).data('slwindow').options;
 		if (opts.maximized == false) {
 			return;
 		}
-		var toolMax = $(target).children('.window-header').find('a.window-tool-max');
-		toolMax.removeClass('window-tool-restore');
-		var original = $(target).data('window').original;
+		var toolMax = $(target).children('.slwindow-header').find('a.slwindow-tool-max');
+		toolMax.removeClass('slwindow-tool-restore');
+		var original = $(target).data('slwindow').original;
 		opts.fit = false;
 		resize(target, {
 			width : original.width,
@@ -346,34 +330,30 @@
 			top : original.top
 		});
 		opts.maximized = false;
-		$(target).data('window').original = null;
+		$(target).data('slwindow').original = null;
 		opts.onRestore.call(target);
 	}
-	/**
-	 * 折叠窗口
-	 */
+	// 折叠窗口
 	function collapse(target) {
-		var opts = $(target).data('window').options;
+		var opts = $(target).data('slwindow').options;
 		if (opts.collapsed == true) {
 			return;
 		}
-		var body = $(target).children('.window-body');
+		var body = $(target).children('.slwindow-body');
 		body.stop(true, true);
 		if (opts.onBeforeCollapse.call(target) == false) {
 			return;
 		}
 		body.slideUp('normal', function() {
-			$(target).children('.window-header').find('a.window-tool-collapse').addClass('window-tool-expand');
+			$(target).children('.slwindow-header').find('a.slwindow-tool-collapse').addClass('slwindow-tool-expand');
 			opts.collapsed = true;
 			opts.onCollapse.call(target);
 		});
 	}
-	/**
-	 * 展开窗口
-	 */
+	// 展开窗口
 	function expand(target) {
-		var opts = $(target).data('window').options;
-		var body = $(target).children('.window-body');
+		var opts = $(target).data('slwindow').options;
+		var body = $(target).children('.slwindow-body');
 		if (opts.collapsed == false) {
 			return;
 		}
@@ -382,16 +362,16 @@
 			return;
 		}
 		body.slideDown('normal', function() {
-			$(target).children('.window-header').find('a.window-tool-collapse').removeClass('window-tool-expand');
+			$(target).children('.slwindow-header').find('a.slwindow-tool-collapse').removeClass('slwindow-tool-expand');
 			opts.collapsed = false;
 			opts.onExpand.call(target);
 			load(target);
 		});
 	}
 	function load(target, queryParams) {
-		var state = $(target).data('window');
+		var state = $(target).data('slwindow');
 		var opts = state.options;
-		var body = $(target).children('.window-body');
+		var body = $(target).children('.slwindow-body');
 		if (!opts.href) {
 			return;
 		}
@@ -406,12 +386,12 @@
 			state.isLoaded = false;
 			clear(target);
 			if (opts.loadingMessage) {
-				body.html($('<div class="window-loading"></div>').html(opts.loadingMessage));
+				body.html($('<div class="slwindow-loading"></div>').html(opts.loadingMessage));
 			}
 			opts.loader.call(target, queryParams, function(data) {
 				var filterData = opts.extractor.call(target, data);
 				body.html(filterData);
-				$.parser.parse(body);
+				$.slparser.parse(body);
 				opts.onLoad.apply(target, arguments);
 				state.isLoaded = true;
 			}, function() {
@@ -419,22 +399,18 @@
 			});
 		}
 	}
-	/**
-	 * 水平居中
-	 */
+	// 水平居中
 	function hcenter(target) {
-		var opts = $(target).data('window').options;
+		var opts = $(target).data('slwindow').options;
 		var parent = $(target).parent();
 		opts.left = Math.ceil((getPageArea().width - $(target).outerWidth()) / 2 + parent.scrollLeft());
 		move(target, {
 			left : opts.left
 		});
 	}
-	/**
-	 * 垂直居中
-	 */
+	// 垂直居中
 	function vcenter(target) {
-		var opts = $(target).data('window').options;
+		var opts = $(target).data('slwindow').options;
 		var parent = $(target).parent();
 		opts.top = Math.ceil((getPageArea().height - $(target).outerHeight()) / 2 + parent.scrollTop());
 		move(target, {
@@ -455,48 +431,48 @@
 			}
 		}
 	}
-	
+
 	// 标签上绑定的数据包括：
 	// options：属性
 	// isLoaded：是否加载结束
 	// original：窗口最大化前的尺寸
-	$.fn.window = function(options, param) {
+	$.fn.slwindow = function(options, param) {
 		if (typeof options == 'string') {
-			return $.fn.window.methods[options](this, param);
+			return $.fn.slwindow.methods[options](this, param);
 		}
 		options = options || {};
 		return this.each(function() {
-			var state = $(this).data('window');
+			var state = $(this).data('slwindow');
 			if (state) {
 				$.extend(state.options, options);
 			} else {
-				$(this).data('window', {
-					options : $.extend({}, $.fn.window.defaults, $.fn.window.parseOptions(this), options),
+				$(this).data('slwindow', {
+					options : $.extend({}, $.fn.slwindow.defaults, $.fn.slwindow.parseOptions(this), options),
 					isLoaded : false,
 					original : null
 				});
-				state = $(this).data('window');
+				state = $(this).data('slwindow');
 			}
 			create(this);
 			setProperties(this);
 		});
 	};
 
-	$.fn.window.methods = {
+	$.fn.slwindow.methods = {
 		options : function(jq) {
-			return $(jq[0]).data('window').options;
+			return $(jq[0]).data('slwindow').options;
 		},
 		header : function(jq) {
-			return $(jq[0]).children('.window-header');
+			return $(jq[0]).children('.slwindow-header');
 		},
 		footer : function(jq) {
-			return $(jq[0]).children('.window-footer');
+			return $(jq[0]).children('.slwindow-footer');
 		},
 		body : function(jq) {
-			return $(jq[0]).children('.window-body');
+			return $(jq[0]).children('.slwindow-body');
 		},
-		destroy:function(jq){
-			return jq.each(function(){
+		destroy : function(jq) {
+			return jq.each(function() {
 				destroy(this);
 			});
 		},
@@ -522,7 +498,7 @@
 		},
 		refresh : function(jq, param) {
 			return jq.each(function() {
-				var state = $(this).data('window');
+				var state = $(this).data('slwindow');
 				state.isLoaded = false;
 				if (param) {
 					if (typeof param == 'string') {
@@ -582,12 +558,12 @@
 		}
 	};
 
-	$.fn.window.parseOptions = function(target) {
-		return $.extend({}, $.parser.parseOptions(target));
+	$.fn.slwindow.parseOptions = function(target) {
+		return $.extend({}, $.slparser.parseOptions(target));
 	};
 
-	$.fn.window.defaults = {
-		title : 'New Window',
+	$.fn.slwindow.defaults = {
+		title : 'New window',
 		iconCls : null,
 		width : 400,
 		height : 300,
@@ -620,7 +596,7 @@
 		method : 'get',
 		queryParams : null,
 		loader : function(param, success, error) {
-			var opts = $(this).window('options');
+			var opts = $(this).slwindow('options');
 			if (!opts.href) {
 				return false;
 			}
@@ -676,15 +652,15 @@
 		defaultTools : {
 			maxTool : {
 				text : '',
-				css : "window-tool-max"
+				css : "slwindow-tool-max"
 			},
 			closeTool : {
 				text : '',
-				css : "window-tool-close"
+				css : "slwindow-tool-close"
 			},
 			collapseTool : {
 				text : '',
-				css : "window-tool-collapse"
+				css : "slwindow-tool-collapse"
 			}
 		}
 	};

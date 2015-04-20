@@ -1,16 +1,16 @@
 /**
  * jQuery StreamlineUI v1.0
- * 依赖：parser
+ * 依赖：slparser
  */
  (function ($) {
 	/**
 	 * 初始化分页控件
 	 */
 	 function init(target) {
-	 	var state = $(target).data('pagination');
+	 	var state = $(target).data('slpagination');
 	 	var opts = state.options;
 	 	var bb=state.bb={};
-	 	var table = $(target).addClass('pagination').html('<table cellspacing="0" cellpadding="0" border="0"><tr></tr></table>');
+	 	var table = $(target).addClass('slpagination').html('<table cellspacing="0" cellpadding="0" border="0"><tr></tr></table>');
 	 	var tr = table.find('tr');
 	 	var layout = $.extend([], opts.layout);
 	 	if (!opts.showPageList) {
@@ -28,7 +28,7 @@
 	 	for (var layoutIndex = 0; layoutIndex < layout.length; layoutIndex++) {
 	 		var str = layout[layoutIndex];
 	 		if (str == 'list') {
-	 			var ps = $('<select class="pagination-page-list"></select>');
+	 			var ps = $('<select class="slpagination-page-list"></select>');
 	 			ps.bind('change', function () {
 	 				opts.pageSize = parseInt($(this).val());
 	 				opts.onChangePageSize.call(target, opts.pageSize);
@@ -39,7 +39,7 @@
 	 			}
 	 			$('<td></td>').append(ps).appendTo(tr);
 	 		} else if(str == 'sep'){
-	 			$('<td><div class="pagination-btn-separator"></div></td>').appendTo(tr);
+	 			$('<td><div class="slpagination-btn-separator"></div></td>').appendTo(tr);
 	 		} else if (str == 'first') {
 	 			bb.first = setLayout('first');
 	 		} else if (str == 'prev') {
@@ -49,33 +49,33 @@
 	 		} else if (str == 'last') {
 	 			bb.last = setLayout('last');
 	 		} else if (str == 'manual') {
-	 			$('<span class="pagination-text"></span>').html(opts.beforePageText).appendTo(tr).wrap('<td></td>');
-	 			bb.num = $('<input class="pagination-num" type="text" value="1">').appendTo(tr).wrap('<td></td>');
-	 			bb.num.unbind('.pagination').bind('keydown.pagination', function (e) {
+	 			$('<span class="slpagination-text"></span>').html(opts.beforePageText).appendTo(tr).wrap('<td></td>');
+	 			bb.num = $('<input class="slpagination-num" type="text" value="1">').appendTo(tr).wrap('<td></td>');
+	 			bb.num.unbind('.slpagination').bind('keydown.slpagination', function (e) {
 					if (e.keyCode == 13) {//回车响应
 						var number = parseInt($(this).val()) || 1;
 						changePage(target, number);
 						return false;
 					}
-				}).bind('focusout.pagination',function(e){
+				}).bind('focusout.slpagination',function(e){
 					var number = parseInt($(this).val()) || 1;
 					changePage(target, number);
 					return false;
 				});
-	 			bb.after = $('<span class="pagination-text"></span>').appendTo(tr).wrap('<td></td>');
+	 			bb.after = $('<span class="slpagination-text"></span>').appendTo(tr).wrap('<td></td>');
 	 		} else if (str == 'refresh') {
 	 			bb.refresh = setLayout('refresh');
 	 		} else if (str == 'links') {
-	 			$('<td class="pagination-links"></td>').appendTo(tr);
+	 			$('<td class="slpagination-links"></td>').appendTo(tr);
 	 		}
 	 	}
 	 	if (opts.controls) {
-	 		$('<td><div class="pagination-btn-separator"></div></td>').appendTo(tr);
+	 		$('<td><div class="slpagination-btn-separator"></div></td>').appendTo(tr);
 	 		if ($.isArray(opts.controls)) {
 	 			for (var i = 0; i < opts.controls.length; i++) {
 	 				var control = opts.controls[i];
 	 				if (control == "-") {
-	 					$('<td><div class="pagination-btn-separator"></div></td>').appendTo(tr);
+	 					$('<td><div class="slpagination-btn-separator"></div></td>').appendTo(tr);
 	 				} else {
 	 					var td = $('<td></td>').appendTo(tr);
 	 					var a = $('<a href="javascript:void(0)" class="'+control.css+'">'+(control.text==undefined?'':control.text)+'</a>').appendTo(td);
@@ -88,7 +88,7 @@
 	 			$(opts.controls).appendTo(td).show();
 	 		}
 	 	}
-	 	$('<div class="pagination-info"></div>').appendTo(table);
+	 	$('<div class="slpagination-info"></div>').appendTo(table);
 	 	$('<div style="clear:both;"></div>').appendTo(table);
 		/**
 		 * 添加分页布局按钮
@@ -97,7 +97,7 @@
 		 	var control = opts.nav[str];
 		 	var a = $('<a href="javascript:void(0)" class="'+control.css+'">'+control.text+'</a>').appendTo(tr);
 		 	a.wrap("<td></td>");
-		 	a.unbind(".pagination").bind("click.pagination", function () {
+		 	a.unbind(".slpagination").bind("click.slpagination", function () {
 		 		control.handler.call(target);
 		 	});
 		 	return a;
@@ -115,7 +115,7 @@
 	 * pageNumber：指定的页码
 	 */
 	 function changePage(target, pageNumber) {
-	 	var opts = $(target).data("pagination").options;
+	 	var opts = $(target).data("slpagination").options;
 	 	update(target, { pageNumber: pageNumber });
 	 	opts.onSelectPage.call(target, opts.pageNumber, opts.pageSize);
 	 };
@@ -124,11 +124,11 @@
 	 * param：object
 	 */
 	 function update(target, param) {
-	 	var state = $(target).data('pagination');
+	 	var state = $(target).data('slpagination');
 	 	var opts = state.options;
 	 	var bb = state.bb;
 	 	$.extend(opts, param || {});
-	 	var ps = $(target).find('select.pagination-page-list');
+	 	var ps = $(target).find('select.slpagination-page-list');
 	 	if (ps.length) {
 	 		ps.val(opts.pageSize);
 	 	}
@@ -150,7 +150,7 @@
 	 	if (bb.after) {
 	 		bb.after.html(opts.afterPageText.replace(/{pages}/, pageCount));
 	 	}
-	 	var td = $(target).find('td.pagination-links');
+	 	var td = $(target).find('td.slpagination-links');
 	 	if (td.length) {
 	 		td.empty();
 			var numMin = opts.pageNumber - Math.floor(opts.links / 2);//分页链接的最小值
@@ -166,12 +166,12 @@
 				numMin = 1;
 			}
 			for (var i = numMin; i <= numMax; i++) {
-				var a = $('<a class="pagination-link" href="javascript:void(0)">'+i+'</a>').appendTo(td);
+				var a = $('<a class="slpagination-link" href="javascript:void(0)">'+i+'</a>').appendTo(td);
 				if (i == opts.pageNumber) {
 					a.addClass('select');
 				} else {
 					//给其他未选中链接添加点击事件
-					a.unbind('.pagination').bind('click.pagination', { pageNumber: i }, function (e) {
+					a.unbind('.slpagination').bind('click.slpagination', { pageNumber: i }, function (e) {
 						changePage(target, e.data.pageNumber);
 					});
 				}
@@ -181,33 +181,33 @@
 		displayMsg = displayMsg.replace(/{from}/, opts.total == 0 ? 0 : opts.pageSize * (opts.pageNumber - 1) + 1);
 		displayMsg = displayMsg.replace(/{to}/, Math.min(opts.pageSize * (opts.pageNumber), opts.total));
 		displayMsg = displayMsg.replace(/{total}/, opts.total);
-		$(target).find("div.pagination-info").html(displayMsg);
+		$(target).find("div.slpagination-info").html(displayMsg);
 		if (bb.first) {
 			if(opts.total==0||opts.pageNumber==1){
-				bb.first.addClass('pagination-disabled');
+				bb.first.addClass('slpagination-disabled');
 			}else{
-				bb.first.removeClass('pagination-disabled');
+				bb.first.removeClass('slpagination-disabled');
 			}
 		}
 		if (bb.prev) {
 			if(opts.total==0||opts.pageNumber==1){
-				bb.prev.addClass('pagination-disabled');
+				bb.prev.addClass('slpagination-disabled');
 			}else{
-				bb.prev.removeClass('pagination-disabled');
+				bb.prev.removeClass('slpagination-disabled');
 			}
 		}
 		if (bb.next) {
 			if(opts.pageNumber==pageCount){
-				bb.next.addClass('pagination-disabled');
+				bb.next.addClass('slpagination-disabled');
 			}else{
-				bb.next.removeClass('pagination-disabled');
+				bb.next.removeClass('slpagination-disabled');
 			}
 		}
 		if (bb.last) {
 			if(opts.pageNumber==pageCount){
-				bb.last.addClass('pagination-disabled');
+				bb.last.addClass('slpagination-disabled');
 			}else{
-				bb.last.removeClass('pagination-disabled');
+				bb.last.removeClass('slpagination-disabled');
 			}
 		}
 		showLoading(target, opts.loading);
@@ -216,39 +216,39 @@
 	 * 显示正在加载	 
 	 */
 	 function showLoading(target, param) {
-	 	var state = $(target).data("pagination");
+	 	var state = $(target).data("slpagination");
 	 	var opts = state.options;
 	 	opts.loading = param;
 	 	if (opts.showRefresh && state.bb.refresh) {
 	 		if(opts.loading){
-	 			state.bb.refresh.addClass('pagination-loading').removeClass('pagination-load');
+	 			state.bb.refresh.addClass('slpagination-loading').removeClass('slpagination-load');
 	 		}else{
-	 			state.bb.refresh.addClass('pagination-load').removeClass('pagination-loading');
+	 			state.bb.refresh.addClass('slpagination-load').removeClass('slpagination-loading');
 	 		}
 	 	}
 	 };
-	 $.fn.pagination = function (options, param) {
+	 $.fn.slpagination = function (options, param) {
 	 	if (typeof options == "string") {
-	 		return $.fn.pagination.methods[options](this, param);
+	 		return $.fn.slpagination.methods[options](this, param);
 	 	}
 	 	options = options || {};
 	 	return this.each(function () {
-	 		var state = $(this).data('pagination');
+	 		var state = $(this).data('slpagination');
 			if (state) {
 				$.extend(state.options, options);
 			} else {
-				$(this).data('pagination', {
-					options: $.extend({}, $.fn.pagination.defaults, $.fn.pagination.parseOptions(this), options)
+				$(this).data('slpagination', {
+					options: $.extend({}, $.fn.slpagination.defaults, $.fn.slpagination.parseOptions(this), options)
 				});
-				state =$(this).data('pagination');
+				state =$(this).data('slpagination');
 			}
 	 		init(this);
 	 		update(this);
 	 	});
 	 };
-	 $.fn.pagination.methods = {
+	 $.fn.slpagination.methods = {
 	 	options: function (jq) {
-	 		return $(jq[0]).data("pagination").options;
+	 		return $(jq[0]).data("slpagination").options;
 	 	}, 
 	 	loading: function (jq) {
 	 		return jq.each(function () {
@@ -271,11 +271,11 @@
 	 		});
 	 	}
 	 };
-	 $.fn.pagination.parseOptions = function (target) {
+	 $.fn.slpagination.parseOptions = function (target) {
 	 	var t = $(target);
-	 	return $.extend({}, $.parser.parseOptions(target, [{ total: "number", pageSize: "number", pageNumber: "number", links: "number" }, { loading: "boolean", showPageList: "boolean", showRefresh: "boolean" }]), { pageList: (t.attr("pageList") ? eval(t.attr("pageList")) : undefined) });
+	 	return $.extend({}, $.slparser.parseOptions(target, [{ total: "number", pageSize: "number", pageNumber: "number", links: "number" }, { loading: "boolean", showPageList: "boolean", showRefresh: "boolean" }]), { pageList: (t.attr("pageList") ? eval(t.attr("pageList")) : undefined) });
 	 };
-	 $.fn.pagination.defaults = {
+	 $.fn.slpagination.defaults = {
 	 	total: 1, 
 	 	pageSize: 10, 
 	 	pageNumber: 1, 
@@ -297,49 +297,49 @@
 	 	nav: {
 	 		first: {
 	 			text:'',
-	 			css: "pagination-first", 
+	 			css: "slpagination-first", 
 	 			handler: function () {
-	 				var opts = $(this).pagination("options");
+	 				var opts = $(this).slpagination("options");
 	 				if (opts.pageNumber > 1) {
-	 					$(this).pagination("select", 1);
+	 					$(this).slpagination("select", 1);
 	 				}
 	 			}
 	 		}, prev: {
 	 			text:'',
-	 			css: "pagination-prev", 
+	 			css: "slpagination-prev", 
 	 			handler: function () {
-	 				var opts = $(this).pagination("options");
+	 				var opts = $(this).slpagination("options");
 	 				if (opts.pageNumber > 1) {
-	 					$(this).pagination("select", opts.pageNumber - 1);
+	 					$(this).slpagination("select", opts.pageNumber - 1);
 	 				}
 	 			}
 	 		}, next: {
 	 			text:'',
-	 			css: "pagination-next", 
+	 			css: "slpagination-next", 
 	 			handler: function () {
-	 				var opts = $(this).pagination("options");
+	 				var opts = $(this).slpagination("options");
 	 				var pageCount = Math.ceil(opts.total / opts.pageSize);
 	 				if (opts.pageNumber < pageCount) {
-	 					$(this).pagination("select", opts.pageNumber + 1);
+	 					$(this).slpagination("select", opts.pageNumber + 1);
 	 				}
 	 			}
 	 		}, last: {
 	 			text:'',
-	 			css: "pagination-last", 
+	 			css: "slpagination-last", 
 	 			handler: function () {
-	 				var opts = $(this).pagination("options");
+	 				var opts = $(this).slpagination("options");
 	 				var pageCount = Math.ceil(opts.total / opts.pageSize);
 	 				if (opts.pageNumber < pageCount) {
-	 					$(this).pagination("select", pageCount);
+	 					$(this).slpagination("select", pageCount);
 	 				}
 	 			}
 	 		}, refresh: {
 	 			text:'',
-	 			css: "pagination-load", 
+	 			css: "slpagination-load", 
 	 			handler: function () {
-	 				var opts = $(this).pagination("options");
+	 				var opts = $(this).slpagination("options");
 	 				if (opts.onBeforeRefresh.call(this, opts.pageNumber, opts.pageSize) != false) {
-	 					$(this).pagination("select", opts.pageNumber);
+	 					$(this).slpagination("select", opts.pageNumber);
 	 					opts.onRefresh.call(this, opts.pageNumber, opts.pageSize);
 	 				}
 	 			}
