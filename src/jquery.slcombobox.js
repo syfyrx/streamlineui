@@ -1,5 +1,6 @@
-// jQuery StreamlineUI v1.0 
-// 依赖：slparser
+/*
+ * jQuery StreamlineUI v1.0 依赖：slparser
+ */
 (function($) {
 	// 创建组件
 	function create(target) {
@@ -52,13 +53,10 @@
 			if (!state.values.length) {
 				$(target).val(opts.prompt);
 			}
-		}).addClass('slcombobox').css(
-				{
-					width : opts.width - opts.height - $(target).css('padding-left').replace('px', '')
-							- $(target).css('padding-right').replace('px', '')
-							- state.downArrow.css('border-right-width').replace('px', ''),
-					height : opts.height
-				}).attr('comboName', $(target).attr('name')).removeAttr('name').addClass('slcombobox-f').val(opts.prompt);
+		}).addClass('slcombobox').css({
+			width : opts.width - opts.height - $(target).css('padding-left').replace('px', '') - $(target).css('padding-right').replace('px', '') - state.downArrow.css('border-right-width').replace('px', ''),
+			height : opts.height
+		}).attr('comboName', $(target).attr('name')).removeAttr('name').addClass('slcombobox-f').val(opts.prompt);
 		if (opts.required) {
 			if ($.fn.validate)
 				$(target).validate($.extend({}, $.fn.validate.defaults, {
@@ -68,11 +66,10 @@
 				}));
 		}
 		state.textbox.attr('name', $(target).attr('comboName'));
-		state.panel.undelegate('div.slcombobox-item', '.slcombobox').delegate('div.slcombobox-item', 'mouseenter.slcombobox',
-				function(e) {
-					$(this).addClass('slcombobox-item-hover');
-					e.stopPropagation();
-				}).delegate('div.slcombobox-item', 'mouseleave.slcombobox', function(e) {
+		state.panel.undelegate('div.slcombobox-item', '.slcombobox').delegate('div.slcombobox-item', 'mouseenter.slcombobox', function(e) {
+			$(this).addClass('slcombobox-item-hover');
+			e.stopPropagation();
+		}).delegate('div.slcombobox-item', 'mouseleave.slcombobox', function(e) {
 			$(this).removeClass('slcombobox-item-hover');
 			e.stopPropagation();
 		}).delegate('div.slcombobox-item', 'click.slcombobox', function(e) {
@@ -267,9 +264,7 @@
 			} else {
 				$(target).val(opts.prompt);
 			}
-			if (newValue != state.textbox.val()) {
-				opts.onChange.call(target, newValue, state.textbox.val());
-			}
+			opts.onChange.call(target, newValue, state.textbox.val());
 		}
 		state.textbox.val(newValue);
 		state.values = newValues;
@@ -427,8 +422,7 @@
 			});
 		} else {
 			var panel = state.panel;
-			panel.find('div.slcombobox-item-selected,div.slcombobox-item-hover').removeClass(
-					'slcombobox-item-selected slcombobox-item-hover');
+			panel.find('div.slcombobox-item-selected,div.slcombobox-item-hover').removeClass('slcombobox-item-selected slcombobox-item-hover');
 			panel.find('div.slcombobox-item,div.slcombobox-group').hide();
 			var data = state.data;
 			var vv = [];

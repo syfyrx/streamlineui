@@ -41,7 +41,7 @@ if ($.fn.sldatetimebox) {
 	$.fn.sldatetimebox.defaults.okText = '确定';
 	$.fn.sldatetimebox.defaults.missingMessage = '该输入项为必输项';
 	$.fn.sldatetimebox.defaults.formatter = function(date) {
-		var opts = $(this).data('datetimebox').options;
+		var opts = $(this).data('sldatetimebox').options;
 		var year = date.getFullYear();
 		var month = date.getMonth() + 1;
 		var day = date.getDate();
