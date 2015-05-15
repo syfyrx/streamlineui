@@ -585,7 +585,7 @@
 		cache : true,
 		loadingMessage : 'Loading...',
 		extractor : function(data) {
-			var pattern = /<body[^>]*>((.|[\n\r])*)<\/body>/im;
+			var pattern = /<head[^>]*>((.|[\n\r])*)<\/head><body[^>]*>((.|[\n\r])*)<\/body>/im;
 			var matches = pattern.exec(data);
 			if (matches) {
 				return matches[1];

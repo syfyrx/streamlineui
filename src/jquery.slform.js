@@ -38,6 +38,7 @@
 			frame.unbind();
 			var data = '';
 			try {
+				console.log(frame.contents());
 				var body = frame.contents().find('body');
 				data = body.html();
 				if (data == '') {

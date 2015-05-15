@@ -751,7 +751,7 @@
 }
 
 .sltree-node {
-	height: 18px; white-space: nowrap; cursor: pointer;
+	padding: 3px 0; white-space : nowrap; cursor: pointer; white-space: nowrap;
 }
 
 .sltree-hit {
