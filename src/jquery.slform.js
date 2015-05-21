@@ -34,15 +34,22 @@
 			}
 			t.submit();
 		}
+		var checkCount = 10;
 		function frameLoad() {
-			frame.unbind();
+			var f = $('#' + frameId);
+			if (f.length == 0) {
+				return;
+			}
+			f.unbind();
 			var data = '';
 			try {
-				console.log(frame.contents());
-				var body = frame.contents().find('body');
+				var body = f.contents().find('body');
 				data = body.html();
 				if (data == '') {
-					return;
+					if (--checkCount) {
+						setTimeout(frameLoad, 100);
+						return;
+					}
 				}
 				var ta = body.find('>textarea');
 				if (ta.length) {
